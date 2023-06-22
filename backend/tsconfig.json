@@ -1,0 +1,30 @@
+{
+  "extends": "./tsconfig.paths.json",
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    //"noUnusedLocals": true,
+    //"noUnusedParameters": true,
+    "removeComments": true,
+    "sourceMap": true
+  },
+  /*"exclude": [
+    "node_modules"
+  ],*/
+  "include": ["src/**/*.ts", "serverless.ts"],
+  "exclude": [
+    "node_modules/**/*",
+    ".serverless/**/*",
+    ".webpack/**/*",
+    "_warmup/**/*",
+    ".vscode/**/*"
+  ],
+  "types": [
+    "node",
+    "aws-sdk"
+  ],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
+}

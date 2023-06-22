@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@businessLogic/*": ["src/businessLogic/*"],
+      "@lambda/*": ["src/lambda/*"],
+      "@libs": ["src/libs"],
+      "@utils": ["src/utils"]
+    }
+  }
+}
