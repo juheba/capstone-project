@@ -1,0 +1,25 @@
+{
+  "name": "sample-app",
+  "version": "1.0.0",
+  "description": "Sample application for the new Auth0 SPA SDK",
+  "engines": {
+    "node": ">=18.16.0",
+    "npm": ">=9.5.1"
+  },
+  "main": "server.js",
+  "scripts": {
+    "start": "node bin/www",
+    "dev": "nodemon bin/www"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "helmet": "^3.23.3",
+    "morgan": "^1.10.0"
+  }
+}
