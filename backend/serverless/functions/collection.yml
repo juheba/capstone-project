@@ -1,0 +1,83 @@
+# Configure this function - 
+# Provide iamRoleStatements property for performing Actions on DynamoDB
+GetCollections:
+  tracing: true
+  handler: src/lambda/http/collection/getCollections.main
+  events:
+    - http:
+        method: get
+        path: collections
+        cors: true
+        authorizer: Auth
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
+
+# Configure this function - 
+# Provide iamRoleStatements property. Decide the Actions and AWS Resource. 
+# To refer to an AWS resource defined in the "Resources" section, you can use "Resource: !GetAtt <resource-name>.Arn"
+# To validate incoming HTTP requests, we have provided the request schemas in function definition below. 
+CreateCollection:
+  tracing: true
+  handler: src/lambda/http/collection/createCollection.main
+  events:
+    - http:
+        method: post
+        path: collections
+        cors: true
+        authorizer: Auth
+#        request:
+#          schemas:
+#            application/json: ${file(./schemas/create-collection-model.json)}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
+
+# Configure this function
+# Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
+UpdateCollection:
+  tracing: true
+  handler: src/lambda/http/collection/updateCollection.main
+  events:
+    - http:
+        method: patch
+        path: collections/{collectionId}
+        cors: true
+        authorizer: Auth
+#        request:
+#          schemas:
+#            application/json: ${file(./schemas/update-collection-model.json)}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:UpdateItem
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
+
+# Configure this function
+# Provide property for setting up CORS, Authorizer, iamRoleStatements
+DeleteCollection:
+  tracing: true
+  handler: src/lambda/http/collection/deleteCollection.main
+  events:
+    - http:
+        method: delete
+        path: collections/{collectionId}
+        cors: true
+        authorizer: Auth
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DeleteItem
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'

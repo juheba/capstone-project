@@ -1,7 +1,7 @@
 {
-  "name": "serverless-todo-app",
+  "name": "collecter-app",
   "version": "0.0.0",
-  "description": "Serverless Todo API",
+  "description": "Collector Todo API",
   "engines" : { 
     "npm" : ">=9.5.1",
     "node" : ">=18.16.0"

@@ -3,8 +3,10 @@
     "baseUrl": ".",
     "paths": {
       "@businessLogic/*": ["src/businessLogic/*"],
+      "@dataLayer/*": ["src/dataLayer/*"],
       "@lambda/*": ["src/lambda/*"],
-      "@libs": ["src/libs"],
+      "@models/*": ["src/models/*"],
+      "@requests/*": ["src/requests/*"],
       "@utils": ["src/utils"]
     }
   }
