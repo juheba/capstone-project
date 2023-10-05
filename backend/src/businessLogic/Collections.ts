@@ -1,12 +1,17 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Collection, CollectionsWithLastKey } from '@models/collection'
 import { CollectionAccess } from '@dataLayer/collectionAccess'
-import { GetCollectionsRequest, CreateCollectionRequest, UpdateCollectionRequest } from '@requests/collection'
+import { CreateCollectionRequest, UpdateCollectionRequest } from '@requests/collection'
+import { GetLimitNextKeyRequest } from '@requests/generel'
 
 const collectionAccess = new CollectionAccess()
 
-export async function getCollectionsForUser(userId: string, getCollectionsRequest: GetCollectionsRequest): Promise<CollectionsWithLastKey> {
-  return await collectionAccess.getCollectionsForUser(userId, getCollectionsRequest.limit, getCollectionsRequest.nextKey)
+export async function getCollectionsForUser(userId: string, getLimitNextKeyRequest: GetLimitNextKeyRequest): Promise<CollectionsWithLastKey> {
+  return await collectionAccess.getCollectionsForUser(userId, getLimitNextKeyRequest.limit, getLimitNextKeyRequest.nextKey)
+}
+
+export async function getCollectionsByIds(userId: string, collectionId: string[]): Promise<Collection[]> {
+  return await collectionAccess.getCollectionsByIds(userId, collectionId)
 }
 
 export async function createCollection(userId: string, createCollectionRequest: CreateCollectionRequest,): Promise <Collection> {

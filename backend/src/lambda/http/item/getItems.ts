@@ -2,14 +2,14 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
-import { getCollectionsForUser } from '@businessLogic/Collections';
+import { getItemsForUser } from '@businessLogic/Items';
 import { createLogger, middyfy, getUserId } from '@utils'
 
 import { DynamoDB } from "aws-sdk";
 
-const logger = createLogger('getCollections')
+const logger = createLogger('getItems')
 
-// Get all Collections for a current user
+// Get all TODO items for a current user
 const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info(`Processing event: ${event}`)
 
@@ -24,12 +24,12 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
     return createBadRequestResponse(e.message)
   }
 
-  const result = await getCollectionsForUser(userId, {limit, nextKey})
+  const result = await getItemsForUser(userId, {limit, nextKey})
 
   return {
     statusCode: 200,
     body: JSON.stringify({
-      collections: result.collections,
+      items: result.items,
       // Encode the JSON object so a client can return it in a URL as is
       nextKey: encodeNextKey(result.lastKey)
     })
@@ -75,7 +75,7 @@ function parseNextKeyParameter(event) {
 
   if (nextKey !== undefined) {
     nextKey = decodeNextKey(nextKey)
-    if (nextKey == null || nextKey.collectionId === undefined || nextKey.userId === undefined) {
+    if (nextKey == null || nextKey.itemId === undefined || nextKey.userId === undefined) {
       throw new Error('parameter \'nextKey\' is not valid.')
     }
   }

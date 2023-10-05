@@ -2,25 +2,25 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
-import { CreateCollectionRequest } from '@requests/collection'
-import { createCollection } from '@businessLogic/Collections';
+import { CreateItemRequest } from '@requests/item'
+import { createItem } from '@businessLogic/Items';
 import { createLogger, middyfy, getUserId } from '@utils'
 
-const logger = createLogger('createCollections')
+const logger = createLogger('createItems')
 
 const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info(`Processing event: ${event}`)
 
   let userId = getUserId(event);
-  var collection: CreateCollectionRequest;
+  var item: CreateItemRequest;
 
   try {
-    collection = parseBody(event)
+    item = parseBody(event)
   } catch (e) {
     return createBadRequestResponse(e.message)
   }
 
-  const newItem = await createCollection(userId, collection)
+  const newItem = await createItem(userId, item)
   return {
       statusCode: 201,
       body: JSON.stringify({
@@ -48,9 +48,9 @@ function parseBody(event) {
     throw new Error('body does not exist.')
   }
 
-  // Because "pattern": "^.*\\S.*$" in create-collection-model.json does not work for inputs like this: " \n\tTest"
-  if(parsedBody.name.trim() === '') {
-    throw new Error('name is empty.')
+  // Because "pattern": "^.*\\S.*$" in create-item-model.json does not work for inputs like this: " \n\tTest"
+  if(parsedBody.title.trim() === '') {
+    throw new Error('title is empty.')
   }
   return parsedBody
 }

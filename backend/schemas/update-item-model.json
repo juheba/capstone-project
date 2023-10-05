@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Item",
+  "description": "Stores information about each item that can be part of a user's collection.",
+  "required": [
+    "title",
+    "isLendable",
+    "ownershipStatus",
+    "status"
+  ],
+  "type": "object",
+  "properties": {
+    "title": {
+      "description": "The title of the item (e.g., the name of the book, movie, or comic).",
+      "type": "string",
+      "minLength": 1
+    },
+    "itemType": {
+      "description": "The type of the item (e.g., book, movie, game, comic).",
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "description": "A brief description or summary of the item.",
+      "type": "string",
+      "minLength": 1
+    },
+    "isLendable": {
+      "description": "Information about whether the user (owner) would lend the item.",
+      "type": "boolean"
+    },
+    "ownershipStatus": {
+      "description": "Information about whether the user owns the item, wishes to buy it, has borrowed it, etc.",
+      "type": "string",
+      "enum": [ "OWNER", "BORROWER", "WISHLIST"]
+    },
+    "status": {
+      "description": "Information about whether the item has been read/watched, is currently being read/watched, or is on a to-read/to-watch list.",
+      "type": "string",
+      "enum": ["TODO", "PROCESSING", "DONE"]
+    }
+  },
+  "additionalProperties": false
+}

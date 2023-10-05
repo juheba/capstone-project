@@ -1,0 +1,8 @@
+Auth:
+  tracing: true
+  handler: src/lambda/auth/auth0Authorizer.main
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+      Resource: "*"

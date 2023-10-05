@@ -2,34 +2,36 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
-import { getCollectionsForUser } from '@businessLogic/Collections';
+import { getItemsForCollection } from '@businessLogic/CollectionItems';
 import { createLogger, middyfy, getUserId } from '@utils'
 
 import { DynamoDB } from "aws-sdk";
 
-const logger = createLogger('getCollections')
+const logger = createLogger('getCollectionItems')
 
-// Get all Collections for a current user
+// Get all itemIds for a collection
 const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info(`Processing event: ${event}`)
 
   let userId = getUserId(event);
+  let collectionId: string;
   let limit: number;
   let nextKey: DynamoDB.Key;
 
   try {
+    collectionId = parseCollectionParameter(event)
     limit = parseLimitParameter(event)      // Maximum number of elements to return
     nextKey = parseNextKeyParameter(event)  // Next key to continue scan operation if necessary
   } catch (e) {
     return createBadRequestResponse(e.message)
   }
 
-  const result = await getCollectionsForUser(userId, {limit, nextKey})
+  const result = await getItemsForCollection(userId, collectionId, {limit, nextKey})
 
   return {
     statusCode: 200,
     body: JSON.stringify({
-      collections: result.collections,
+      items: result.items,
       // Encode the JSON object so a client can return it in a URL as is
       nextKey: encodeNextKey(result.lastKey)
     })
@@ -38,6 +40,22 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
 
 export const main = middyfy(handler);
 
+/**
+ * Get value of the collectionId path parameter or return "undefined"
+ *
+ * @param {Object} event HTTP event passed to a Lambda function
+ *
+ * @returns {string} value of collectionId or "undefined" if the parameter is not defined
+ * @throws {Error} if collectionId is not a valid (number, null or id is missing)
+ */
+function parseCollectionParameter(event) {
+  let collectionId = event.pathParameters.collectionId
+
+  if (collectionId === undefined) {
+    throw new Error('parameter \'collectionId\' is not valid.')
+  }
+  return collectionId
+}
 
 /**
  * Get value of the limit query parameter or return "undefined"

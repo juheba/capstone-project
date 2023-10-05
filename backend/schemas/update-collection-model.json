@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Collection",
+  "description": "Stores information about the items in each user's collection.",
+  "required": [
+    "name",
+    "visibility"
+  ],
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "The name of the collection (e.g., \"Science Fiction Books\", \"Marvel Movies\").",
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "description": "A brief description of the collection.",
+      "type": "string",
+      "minLength": 1
+    },
+    "visibility": {
+      "description": "Settings to control who can view the collection (public, private, shared with specific users).",
+      "type": "string",
+      "enum": ["PRIVATE", "PUBLIC"]
+    }
+  },
+  "additionalProperties": false
+}

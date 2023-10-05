@@ -1,6 +1,6 @@
 import { Lending } from './Lending';
 
-export interface LendingWithLastKey {
+export interface LendingsWithLastKey {
   locations: Lending[],
   lastKey: AWS.DynamoDB.DocumentClient.Key
 }

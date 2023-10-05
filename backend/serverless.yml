@@ -58,6 +58,10 @@ provider:
     AUTH_0_SECRET_FIELD: auth0Secret
     COLLECTION_TABLE: ${self:app}-collection-${self:provider.stage}
     COLLECTION_CREATED_AT_INDEX: CollectionCreatedAtIndex
+    ITEM_TABLE: ${self:app}-item-${self:provider.stage}
+    ITEM_CREATED_AT_INDEX: ItemCreatedAtIndex
+    COLLECTION_ITEM_TABLE: ${self:app}-collection-item-${self:provider.stage}
+    COLLECTION_ITEM_INDEX: CollectionItemIndex
     TODOS_TABLE: todos-${self:provider.stage}
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
     ATTACHMENTS_S3_BUCKET: juheba-todo-attachments-${self:provider.stage}
@@ -70,8 +74,9 @@ provider:
     restApi: true
 
 functions:
-  - ${file(serverless/functions.yml)}
+  - ${file(serverless/functions/auth.yml)}
   - ${file(serverless/functions/collection.yml)}
-  
+  - ${file(serverless/functions/item.yml)}
+  - ${file(serverless/functions.yml)}
 
 resources: ${file(serverless/ressources.yml)}

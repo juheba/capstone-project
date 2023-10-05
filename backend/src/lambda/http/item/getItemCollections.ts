@@ -2,29 +2,31 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
-import { getCollectionsForUser } from '@businessLogic/Collections';
+import { getCollectionsForItem } from '@businessLogic/CollectionItems';
 import { createLogger, middyfy, getUserId } from '@utils'
 
 import { DynamoDB } from "aws-sdk";
 
-const logger = createLogger('getCollections')
+const logger = createLogger('getItemCollections')
 
-// Get all Collections for a current user
+// Get all collectionIds for a itemId
 const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info(`Processing event: ${event}`)
 
   let userId = getUserId(event);
+  let itemId: string;
   let limit: number;
   let nextKey: DynamoDB.Key;
 
   try {
+    itemId = parseItemParameter(event)
     limit = parseLimitParameter(event)      // Maximum number of elements to return
     nextKey = parseNextKeyParameter(event)  // Next key to continue scan operation if necessary
   } catch (e) {
     return createBadRequestResponse(e.message)
   }
 
-  const result = await getCollectionsForUser(userId, {limit, nextKey})
+  const result = await getCollectionsForItem(userId, itemId, {limit, nextKey})
 
   return {
     statusCode: 200,
@@ -38,6 +40,22 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
 
 export const main = middyfy(handler);
 
+/**
+ * Get value of the itemId path parameter or return "undefined"
+ *
+ * @param {Object} event HTTP event passed to a Lambda function
+ *
+ * @returns {string} value of itemId or "undefined" if the parameter is not defined
+ * @throws {Error} if itemId is not a valid (number, null or id is missing)
+ */
+function parseItemParameter(event) {
+  let itemId = event.pathParameters.itemId
+
+  if (itemId === undefined) {
+    throw new Error('parameter \'itemId\' is not valid.')
+  }
+  return itemId
+}
 
 /**
  * Get value of the limit query parameter or return "undefined"

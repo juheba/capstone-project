@@ -1,12 +1,10 @@
-# Configure this function - 
-# Provide iamRoleStatements property for performing Actions on DynamoDB
-GetCollections:
+GetItems:
   tracing: true
-  handler: src/lambda/http/collection/getCollections.main
+  handler: src/lambda/http/item/getItems.main
   events:
     - http:
         method: get
-        path: collections
+        path: items
         cors: true
         authorizer: Auth
   iamRoleStatements:
@@ -15,63 +13,55 @@ GetCollections:
         - dynamodb:Query
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}'
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}'
 
-# Configure this function - 
-# Provide iamRoleStatements property. Decide the Actions and AWS Resource. 
-# To refer to an AWS resource defined in the "Resources" section, you can use "Resource: !GetAtt <resource-name>.Arn"
-# To validate incoming HTTP requests, we have provided the request schemas in function definition below. 
-CreateCollection:
+CreateItem:
   tracing: true
-  handler: src/lambda/http/collection/createCollection.main
+  handler: src/lambda/http/item/createItem.main
   events:
     - http:
         method: post
-        path: collections
+        path: items
         cors: true
         authorizer: Auth
         request:
           schemas:
-            application/json: ${file(./schemas/create-collection-model.json)}
+            application/json: ${file(./schemas/create-item-model.json)}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:PutItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}'
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}'
 
-# Configure this function
-# Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
-UpdateCollection:
+UpdateItem:
   tracing: true
-  handler: src/lambda/http/collection/updateCollection.main
+  handler: src/lambda/http/item/updateItem.main
   events:
     - http:
         method: patch
-        path: collections/{collectionId}
+        path: items/{itemId}
         cors: true
         authorizer: Auth
         request:
           schemas:
-            application/json: ${file(./schemas/update-collection-model.json)}
+            application/json: ${file(./schemas/update-item-model.json)}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:UpdateItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}'
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}'
 
-# Configure this function
-# Provide property for setting up CORS, Authorizer, iamRoleStatements
-DeleteCollection:
+DeleteItem:
   tracing: true
-  handler: src/lambda/http/collection/deleteCollection.main
+  handler: src/lambda/http/item/deleteItem.main
   events:
     - http:
         method: delete
-        path: collections/{collectionId}
+        path: items/{itemId}
         cors: true
         authorizer: Auth
   iamRoleStatements:
@@ -80,15 +70,16 @@ DeleteCollection:
         - dynamodb:DeleteItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}'
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}'
 
-GetCollectionItems:
+
+GetItemCollections:
   tracing: true
-  handler: src/lambda/http/collection/getCollectionItems.main
+  handler: src/lambda/http/item/getItemCollections.main
   events:
     - http:
         method: get
-        path: collections/{collectionId}/items
+        path: items/{itemId}/collections
         cors: true
         authorizer: Auth
   iamRoleStatements:
@@ -100,13 +91,13 @@ GetCollectionItems:
         - xray:PutTraceSegments
       Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_ITEM_TABLE}'
 
-UpdateCollectionItems:
+UpdateItemCollections:
   tracing: true
-  handler: src/lambda/http/collection/updateCollectionItems.main
+  handler: src/lambda/http/item/updateItemCollections.main
   events:
     - http:
         method: post
-        path: collections/{collectionId}/items
+        path: items/{itemId}/collections
         cors: true
         authorizer: Auth
         request:

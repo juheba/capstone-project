@@ -1,2 +1,2 @@
 export { Location } from './Location'
-export { LocationWithLastKey } from './LocationWithLastKey'
+export { LocationsWithLastKey } from './LocationsWithLastKey'

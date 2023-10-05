@@ -2,19 +2,18 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
-import { updateCollection } from '@businessLogic/Collections'
-import { UpdateCollectionRequest } from '@requests/collection/UpdateCollectionRequest'
+import { updateCollectionItems } from '@businessLogic/CollectionItems'
 import { createLogger, middyfy, getUserId } from '@utils'
 
-const logger = createLogger('updateCollection')
+const logger = createLogger('updateCollectionItems')
 
-// Update a Collection with the provided id using values in the "updatedCollection" object
+// Update a Collections relation to many items
 const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info(`Processing event: ${event}`)
 
   let userId = getUserId(event);
   let collectionId: string;
-  var updatedCollection: UpdateCollectionRequest;
+  var itemIds: string[];
   
   try {
     collectionId = parseCollectionParameter(event)
@@ -23,14 +22,14 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
   }
 
   try {
-    updatedCollection = parseBody(event)
+    itemIds = parseBody(event)
   } catch (e) {
     return createBadRequestResponse(e.message)
   }
 
   let result;
   try {
-    result = await updateCollection(userId, collectionId, updatedCollection)
+    result = await updateCollectionItems(userId, collectionId, itemIds)
   } catch (error) {
     if (error.code === 'ConditionalCheckFailedException') {
       const msg = 'No collection found with the provided collectionId'
@@ -40,11 +39,11 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
     throw error;
   }
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify(result)
+  if (!result) {
+    return createInternalServerErrorResponse(`Couldn't update all item relations of collection with the provided collectionId: ${collectionId}`)
   }
 
+  return createNoContentResponse()
 }
 
 export const main = middyfy(handler);
@@ -64,6 +63,41 @@ function parseCollectionParameter(event) {
     throw new Error('parameter \'collectionId\' is not valid.')
   }
   return collectionId
+}
+
+/**
+ * Parses a string to a JSON object.
+ *
+ * @param {Object} event HTTP event passed to a Lambda function
+ *
+ * @returns JSON representation of the provided string
+ * @throws Error if body is undefined or null
+ */
+function parseBody(event): string[] {
+  // The middy plugin already convert API Gateways `event.body` property, originally passed as a stringified JSON, to its corresponding parsed object.
+  //var parsedBody = typeof event.body === 'string' ? JSON.parse(event.body) : event.body  // Not necessary because of middy plugin
+
+  var parsedBody = event.body
+  if (parsedBody === undefined || parsedBody === null) {
+    throw new Error('body does not exist.')
+  }
+
+  if(parsedBody.itemIds === undefined) {
+    throw new Error('itemIds is empty.')
+  }
+  return parsedBody.itemIds as string[]
+}
+
+/**
+ * Creates a 204 NO CONTENT response
+ *
+ * @returns {string} a response with no body
+ */
+function createNoContentResponse() {
+  return {
+    statusCode: 204,
+    body: ""
+  }
 }
 
 /**
@@ -97,24 +131,16 @@ function createNotFoundResponse(details) {
 }
 
 /**
- * Parses a string to a JSON object.
+ * Creates a 500 INTERNAL SERVER ERROR response
  *
- * @param {Object} event HTTP event passed to a Lambda function
+ * @param {string} details optional details to describe the error
  *
- * @returns JSON representation of the provided string
- * @throws Error if body is undefined or null
+ * @returns {string} a json stringifed internal server error response
  */
-function parseBody(event): UpdateCollectionRequest {
-  // The middy plugin already convert API Gateways `event.body` property, originally passed as a stringified JSON, to its corresponding parsed object.
-  //var parsedBody = typeof event.body === 'string' ? JSON.parse(event.body) : event.body  // Not necessary because of middy plugin
-
-  var parsedBody = event.body
-  if (parsedBody === undefined || parsedBody === null) {
-    throw new Error('body does not exist.')
+function createInternalServerErrorResponse(details) {
+  const err = {statusCode:400, errorCode:'T500', message:'Unexpected Error', details}
+  return {
+    statusCode: 500,
+    body: JSON.stringify(err)
   }
-  // Because "pattern": "^.*\\S.*$" in update-collection-model.json does not work for inputs like this: " \n\tTest"
-  if(parsedBody.name.trim() === '') {
-    throw new Error('name is empty.')
-  }
-  return parsedBody as UpdateCollectionRequest
 }

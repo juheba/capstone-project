@@ -1,2 +1,2 @@
-export { Item } from './Item'
-export { ItemWithLastKey } from './ItemWithLastKey'
+export * from './Item'
+export { ItemsWithLastKey } from './ItemsWithLastKey'

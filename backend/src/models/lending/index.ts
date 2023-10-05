@@ -1,2 +1,2 @@
 export { Lending } from './Lending'
-export { LendingWithLastKey } from './LendingWithLastKey'
+export { LendingsWithLastKey } from './LendingsWithLastKey'

@@ -41,7 +41,7 @@ Resources:
         - AttributeName: userId
           KeyType: HASH                 # userId is the partitionKey
         - AttributeName: collectionId
-          KeyType: RANGE                # todoId is the sortKey
+          KeyType: RANGE                # collectionId is the sortKey
       BillingMode: PAY_PER_REQUEST
       TableName: ${self:provider.environment.COLLECTION_TABLE}
       LocalSecondaryIndexes:
@@ -51,6 +51,65 @@ Resources:
               KeyType: HASH
             - AttributeName: createdAt
               KeyType: RANGE            # createdAt is the indexKey
+          Projection:
+            ProjectionType: ALL # What attributes will be copied to an index
+
+  # Create a DynamoDB table with local secondary index and a composite key
+  ItemTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: itemId
+          AttributeType: S
+        - AttributeName: addedAt
+          AttributeType: S
+      KeySchema:  # Key schema with partition and sort key creates a composite key
+        - AttributeName: userId
+          KeyType: HASH                 # userId is the partitionKey
+        - AttributeName: itemId
+          KeyType: RANGE                # itemId is the sortKey
+      BillingMode: PAY_PER_REQUEST
+      TableName: ${self:provider.environment.ITEM_TABLE}
+      LocalSecondaryIndexes:
+        - IndexName: ${self:provider.environment.ITEM_CREATED_AT_INDEX}
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: addedAt
+              KeyType: RANGE            # addedAt is the indexKey
+          Projection:
+            ProjectionType: ALL # What attributes will be copied to an index
+
+  CollectionItemTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: collectionId
+          AttributeType: S
+        - AttributeName: itemId
+          AttributeType: S
+      KeySchema:  # Key schema with partition and sort key creates a composite key
+        - AttributeName: collectionId
+          KeyType: HASH                 # collectionId is the partitionKey
+        - AttributeName: itemId
+          KeyType: RANGE                # itemId is the sortKey
+      BillingMode: PAY_PER_REQUEST
+      TableName: ${self:provider.environment.COLLECTION_ITEM_TABLE}
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      GlobalSecondaryIndexes:
+        - IndexName: ${self:provider.environment.COLLECTION_ITEM_INDEX}
+          KeySchema:
+            - AttributeName: itemId
+              KeyType: HASH
+            - AttributeName: collectionId
+              KeyType: RANGE
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
           Projection:
             ProjectionType: ALL # What attributes will be copied to an index
 

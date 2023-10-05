@@ -11,9 +11,9 @@ export const middyfy = (handler) => {
       // default adds header 'Access-Control-Allow-Origin': '*'
       credentials: true  // adds header 'Access-Control-Allow-Credentials': true
     }))
-    // for debugging purpose
     /*.after((handlerContext) => {
-      console.log("Response after middleware:", handlerContext.response);
-      console.log("Context after middleware:", handlerContext.context);
+      // for debugging purpose
+      console.error("Response after middleware:", handlerContext.response);
+      console.error("Context after middleware:", handlerContext.context);
     });*/
 }

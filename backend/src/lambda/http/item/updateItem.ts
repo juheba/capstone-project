@@ -2,40 +2,40 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
-import { updateCollection } from '@businessLogic/Collections'
-import { UpdateCollectionRequest } from '@requests/collection/UpdateCollectionRequest'
+import { updateItem } from '@businessLogic/Items'
+import { UpdateItemRequest } from '@requests/item/UpdateItemRequest'
 import { createLogger, middyfy, getUserId } from '@utils'
 
-const logger = createLogger('updateCollection')
+const logger = createLogger('updateItem')
 
-// Update a Collection with the provided id using values in the "updatedCollection" object
+// Update a Item item with the provided id using values in the "updatedItem" object
 const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info(`Processing event: ${event}`)
 
   let userId = getUserId(event);
-  let collectionId: string;
-  var updatedCollection: UpdateCollectionRequest;
+  let itemId: string;
+  var updatedItem: UpdateItemRequest;
   
   try {
-    collectionId = parseCollectionParameter(event)
+    itemId = parseItemParameter(event)
   } catch (e) {
     return createBadRequestResponse(e.message)
   }
 
   try {
-    updatedCollection = parseBody(event)
+    updatedItem = parseBody(event)
   } catch (e) {
     return createBadRequestResponse(e.message)
   }
 
   let result;
   try {
-    result = await updateCollection(userId, collectionId, updatedCollection)
+    result = await updateItem(userId, itemId, updatedItem)
   } catch (error) {
     if (error.code === 'ConditionalCheckFailedException') {
-      const msg = 'No collection found with the provided collectionId'
-      logger.info({message: msg, collectionId: collectionId, userId: userId})
-      return createNotFoundResponse(`${msg}: ${collectionId}`)
+      const msg = 'No item found with the provided itemId'
+      logger.info({message: msg, itemId: itemId, userId: userId})
+      return createNotFoundResponse(`${msg}: ${itemId}`)
     }
     throw error;
   }
@@ -50,20 +50,20 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
 export const main = middyfy(handler);
 
 /**
- * Get value of the collectionId path parameter or return "undefined"
+ * Get value of the itemId path parameter or return "undefined"
  *
  * @param {Object} event HTTP event passed to a Lambda function
  *
- * @returns {string} value of collectionId or "undefined" if the parameter is not defined
- * @throws {Error} if collectionId is not a valid (number, null or id is missing)
+ * @returns {string} value of itemId or "undefined" if the parameter is not defined
+ * @throws {Error} if itemId is not a valid (number, null or id is missing)
  */
-function parseCollectionParameter(event) {
-  let collectionId = event.pathParameters.collectionId
+function parseItemParameter(event) {
+  let itemId = event.pathParameters.itemId
 
-  if (collectionId === undefined) {
-    throw new Error('parameter \'collectionId\' is not valid.')
+  if (itemId === undefined) {
+    throw new Error('parameter \'itemId\' is not valid.')
   }
-  return collectionId
+  return itemId
 }
 
 /**
@@ -104,7 +104,7 @@ function createNotFoundResponse(details) {
  * @returns JSON representation of the provided string
  * @throws Error if body is undefined or null
  */
-function parseBody(event): UpdateCollectionRequest {
+function parseBody(event): UpdateItemRequest {
   // The middy plugin already convert API Gateways `event.body` property, originally passed as a stringified JSON, to its corresponding parsed object.
   //var parsedBody = typeof event.body === 'string' ? JSON.parse(event.body) : event.body  // Not necessary because of middy plugin
 
@@ -112,9 +112,9 @@ function parseBody(event): UpdateCollectionRequest {
   if (parsedBody === undefined || parsedBody === null) {
     throw new Error('body does not exist.')
   }
-  // Because "pattern": "^.*\\S.*$" in update-collection-model.json does not work for inputs like this: " \n\tTest"
-  if(parsedBody.name.trim() === '') {
-    throw new Error('name is empty.')
+  // Because "pattern": "^.*\\S.*$" in update-item-model.json does not work for inputs like this: " \n\tTest"
+  if(parsedBody.title.trim() === '') {
+    throw new Error('title is empty.')
   }
-  return parsedBody as UpdateCollectionRequest
+  return parsedBody as UpdateItemRequest
 }

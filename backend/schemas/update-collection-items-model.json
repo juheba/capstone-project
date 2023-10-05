@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "itemIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "collectionIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    }
+  },
+  "anyOf": [
+    {
+      "required": [
+        "itemIds"
+      ]
+    },
+    {
+      "required": [
+        "collectionIds"
+      ]
+    }
+  ],
+  "not": {
+    "required": [
+      "itemIds",
+      "collectionIds"
+    ]
+    
+  },
+  "additionalProperties": false
+}

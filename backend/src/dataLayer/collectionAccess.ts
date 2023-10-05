@@ -54,8 +54,8 @@ export class CollectionAccess {
     }
   }
 
-  async getCollectionsById(userId: string, collectionId: string): Promise<Collection> {
-    logger.info({message: 'Getting a collection by id', collectionId: collectionId, userId: userId})
+  async getCollectionsByIds(userId: string, collectionId: string[]): Promise<Collection[]> {
+    logger.info({message: 'Getting collections by ids', userId: userId})
 
     const queryParams = {
       TableName: this.collectionsTable,
@@ -71,7 +71,7 @@ export class CollectionAccess {
     }
 
     const result = await this.docClient.query(queryParams).promise()
-    return result.Items[0] as Collection
+    return result.Items as Collection[]
   }
 
   async createCollection(userId: string, collection: Collection) {

@@ -1,6 +1,6 @@
 import { Item } from './Item';
 
-export interface ItemWithLastKey {
+export interface ItemsWithLastKey {
   items: Item[],
   lastKey: AWS.DynamoDB.DocumentClient.Key
 }
