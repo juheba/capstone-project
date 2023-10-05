@@ -38,7 +38,6 @@ export async function createItem(userId: string, createItemRequest: CreateItemRe
 
 export async function updateItem(userId: string, itemId: string, updateItemRequest: UpdateItemRequest): Promise <Item> {
   const item = {
-    userId,
     itemId,
     itemType: updateItemRequest.itemType,
     title: updateItemRequest.title,

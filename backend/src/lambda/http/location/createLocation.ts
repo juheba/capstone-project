@@ -2,29 +2,29 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
-import { CreateCollectionRequest } from '@requests/collection'
-import { createCollection } from '@businessLogic/Collections';
+import { CreateLocationRequest } from '@requests/location'
+import { createLocation } from '@businessLogic/Locations';
 import { createLogger, middyfy, getUserId } from '@utils'
 
-const logger = createLogger('createCollections')
+const logger = createLogger('createLocations')
 
 const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info(`Processing event: ${event}`)
 
   let userId = getUserId(event);
-  var collection: CreateCollectionRequest;
+  var location: CreateLocationRequest;
 
   try {
-    collection = parseBody(event)
+    location = parseBody(event)
   } catch (e) {
     return createBadRequestResponse(e.message)
   }
 
-  const newCollection = await createCollection(userId, collection)
+  const newLocation = await createLocation(userId, location)
   return {
       statusCode: 201,
       body: JSON.stringify({
-          collection: newCollection
+          location: newLocation
       })
   }
 };
@@ -48,7 +48,7 @@ function parseBody(event) {
     throw new Error('body does not exist.')
   }
 
-  // Because "pattern": "^.*\\S.*$" in create-collection-model.json does not work for inputs like this: " \n\tTest"
+  // Because "pattern": "^.*\\S.*$" in create-location-model.json does not work for inputs like this: " \n\tTest"
   if(parsedBody.name.trim() === '') {
     throw new Error('name is empty.')
   }

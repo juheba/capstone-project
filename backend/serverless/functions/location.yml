@@ -1,0 +1,73 @@
+GetLocations:
+  tracing: true
+  handler: src/lambda/http/location/getLocations.main
+  events:
+    - http:
+        method: get
+        path: locations
+        cors: true
+        authorizer: Auth
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LOCATION_TABLE}'
+
+CreateLocation:
+  tracing: true
+  handler: src/lambda/http/location/createLocation.main
+  events:
+    - http:
+        method: post
+        path: locations
+        cors: true
+        authorizer: Auth
+        request:
+          schemas:
+            application/json: ${file(./schemas/location/create-location-model.json)}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutLocation
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LOCATION_TABLE}'
+
+UpdateLocation:
+  tracing: true
+  handler: src/lambda/http/location/updateLocation.main
+  events:
+    - http:
+        method: patch
+        path: locations/{locationId}
+        cors: true
+        authorizer: Auth
+        request:
+          schemas:
+            application/json: ${file(./schemas/location/update-location-model.json)}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:UpdateLocation
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LOCATION_TABLE}'
+
+DeleteLocation:
+  tracing: true
+  handler: src/lambda/http/location/deleteLocation.main
+  events:
+    - http:
+        method: delete
+        path: locations/{locationId}
+        cors: true
+        authorizer: Auth
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DeleteLocation
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LOCATION_TABLE}'

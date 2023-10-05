@@ -1,0 +1,849 @@
+{
+	"info": {
+		"_postman_id": "ae7a77b4-8281-44fb-8fbd-9622ea2e51f6",
+		"name": "collector-app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30250389"
+	},
+	"item": [
+		{
+			"name": "collections",
+			"item": [
+				{
+					"name": "{id}/items",
+					"item": [
+						{
+							"name": "Get items of collection",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/{{STAGE}}/collections/{{temp_collectionId}}/items",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"{{STAGE}}",
+										"collections",
+										"{{temp_collectionId}}",
+										"items"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add items to collection",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"collectionIds\": [\"def25b1c-f6d6-4628-a631-70985c0afb8c\", \"72491f8c-33d3-46a5-bec3-5b8a3eecd256\", \"{{temp_collectionId}}\"]\n}"
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/{{STAGE}}/collections/{{temp_collectionId}}/items",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"{{STAGE}}",
+										"collections",
+										"{{temp_collectionId}}",
+										"items"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get all collections",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/collections",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"collections"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get collections with limit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"pm.environment.set(\"temp_nextKey\", responseJson.nextKey);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const currentNextKey = pm.environment.get(\"temp_nextKey\")\r",
+									"if (null === currentNextKey || undefined === currentNextKey || \"\" === currentNextKey) {\r",
+									"    pm.request.removeQueryParams(\"nextKey\")\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/collections?limit=2&nextKey={{temp_nextKey}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"collections"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2"
+								},
+								{
+									"key": "nextKey",
+									"value": "{{temp_nextKey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"pm.environment.set(\"temp_collectionId\", responseJson.collection.collectionId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{$randomProductAdjective}} {{$randomDepartment}}\",\n  \"description\": \"{{$randomPhrase}}\",\n  \"visibility\": \"PRIVATE\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/collections",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"collections"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update collection",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"edited - {{$randomProductAdjective}} {{$randomDepartment}}\",\n  \"description\": \"{{$randomPhrase}}\",\n  \"visibility\": \"PUBLIC\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/collections/{{temp_collectionId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"collections",
+								"{{temp_collectionId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete collection",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/collections/{{temp_collectionId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"collections",
+								"{{temp_collectionId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "items",
+			"item": [
+				{
+					"name": "{id}/collections",
+					"item": [
+						{
+							"name": "Get collections of item",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/{{STAGE}}/items/{{temp_itemId}}/collections",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"{{STAGE}}",
+										"items",
+										"{{temp_itemId}}",
+										"collections"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add collections to item",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"collectionIds\": [\"def25b1c-f6d6-4628-a631-70985c0afb8c\", \"72491f8c-33d3-46a5-bec3-5b8a3eecd256\", \"{{temp_collectionId}}\"]\n}"
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/{{STAGE}}/items/{{temp_itemId}}/collections",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"{{STAGE}}",
+										"items",
+										"{{temp_itemId}}",
+										"collections"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get all items",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/items",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get items with limit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"pm.environment.set(\"temp_nextKey\", responseJson.nextKey);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const currentNextKey = pm.environment.get(\"temp_nextKey\")\r",
+									"if (null === currentNextKey || undefined === currentNextKey || \"\" === currentNextKey) {\r",
+									"    pm.request.removeQueryParams(\"nextKey\")\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/items?limit=2&nextKey={{temp_nextKey}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"items"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2"
+								},
+								{
+									"key": "nextKey",
+									"value": "{{temp_nextKey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"pm.environment.set(\"temp_itemId\", responseJson.item.itemId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"{{$randomProductName}}\",\n  \"description\": \"{{$randomPhrase}}\",\n  \"itemType\": \"{{$randomProductMaterial}}\",\n  \"isLendable\": false,\n  \"ownershipStatus\": \"WISHLIST\",\n  \"status\": \"TODO\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/items",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update item",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"edited - {{$randomProductName}}\",\n  \"description\": \"{{$randomPhrase}}\",\n  \"itemType\": \"{{$randomProductMaterial}}\",\n  \"isLendable\": true,\n  \"ownershipStatus\": \"OWNER\",\n  \"status\": \"TODO\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/items/{{temp_itemId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"items",
+								"{{temp_itemId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete item",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/items/{{temp_itemId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"items",
+								"{{temp_itemId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "locations",
+			"item": [
+				{
+					"name": "Get all locations",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/locations",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get locations with limit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"pm.environment.set(\"temp_nextKey\", responseJson.nextKey);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const currentNextKey = pm.environment.get(\"temp_nextKey\")\r",
+									"if (null === currentNextKey || undefined === currentNextKey || \"\" === currentNextKey) {\r",
+									"    pm.request.removeQueryParams(\"nextKey\")\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/locations?limit=2&nextKey={{temp_nextKey}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"locations"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2"
+								},
+								{
+									"key": "nextKey",
+									"value": "{{temp_nextKey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"pm.environment.set(\"temp_locationId\", responseJson.location.locationId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{$randomProductMaterial}} {{$randomDepartment}}\",\n  \"description\": \"{{$randomPhrase}}\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/locations",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update collection",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"edited - {{$randomProductMaterial}} {{$randomDepartment}}\",\n  \"description\": \"{{$randomPhrase}}\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/locations/{{temp_locationId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"locations",
+								"{{temp_locationId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete collection",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/locations/{{temp_locationId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"locations",
+								"{{temp_locationId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{TOKEN}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"var base_url;",
+					"if (pm.environment.get(\"LOCALHOST\")) {",
+					"    //console.log(\"offline\")",
+					"    base_url = pm.environment.get(\"LOCALHOST\");",
+					"} else {",
+					"    //console.log(\"online\")",
+					"    base_url = `https://${pm.environment.get(\"API_ID\")}.execute-api.${pm.environment.get(\"AWS_REGION\")}.amazonaws.com`",
+					"}",
+					"pm.collectionVariables.set(\"BASE_URL\", base_url);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": ""
+		}
+	]
+}

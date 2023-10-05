@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "location",
+  "description": "Represents the physical locations where collection items.",
+  "required": [
+    "name"
+  ],
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "The name of the location (e.g., Living Room Bookshelf, Storage Box).",
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "description": "A description of the location. Provides users with more information about each location.",
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false
+}

@@ -26,7 +26,7 @@ CreateItem:
         authorizer: Auth
         request:
           schemas:
-            application/json: ${file(./schemas/create-item-model.json)}
+            application/json: ${file(./schemas/item/create-item-model.json)}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -46,7 +46,7 @@ UpdateItem:
         authorizer: Auth
         request:
           schemas:
-            application/json: ${file(./schemas/update-item-model.json)}
+            application/json: ${file(./schemas/item/update-item-model.json)}
   iamRoleStatements:
     - Effect: Allow
       Action:

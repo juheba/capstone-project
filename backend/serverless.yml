@@ -60,6 +60,8 @@ provider:
     ITEM_CREATED_AT_INDEX: ItemCreatedAtIndex
     COLLECTION_ITEM_TABLE: ${self:app}-collection-item-${self:provider.stage}
     COLLECTION_ITEM_INDEX: CollectionItemIndex
+    LOCATION_TABLE: ${self:app}-location-${self:provider.stage}
+    LOCATION_ADDED_AT_INDEX: LocationAddedAtIndex
     TODOS_TABLE: todos-${self:provider.stage}
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
     TODOS_ATTACHMENTS_S3_BUCKET: juheba-todo-attachments-${self:provider.stage}
@@ -76,6 +78,7 @@ functions:
   - ${file(serverless/functions/auth.yml)}
   - ${file(serverless/functions/collection.yml)}
   - ${file(serverless/functions/item.yml)}
+  - ${file(serverless/functions/location.yml)}
 #  - ${file(serverless/functions.yml)}
 
 resources: ${file(serverless/ressources.yml)}

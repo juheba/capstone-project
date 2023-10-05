@@ -111,9 +111,9 @@ aws dynamodb describe-table --endpoint-url http://localhost:8000 --table-name to
 **Location:** Represents the physical locations where collection items can be stored.
 | implemented | name        | description |
 |:-----------:|-------------|-------------|
-|             | LocationID  | A unique identifier for each location. |
-|             | Title/Name  | The name of the location (e.g., "Living Room Bookshelf", "Storage Box 1"). Allows users to identify and search for locations. |
-|             | Description | A description of the location. Provides users with more information about each location, such as its physical characteristics or where it is located in the user's home. |
+|     ✅     | LocationID  | A unique identifier for each location. |
+|     ✅     | Title/Name  | The name of the location (e.g., "Living Room Bookshelf", "Storage Box 1"). Allows users to identify and search for locations. |
+|     ✅     | Description | A description of the location. Provides users with more information about each location, such as its physical characteristics or where it is located in the user's home. |
 |             | ImageURL    | An image of the location for easier recognation. |
 
 **Lending:** Stores information about each lending transaction.

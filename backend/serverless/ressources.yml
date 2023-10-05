@@ -105,6 +105,33 @@ Resources:
             ProjectionType: ALL # What attributes will be copied to an index
 
   # Create a DynamoDB table with local secondary index and a composite key
+  LocationTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: locationId
+          AttributeType: S
+        - AttributeName: addedAt
+          AttributeType: S
+      KeySchema:  # Key schema with partition and sort key creates a composite key
+        - AttributeName: userId
+          KeyType: HASH                 # userId is the partitionKey
+        - AttributeName: locationId
+          KeyType: RANGE                # locationId is the sortKey
+      BillingMode: PAY_PER_REQUEST
+      TableName: ${self:provider.environment.LOCATION_TABLE}
+      LocalSecondaryIndexes:
+        - IndexName: ${self:provider.environment.LOCATION_ADDED_AT_INDEX}
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: addedAt
+              KeyType: RANGE            # addedAt is the indexKey
+          Projection:
+            ProjectionType: ALL # What attributes will be copied to an index
+
 #  TodosTable:
 #    Type: AWS::DynamoDB::Table
 #    Properties:
@@ -132,8 +159,6 @@ Resources:
 #          Projection:
 #            ProjectionType: ALL # What attributes will be copied to an index
 
-  # Complete the bucket properties below.
-  # Do not forget to add the CorsConfiguration propoerty
   AttachmentsBucket:
     Type: AWS::S3::Bucket
     Properties:

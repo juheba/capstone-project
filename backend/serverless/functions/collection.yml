@@ -32,7 +32,7 @@ CreateCollection:
         authorizer: Auth
         request:
           schemas:
-            application/json: ${file(./schemas/create-collection-model.json)}
+            application/json: ${file(./schemas/collection/create-collection-model.json)}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -54,7 +54,7 @@ UpdateCollection:
         authorizer: Auth
         request:
           schemas:
-            application/json: ${file(./schemas/update-collection-model.json)}
+            application/json: ${file(./schemas/collection/update-collection-model.json)}
   iamRoleStatements:
     - Effect: Allow
       Action:
