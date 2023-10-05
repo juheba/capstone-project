@@ -1,5 +1,5 @@
 {
-  "name": "collecter-app",
+  "name": "collector-app",
   "version": "0.0.0",
   "description": "Collector Todo API",
   "engines" : { 

@@ -72,7 +72,6 @@ DeleteItem:
         - xray:PutTraceSegments
       Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}'
 
-
 GetItemCollections:
   tracing: true
   handler: src/lambda/http/item/getItemCollections.main
@@ -86,10 +85,18 @@ GetItemCollections:
     - Effect: Allow
       Action:
         - dynamodb:Query
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource:
+        - 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_ITEM_TABLE}'
+        - 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_ITEM_TABLE}/index/${self:provider.environment.COLLECTION_ITEM_INDEX}'
+    - Effect: Allow
+      Action:
         - dynamodb:BatchGetItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_ITEM_TABLE}'
+      Resource:
+        - 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}'
 
 UpdateItemCollections:
   tracing: true
@@ -110,4 +117,6 @@ UpdateItemCollections:
         - dynamodb:BatchWriteItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_ITEM_TABLE}'
+      Resource:
+        - 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_ITEM_TABLE}'
+        - 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_ITEM_TABLE}/index/${self:provider.environment.COLLECTION_ITEM_INDEX}'

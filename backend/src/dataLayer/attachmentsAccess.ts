@@ -1,5 +1,6 @@
-const AWSXRay = require('aws-xray-sdk');
-const AWS = AWSXRay.captureAWS(require('aws-sdk'));
+import { initAWS } from '@utils'
+
+const AWS = initAWS()
 
 export class AttachmentsAccess {
 

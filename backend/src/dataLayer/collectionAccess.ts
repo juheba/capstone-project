@@ -2,30 +2,14 @@ import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
 import { Collection, CollectionsWithLastKey } from "@models/collection";
 
-import { createLogger} from '@utils'
+import { createLogger, createDynamoDBClient } from '@utils'
 
 const logger = createLogger('collectionAccess')
-
-const AWSXRay = require('aws-xray-sdk');
-const AWS = AWSXRay.captureAWS(require('aws-sdk'));
-
-function createDynamoDBClient(): DocumentClient {
-  if (process.env.IS_OFFLINE) {
-    logger.info('Creating a local DynamoDB instance')
-    return new AWS.DynamoDB.DocumentClient({
-      region: 'localhost',
-      endpoint: 'http://localhost:8000',
-      accessKeyId: 'DEFAULT_ACCESS_KEY',  // needed if you don't have aws credentials at all in env
-      secretAccessKey: 'DEFAULT_SECRET' // needed if you don't have aws credentials at all in env
-    })
-  }
-  return new AWS.DynamoDB.DocumentClient();
-}
 
 export class CollectionAccess {
 
   constructor(
-    private readonly docClient: DocumentClient = createDynamoDBClient(),
+    private readonly docClient: DocumentClient = createDynamoDBClient(logger),
     private readonly collectionsTable = process.env.COLLECTION_TABLE) {
   }
 
@@ -54,24 +38,24 @@ export class CollectionAccess {
     }
   }
 
-  async getCollectionsByIds(userId: string, collectionId: string[]): Promise<Collection[]> {
+  async getCollectionsByIds(userId: string, collectionIds: string[]): Promise<Collection[]> {
     logger.info({message: 'Getting collections by ids', userId: userId})
 
-    const queryParams = {
-      TableName: this.collectionsTable,
-      KeyConditionExpression: 'collectionId = :collectionId',
-      ExpressionAttributeValues: {
-        ':collectionId': collectionId
-      },
-      /**
-       * If ScanIndexForward is true, DynamoDB returns the results in the order in which they are stored (by sort key value). This is the default behavior.
-       * If ScanIndexForward is false, DynamoDB reads the results in reverse order by sort key value, and then returns the results to the client.
-       */
-      //ScanIndexForward: false  // reverses the result order, meaning last inserted images comes first
-    }
+    const keys = collectionIds.map(collectionId => ({ 
+      userId: userId,
+      collectionId
+    }));
 
-    const result = await this.docClient.query(queryParams).promise()
-    return result.Items as Collection[]
+    const params = {
+        RequestItems: {
+            [this.collectionsTable]: {
+                Keys: keys
+            }
+        }
+    };
+
+    const response = await this.docClient.batchGet(params).promise();
+    return (response.Responses?.[this.collectionsTable] || []) as Collection[];
   }
 
   async createCollection(userId: string, collection: Collection) {

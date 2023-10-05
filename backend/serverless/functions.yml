@@ -1,12 +1,3 @@
-Auth:
-  tracing: true
-  handler: src/lambda/auth/auth0Authorizer.main
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - lambda:InvokeFunction
-      Resource: "*"
-
 # Configure this function - 
 # Provide iamRoleStatements property for performing Actions on DynamoDB
 GetTodos:
@@ -106,7 +97,7 @@ GenerateUploadUrl:
     - Effect: Allow
       Action: 
         - s3:*
-      Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENTS_S3_BUCKET}/*
+      Resource: arn:aws:s3:::${self:provider.environment.TODOS_ATTACHMENTS_S3_BUCKET}/*
     - Effect: Allow
       Action:
         - dynamodb:UpdateItem

@@ -1,6 +1,6 @@
 org: juheba
-app: collecter-app
-service: collecter-app
+app: collector-app
+service: collector-app
 
 frameworkVersion: "3"
 
@@ -49,8 +49,6 @@ provider:
     lambda: true
     apiGateway: true
 
-  # Use these variables in the functions and resouorces section below. For example, 
-  # ${self:provider.environment.ATTACHMENTS_S3_BUCKET}
   environment:
     REGION: ${self:provider.region}
     STAGE: ${self:provider.stage}
@@ -64,7 +62,8 @@ provider:
     COLLECTION_ITEM_INDEX: CollectionItemIndex
     TODOS_TABLE: todos-${self:provider.stage}
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
-    ATTACHMENTS_S3_BUCKET: juheba-todo-attachments-${self:provider.stage}
+    TODOS_ATTACHMENTS_S3_BUCKET: juheba-todo-attachments-${self:provider.stage}
+    ATTACHMENTS_S3_BUCKET: ${self:org}-${self:app}-attachments-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     NODE_OPTIONS: --enable-source-maps --stack-trace-limit=1000
@@ -77,6 +76,6 @@ functions:
   - ${file(serverless/functions/auth.yml)}
   - ${file(serverless/functions/collection.yml)}
   - ${file(serverless/functions/item.yml)}
-  - ${file(serverless/functions.yml)}
+#  - ${file(serverless/functions.yml)}
 
 resources: ${file(serverless/ressources.yml)}

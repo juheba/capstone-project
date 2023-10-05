@@ -1,42 +1,19 @@
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
-import { Collection, CollectionsWithLastKey } from "@models/collection";
-import { Item, ItemsWithLastKey } from "@models/item";
-
-import { createLogger} from '@utils'
-
+import { createLogger, createDynamoDBClient } from '@utils'
 
 const logger = createLogger('collectionItemAccess')
-
-const AWSXRay = require('aws-xray-sdk');
-const AWS = AWSXRay.captureAWS(require('aws-sdk'));
-
-function createDynamoDBClient(): DocumentClient {
-  if (process.env.IS_OFFLINE) {
-    logger.info('Creating a local DynamoDB instance')
-    return new AWS.DynamoDB.DocumentClient({
-      region: 'localhost',
-      endpoint: 'http://localhost:8000',
-      accessKeyId: 'DEFAULT_ACCESS_KEY',  // needed if you don't have aws credentials at all in env
-      secretAccessKey: 'DEFAULT_SECRET' // needed if you don't have aws credentials at all in env
-    })
-  }
-  return new AWS.DynamoDB.DocumentClient();
-}
 
 export class CollectionItemAccess {
 
   constructor(
-    private readonly docClient: DocumentClient = createDynamoDBClient(),
+    private readonly docClient: DocumentClient = createDynamoDBClient(logger),
     private readonly collectionItemTable = process.env.COLLECTION_ITEM_TABLE,
     private readonly collectionItemIndex = process.env.COLLECTION_ITEM_INDEX) {
   }
 
   async getCollectionsForItem(userId: string, itemId: string, limit: number, nextKey: AWS.DynamoDB.Key) {
     logger.info({message: 'Getting collections by item', itemId: itemId, userId: userId})
-
-    console.warn(`itemId: ${itemId}`)
-    console.warn(`collectionItemIndex: ${this.collectionItemIndex}`)
 
     const queryParams = {
       TableName: this.collectionItemTable,
@@ -88,77 +65,6 @@ export class CollectionItemAccess {
     }
   }
 
-  /*
-  async updateCollectionRelationships(userId: string, collectionId: string, itemIds: string[]) {
-    logger.info({message: 'Update collection relationships', collectionId: collectionId, userId: userId})
-
-    logger.info({message: 'Getting items by collection and determine additions and deletions', collectionId: collectionId, userId: userId})
-
-    const queryParams = {
-      TableName: this.collectionItemTable,
-      KeyConditionExpression: 'collectionId = :collectionId',
-      ExpressionAttributeValues: {
-        ':collectionId': collectionId
-      }
-    }
-
-    // 1. Fetch current relations
-    const currentRelationsResponse = await this.docClient.query(queryParams).promise();
-    const currentRelations = (currentRelationsResponse.Items || []).map(item => item.itemId);
-
-    // 2. Determine additions and deletions
-    const additions = itemIds.filter(itemId => !currentRelations.includes(itemId));
-    const deletions = currentRelations.filter(itemId => !itemIds.includes(itemId));
-
-    if (additions.length === 0 && deletions.length === 0) {
-      logger.info({message: 'No items to write or delete. Skipping batchWrite.', collectionId: collectionId, userId: userId})
-      return true;
-    }
-
-    // 3. Batch write operations
-    const batchWriteRequests = [];
-
-    for (const itemId of additions) {
-        batchWriteRequests.push({
-            PutRequest: {
-                Item: {
-                    collectionId,
-                    itemId
-                }
-            }
-        });
-    }
-
-    for (const itemId of deletions) {
-        batchWriteRequests.push({
-            DeleteRequest: {
-                Key: {
-                    collectionId,
-                    itemId
-                }
-            }
-        });
-    }
-
-    logger.info({message: 'Process BatchWrite to update collection relationships', collectionId: collectionId, userId: userId})
-
-    const batchWriteParams = {
-      RequestItems: {
-          [this.collectionItemTable]: batchWriteRequests
-      }
-    }
-
-    const result = await this.docClient.batchWrite(batchWriteParams).promise();
-
-    if (result.UnprocessedItems && result.UnprocessedItems[this.collectionItemTable]) {
-      const unprocessedRequests = result.UnprocessedItems[this.collectionItemTable];
-      logger.error({message: `Unprocessed items found: ${unprocessedRequests}`, collectionId: collectionId, userId: userId})
-      return false;
-    }
-
-    return true;
-  }*/
-
   async updateCollectionRelationships(userId: string, collectionId: string, itemIds: string[]) {
     return await this.updateRelationships(userId, collectionId, itemIds, "collectionId", "itemId")
   }
@@ -175,10 +81,14 @@ export class CollectionItemAccess {
     let attributeValues = {};
     attributeValues[`:${sourceIdName}`] = sourceId;
 
-    const queryParams = {
+    let queryParams = {
       TableName: this.collectionItemTable,
       KeyConditionExpression: `${sourceIdName} = :${sourceIdName}`,
       ExpressionAttributeValues: attributeValues
+    };
+
+    if (sourceIdName === 'itemId') {
+      queryParams['IndexName'] = this.collectionItemIndex;
     }
 
     // 1. Fetch current relations
@@ -237,36 +147,4 @@ export class CollectionItemAccess {
 
     return true;
   }
-
-  /*async addRelationship(userId: string, itemId: string, collectionId: string) {
-    logger.info({message: 'Add a relationship', collectionId: collectionId, itemId: itemId, userId: userId})
-
-    var params = {
-      TableName : this.collectionItemTable,
-      Item: {
-        itemId: itemId,
-        collectionId: collectionId
-      }
-    };
-    const result = await this.docClient.put(params).promise()
-    return !!result.Attributes;
-  }
-
-  async removeRelationship(userId: string, itemId: string, collectionId: string): Promise<Boolean> {
-    logger.info({message: 'Remove a relationship', collectionId: collectionId, itemId: itemId, userId: userId})
- 
-    const params = {
-      TableName: this.collectionItemTable,
-      Key: {
-        itemId,
-        collectionId
-      },
-      ConditionExpression: "attribute_exists(itemId) AND attribute_exists(collectionId)",
-      ReturnValues: "ALL_OLD"
-    }
-
-    const result = await this.docClient.delete(params).promise();
-    return !!result.Attributes;
-  }*/
-
 }

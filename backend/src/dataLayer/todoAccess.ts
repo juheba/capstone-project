@@ -3,30 +3,14 @@ import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import { TodoItem } from "../models/TodoItem";
 import { TodosWithLastKey } from "../models/TodosWithLastKey";
 
-import { createLogger} from '@utils'
+import { createLogger, createDynamoDBClient } from '@utils'
 
 const logger = createLogger('todoAccess')
-
-const AWSXRay = require('aws-xray-sdk');
-const AWS = AWSXRay.captureAWS(require('aws-sdk'));
-
-function createDynamoDBClient(): DocumentClient {
-  if (process.env.IS_OFFLINE) {
-    logger.info('Creating a local DynamoDB instance')
-    return new AWS.DynamoDB.DocumentClient({
-      region: 'localhost',
-      endpoint: 'http://localhost:8000',
-      accessKeyId: 'DEFAULT_ACCESS_KEY',  // needed if you don't have aws credentials at all in env
-      secretAccessKey: 'DEFAULT_SECRET' // needed if you don't have aws credentials at all in env
-    })
-  }
-  return new AWS.DynamoDB.DocumentClient();
-}
 
 export class TodoAccess {
 
   constructor(
-    private readonly docClient: DocumentClient = createDynamoDBClient(),
+    private readonly docClient: DocumentClient = createDynamoDBClient(logger),
     private readonly todosTable = process.env.TODOS_TABLE) {
   }
 

@@ -1,3 +1,5 @@
+export * from './createDynamoDBClient'
 export * from './getUserId'
+export * from './initAWS'
 export * from './logger'
 export * from './middyfy'
