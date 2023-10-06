@@ -38,6 +38,10 @@ export async function updateLocation(userId: string, locationId: string, updateL
   return await locationAccess.updateLocation(userId, location)
 }
 
+export async function updateAttachmentUrl(userId: string, itemId: string, url: string): Promise<Item> {
+  return await locationAccess.updateAttachmentUrl(userId, itemId, url)
+}
+
 export async function deleteLocation(userId: string, locationId: string): Promise<Boolean> {
   return await locationAccess.deleteLocation(userId, locationId)
 }

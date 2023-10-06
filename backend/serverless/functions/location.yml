@@ -30,7 +30,7 @@ CreateLocation:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:PutLocation
+        - dynamodb:PutItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
       Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LOCATION_TABLE}'
@@ -50,7 +50,7 @@ UpdateLocation:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:UpdateLocation
+        - dynamodb:UpdateItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
       Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LOCATION_TABLE}'
@@ -67,7 +67,7 @@ DeleteLocation:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:DeleteLocation
+        - dynamodb:DeleteItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
       Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LOCATION_TABLE}'

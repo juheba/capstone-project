@@ -84,9 +84,9 @@ DeleteTodo:
 
 # Configure this function
 # Provide property for setting up CORS, Authorizer, iamRoleStatements
-GenerateUploadUrl:
+GenerateTodoUploadUrl:
   tracing: true
-  handler: src/lambda/http/generateUploadUrl.main
+  handler: src/lambda/http/generateTodoUploadUrl.main
   events:
     - http:
         method: post

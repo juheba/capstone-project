@@ -54,6 +54,10 @@ export async function updateItem(userId: string, itemId: string, updateItemReque
   return await itemAccess.updateItem(userId, item)
 }
 
+export async function updateAttachmentUrl(userId: string, itemId: string, url: string): Promise<Item> {
+  return await itemAccess.updateAttachmentUrl(userId, itemId, url)
+}
+
 export async function deleteItem(userId: string, itemId: string): Promise<Boolean> {
   return await itemAccess.deleteItem(userId, itemId)
 }

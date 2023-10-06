@@ -2,19 +2,11 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
-    "itemIds": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "uniqueItems": true
+    "itemId": {
+      "type": "string"
     },
-    "collectionIds": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "uniqueItems": true
+    "locationId": {
+      "type": "string"
     }
   },
   "anyOf": [
@@ -25,14 +17,14 @@
     },
     {
       "required": [
-        "collectionIds"
+        "locationId"
       ]
     }
   ],
   "not": {
     "required": [
       "itemIds",
-      "collectionIds"
+      "locationId"
     ]
   },
   "additionalProperties": false

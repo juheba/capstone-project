@@ -77,7 +77,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"collectionIds\": [\"def25b1c-f6d6-4628-a631-70985c0afb8c\", \"72491f8c-33d3-46a5-bec3-5b8a3eecd256\", \"{{temp_collectionId}}\"]\n}"
+									"raw": "{\n  \"itemIds\": [\"d84dc947-8091-44d9-85e6-e38920ad48f3\", \"{{temp_collectionId}}\"]\n}"
 								},
 								"url": {
 									"raw": "{{BASE_URL}}/{{STAGE}}/collections/{{temp_collectionId}}/items",
@@ -535,7 +535,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"title\": \"edited - {{$randomProductName}}\",\n  \"description\": \"{{$randomPhrase}}\",\n  \"itemType\": \"{{$randomProductMaterial}}\",\n  \"isLendable\": true,\n  \"ownershipStatus\": \"OWNER\",\n  \"status\": \"TODO\"\n}"
+							"raw": "{\n  \"title\": \"edited - {{$randomProductName}}\",\n  \"description\": \"{{$randomPhrase}}\",\n  \"itemType\": \"{{$randomProductMaterial}}\",\n  \"locationId\": \"{{temp_locationId}}\",\n  \"isLendable\": true,\n  \"ownershipStatus\": \"OWNER\",\n  \"status\": \"TODO\"\n}"
 						},
 						"url": {
 							"raw": "{{BASE_URL}}/{{STAGE}}/items/{{temp_itemId}}",
@@ -729,7 +729,7 @@
 					"response": []
 				},
 				{
-					"name": "Update collection",
+					"name": "Update location",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -759,7 +759,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete collection",
+					"name": "Delete location",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -794,6 +794,112 @@
 								"{{STAGE}}",
 								"locations",
 								"{{temp_locationId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "attatchments",
+			"item": [
+				{
+					"name": "Create item attachment URL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"pm.environment.set(\"temp_uploadUrl\", responseJson.uploadUrl);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"itemId\": \"{{temp_itemId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/attachments",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"attachments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create location attachment URL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"pm.environment.set(\"temp_uploadUrl\", responseJson.uploadUrl);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"locationId\": \"{{temp_locationId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/{{STAGE}}/attachments",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"{{STAGE}}",
+								"attachments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UploadURL with actual image binary",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": "/C:/Users/Julia/Git/juheba-github/capstone-project/postman/myoctocat.com_build-your-octocat.png"
+							}
+						},
+						"url": {
+							"raw": "{{temp_uploadUrl}}",
+							"host": [
+								"{{temp_uploadUrl}}"
 							]
 						}
 					},

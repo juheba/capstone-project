@@ -33,7 +33,7 @@ export async function createAttachmentPresignedUrl(userId: string, todoId: strin
   const attachmentUrl = attachmentsAccess.getAttachmentUrl(attachmentId)
   await todoAccess.updateAttachmentUrl(userId, todoId, attachmentUrl)
 
-  return await attachmentsAccess.getUploadUrl(attachmentId)
+  return await attachmentsAccess.getUploadUrl(userId, attachmentId)
 }
 
 export async function updateTodo(userId: string, todoId: string, updateTodoRequest: UpdateTodoRequest): Promise <TodoItem> {

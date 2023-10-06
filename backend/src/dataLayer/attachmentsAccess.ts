@@ -1,5 +1,6 @@
-import { initAWS } from '@utils'
+import { createLogger, initAWS } from '@utils'
 
+const logger = createLogger('attatchmentsAccess')
 const AWS = initAWS()
 
 export class AttachmentsAccess {
@@ -14,7 +15,8 @@ export class AttachmentsAccess {
     return `https://${this.bucketName}.s3.amazonaws.com/${attachmentId}`
   }
 
-  async getUploadUrl(attachmentId: string) {
+  async getUploadUrl(userId: string, attachmentId: string) {
+    logger.info({message: 'Perform S3 PUT operation', userId: userId, attachmentId: attachmentId})
     return this.s3.getSignedUrl('putObject', {  // The URL will allow to perform the PUT operation
       Bucket: this.bucketName,
       Key: attachmentId,
