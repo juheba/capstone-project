@@ -7,7 +7,8 @@ Brainstorming:
   * Item laden, anlegen, bearbeiten, löschen
 * User kann ein Item von einer Collection in eine andere verschieben
 * Sort/Filter Options - Options to sort and filter items within the collection based on various attributes (e.g., title, author/director, release date, rating).
-* User kann Item verleihen * Ausleihdaten verwalten
+* User kann Item verleihen
+  * Ausleihdaten verwalten
   * Ausleihe anlegen, bearbeiten, löschen
 * User erhält Notification
   * wenn Item aufgenommen wird (?)
@@ -92,13 +93,13 @@ aws dynamodb describe-table --endpoint-url http://localhost:8000 --table-name to
 |             | Genre       | The genre(s) of the item (e.g., fantasy, action, romance). |
 |             | Creator(s)  | The author(s), director(s), or other creator(s) of the item. |
 |             | Release/Publication Date | The date the item was originally released or published. |
-|             | Cover/Image | An image of the item's cover or poster. |
+|     ✅     | Cover/Image | An image of the item's cover or poster. |
 |             | Review/Notes | A section where the user can write personal notes about the item. |
 |             | Rating      | The item's rating, either user-generated or from a popular rating system (e.g., IMDb for movies, Goodreads for books). |
 |     ✅     | isLendable (boolean)| Information about whether the user (owner) would lend the item. |
 |     ✅     | Ownership | Information about whether the user owns the item, wishes to buy it, has borrowed it, etc. |
 |     ✅     | Status      | Information about whether the item has been read/watched, is currently being read/watched, or is on a to-read/to-watch list. |
-|             | LocationID  | A unique identifier for each location. |
+|     ✅     | LocationID  | A unique identifier for each location. |
 |     ✅     | Creation Date/Last Modified | The date the collection was created and the date it was last updated.|
 |             | Tags/Labels | User-defined labels or tags that can be used to categorize and filter items. |
 
@@ -114,7 +115,7 @@ aws dynamodb describe-table --endpoint-url http://localhost:8000 --table-name to
 |     ✅     | LocationID  | A unique identifier for each location. |
 |     ✅     | Title/Name  | The name of the location (e.g., "Living Room Bookshelf", "Storage Box 1"). Allows users to identify and search for locations. |
 |     ✅     | Description | A description of the location. Provides users with more information about each location, such as its physical characteristics or where it is located in the user's home. |
-|             | ImageURL    | An image of the location for easier recognation. |
+|     ✅     | ImageURL    | An image of the location for easier recognation. |
 
 **Lending:** Stores information about each lending transaction.
 | implemented | name        | description |
