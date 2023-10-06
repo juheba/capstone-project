@@ -25,6 +25,11 @@
       "type": "string",
       "minLength": 1
     },
+    "locationId": {
+      "description": "A physical location where the item is stored.",
+      "type": "string",
+      "minLength": 1
+    },
     "isLendable": {
       "description": "Information about whether the user (owner) would lend the item.",
       "type": "boolean"

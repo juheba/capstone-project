@@ -78,15 +78,20 @@ export class ItemAccess {
         userId,
         itemId: updatedItem.itemId
       },
-      UpdateExpression: "SET itemType = :itemType, title = :title, description = :description, isLendable = :isLendable, ownershipStatus = :ownershipStatus, #s = :status, lastModified = :lastModified",
+      UpdateExpression: "SET itemType = :itemType, title = :title, description = :description, locationId = :locationId, "
+                        + " isLendable = :isLendable, ownershipStatus = :ownershipStatus, #s = :status, lastModified = :lastModified",
       ExpressionAttributeValues: {
         ":itemType": updatedItem.itemType,
         ":title": updatedItem.title,
         ":description": updatedItem.description,
+        ":locationId": updatedItem.locationId,
         ":isLendable": updatedItem.isLendable,
         ":ownershipStatus": updatedItem.ownershipStatus,
         ":status": updatedItem.status,
         ":lastModified": updatedItem.lastModified
+        //":notes": updatedItem.notes,
+        //":rating": updatedItem.rating,
+        //":image": updatedItem.image,
       },
       ExpressionAttributeNames: {  // Because status is a reserved keyword
         "#s": "status"
