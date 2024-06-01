@@ -118,18 +118,121 @@
           </p>
         </div>
 
-        <div class="text-center hero auth-visible">
-          <img class="mb-3 app-logo" src="/images/logo.png" alt="JavaScript logo" width="75" />
-          <h1 class="mb-4">Authenticated</h1>
+        <div class="text-center auth-visible">
+          <h1 class="mb-4">Authenticated!</h1>
 
-          <textarea id="userJWT" rows="8" class="lead" style="width: 500px;" readonly>
+          <textarea id="userJWT" rows="8" class="lead" style="width: 1000px; height: 80px;" readonly>
           </textarea>
           <div>
             <button id="copyButton" onclick="copyText()">Copy text</button>
-            <div id="tooltip" style="visibility: hidden; background-color: #555; color: #fff; text-align: center; border-radius: 6px; margin: 10px; padding: 5px; z-index: 9999;">
+            <div id="tooltip"
+              style="visibility: hidden; background-color: #555; color: #fff; text-align: center; border-radius: 6px; margin: 10px; padding: 5px; z-index: 9999;">
               Copied!
             </div>
           </div>
+        </div>
+
+        <div class="text-center auth-visible">
+          <div class="container" id="collections-view">
+            <h2 class="mb-4">Collections</h2>
+            <table id="collections-table" class="table">
+              <thead>
+                <tr>
+                  <th>Visibility</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="collections-list">
+                <!-- collections will be populated here -->
+              </tbody>
+            </table>
+            <button class="btn btn-primary" onclick="showNewCollectionForm()">New Collection</button>
+          </div>
+
+          <div class="container" id="items-view" style="display: none;">
+            <h2 class="mb-4" id="h2-collection-name"></h2>
+            <table id="items-table" class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Type</th>
+                  <th>Lendable?</th>
+                  <th>Ownership</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="items-list">
+                <!-- items will be populated here -->
+              </tbody>
+            </table>
+            <button class="btn btn-primary" onclick="showNewItemForm()">New Item</button>
+          </div>
+
+          <!-- New/Edit Collection Modal -->
+          <div class="modal" tabindex="-1" id="collection-modal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="collection-modal-title">New Collection</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form id="collection-form">
+                    <div class="form-group">
+                      <label for="name">Name</label>
+                      <input type="text" class="form-control" id="name" maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="description">Description</label>
+                      <input type="text" class="form-control" id="description" maxlength="200" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="visibility">Visibility</label>
+                      <select class="form-control" id="visibility">
+                        <option value="PUBLIC">PUBLIC</option>
+                        <option value="PRIVATE">PRIVATE</option>
+                      </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- New/Edit Collection Modal -->
+          <div class="modal" tabindex="-1" id="item-modal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="item-modal-title">New Image</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form id="item-form">
+                    <div class="form-group">
+                      <label for="item-title">Title</label>
+                      <input type="text" class="form-control" id="item-title" maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="description">Description</label>
+                      <input type="text" class="form-control" id="description" maxlength="200" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         <div class="page" id="content-profile">
@@ -167,6 +270,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/collections.js"></script>
 </body>
 
 </html>
