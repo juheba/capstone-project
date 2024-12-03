@@ -8,18 +8,20 @@
       "type": "object",
       "properties": {
         "collectionId": {
-          "type": "string"
+          "type": "string",
+          "format": "uuid"
         },
         "userId": {
-          "type": "string"
+          "type": "string",
+          "format": "uuid"
         },
         "lastModified": {
           "type": "string",
-          "format": "date"
+          "format": "date-time"
         },
         "createdAt": {
           "type": "string",
-          "format": "date"
+          "format": "date-time"
         },
         "name": {
           "description": "The name of the collection (e.g., \"Science Fiction Books\", \"Marvel Movies\").",

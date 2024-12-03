@@ -18,25 +18,27 @@
       "minLength": 1
     },
     "userId": {
-      "type": "string"
+      "type": "string",
+      "format": "uuid"
     },
     "addedAt": {
       "type": "string",
-      "format": "date"
+      "format": "date-time"
     },
     "lastModified": {
       "type": "string",
-      "format": "date"
+      "format": "date-time"
     },
     "attachmentUrl": {
       "description": "A upload url to attach a file to an item or location depending on the request parameter.",
       "type": "string",
+      "format": "url",
       "minLength": 1
     },
     "locationId": {
       "description": "A physical location where the item is stored.",
       "type": "string",
-      "minLength": 1
+      "format": "uuid"
     }
   },
   "additionalProperties": false

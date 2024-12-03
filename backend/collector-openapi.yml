@@ -11,11 +11,13 @@ components:
             Creates a upload url to attach a file to an item. If itemId is
             provided, then locationId is unnessary.
           type: string
+          format: uuid
         locationId:
           description: >-
             Creates a upload url to attach a file to an location. If locationId
             is provided, then itemId is unnessary.
           type: string
+          format: uuid
       anyOf:
         - required:
             - itemIds
@@ -109,14 +111,16 @@ components:
             properties:
               collectionId:
                 type: string
+                format: uuid
               userId:
                 type: string
+                format: uuid
               lastModified:
                 type: string
-                format: date
+                format: date-time
               createdAt:
                 type: string
-                format: date
+                format: date-time
               name:
                 description: >-
                   The name of the collection (e.g., "Science Fiction Books",
@@ -149,14 +153,16 @@ components:
           properties:
             collectionId:
               type: string
+              format: uuid
             userId:
               type: string
+              format: uuid
             lastModified:
               type: string
-              format: date
+              format: date-time
             createdAt:
               type: string
-              format: date
+              format: date-time
             name:
               description: >-
                 The name of the collection (e.g., "Science Fiction Books",
@@ -188,6 +194,7 @@ components:
             properties:
               itemId:
                 type: string
+                format: uuid
               title:
                 description: >-
                   The title of the item (e.g., the name of the book, movie, or
@@ -204,22 +211,24 @@ components:
                 minLength: 1
               userId:
                 type: string
+                format: uuid
               addedAt:
                 type: string
-                format: date
+                format: date-time
               lastModified:
                 type: string
-                format: date
+                format: date-time
               attachmentUrl:
                 description: >-
                   A upload url to attach a file to an item or location depending
                   on the request parameter.
                 type: string
+                format: url
                 minLength: 1
               locationId:
                 description: A physical location where the item is stored.
                 type: string
-                minLength: 1
+                format: uuid
               isLendable:
                 description: >-
                   Information about whether the user (owner) would lend the
@@ -272,7 +281,7 @@ components:
         locationId:
           description: A physical location where the item is stored.
           type: string
-          minLength: 1
+          format: uuid
         isLendable:
           description: Information about whether the user (owner) would lend the item.
           type: boolean
@@ -322,7 +331,7 @@ components:
         locationId:
           description: A physical location where the item is stored.
           type: string
-          minLength: 1
+          format: uuid
         isLendable:
           description: Information about whether the user (owner) would lend the item.
           type: boolean
@@ -350,7 +359,7 @@ components:
       description: A array with all items of a collection.
       type: object
       required:
-        - collections
+        - items
         - nextKey
       properties:
         items:
@@ -376,22 +385,24 @@ components:
                 minLength: 1
               userId:
                 type: string
+                format: uuid
               addedAt:
                 type: string
-                format: date
+                format: date-time
               lastModified:
                 type: string
-                format: date
+                format: date-time
               attachmentUrl:
                 description: >-
                   A upload url to attach a file to an item or location depending
                   on the request parameter.
                 type: string
+                format: url
                 minLength: 1
               locationId:
                 description: A physical location where the item is stored.
                 type: string
-                minLength: 1
+                format: uuid
               isLendable:
                 description: >-
                   Information about whether the user (owner) would lend the
@@ -434,6 +445,7 @@ components:
       properties:
         itemId:
           type: string
+          format: uuid
         title:
           description: The title of the item (e.g., the name of the book, movie, or comic).
           type: string
@@ -448,22 +460,24 @@ components:
           minLength: 1
         userId:
           type: string
+          format: uuid
         addedAt:
           type: string
-          format: date
+          format: date-time
         lastModified:
           type: string
-          format: date
+          format: date-time
         attachmentUrl:
           description: >-
             A upload url to attach a file to an item or location depending on
             the request parameter.
           type: string
+          format: url
           minLength: 1
         locationId:
           description: A physical location where the item is stored.
           type: string
-          minLength: 1
+          format: uuid
         isLendable:
           description: Information about whether the user (owner) would lend the item.
           type: boolean
@@ -498,14 +512,16 @@ components:
             properties:
               collectionId:
                 type: string
+                format: uuid
               userId:
                 type: string
+                format: uuid
               lastModified:
                 type: string
-                format: date
+                format: date-time
               createdAt:
                 type: string
-                format: date
+                format: date-time
               name:
                 description: >-
                   The name of the collection (e.g., "Science Fiction Books",
@@ -588,22 +604,24 @@ components:
                 minLength: 1
               userId:
                 type: string
+                format: uuid
               addedAt:
                 type: string
-                format: date
+                format: date-time
               lastModified:
                 type: string
-                format: date
+                format: date-time
               attachmentUrl:
                 description: >-
                   A upload url to attach a file to an item or location depending
                   on the request parameter.
                 type: string
+                format: url
                 minLength: 1
               locationId:
                 description: A physical location where the item is stored.
                 type: string
-                minLength: 1
+                format: uuid
         nextKey:
           type: string
           nullable: true
@@ -627,22 +645,24 @@ components:
           minLength: 1
         userId:
           type: string
+          format: uuid
         addedAt:
           type: string
-          format: date
+          format: date-time
         lastModified:
           type: string
-          format: date
+          format: date-time
         attachmentUrl:
           description: >-
             A upload url to attach a file to an item or location depending on
             the request parameter.
           type: string
+          format: url
           minLength: 1
         locationId:
           description: A physical location where the item is stored.
           type: string
-          minLength: 1
+          format: uuid
       additionalProperties: false
     UpdateCollectionItemsRequest:
       title: UpdateCollectionItemsRequest
@@ -695,8 +715,118 @@ components:
           type: string
           minLength: 1
       additionalProperties: false
+    400ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error.
+      required:
+        - statusCode
+        - errorCode
+        - message
+      type: object
+      properties:
+        statusCode:
+          description: The http status code.
+          type: number
+          minimum: 100
+          maximum: 599
+        errorCode:
+          description: An unique error code.
+          type: string
+          minLength: 1
+        message:
+          description: Short error message.
+          type: string
+          minLength: 1
+        details:
+          description: Additional details about the error (optional).
+          type: string
+          minLength: 1
+      additionalProperties: false
+    401ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error.
+      required:
+        - statusCode
+        - errorCode
+        - message
+      type: object
+      properties:
+        statusCode:
+          description: The http status code.
+          type: number
+          minimum: 100
+          maximum: 599
+        errorCode:
+          description: An unique error code.
+          type: string
+          minLength: 1
+        message:
+          description: Short error message.
+          type: string
+          minLength: 1
+        details:
+          description: Additional details about the error (optional).
+          type: string
+          minLength: 1
+      additionalProperties: false
+    404ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error.
+      required:
+        - statusCode
+        - errorCode
+        - message
+      type: object
+      properties:
+        statusCode:
+          description: The http status code.
+          type: number
+          minimum: 100
+          maximum: 599
+        errorCode:
+          description: An unique error code.
+          type: string
+          minLength: 1
+        message:
+          description: Short error message.
+          type: string
+          minLength: 1
+        details:
+          description: Additional details about the error (optional).
+          type: string
+          minLength: 1
+      additionalProperties: false
+    500ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error.
+      required:
+        - statusCode
+        - errorCode
+        - message
+      type: object
+      properties:
+        statusCode:
+          description: The http status code.
+          type: number
+          minimum: 100
+          maximum: 599
+        errorCode:
+          description: An unique error code.
+          type: string
+          minLength: 1
+        message:
+          description: Short error message.
+          type: string
+          minLength: 1
+        details:
+          description: Additional details about the error (optional).
+          type: string
+          minLength: 1
+      additionalProperties: false
     limit:
-      type: string
+      type: number
+      format: int64
+      minimum: 1
     nextKey:
       type: string
     Access-Control-Allow-Origin:
@@ -706,7 +836,7 @@ components:
     Access-Control-Allow-Credentials:
       type: boolean
       default: true
-    d8e234f2-601b-49bf-8893-4d45ba8bfc71:
+    d18fbcf2-b634-4b4d-beea-20a29c91cd76:
       title: CreateCollectionRequest
       description: Stores information about the items in each user's collection.
       required:
@@ -735,7 +865,8 @@ components:
       additionalProperties: false
     collectionId:
       type: string
-    86fea3ff-54f4-4d84-b421-a3a8e1f2eb1a:
+      format: uuid
+    5cce8c58-4893-46fb-bc69-ce877344cbc0:
       title: UpdateCollectionRequest
       description: Stores information about the items in each user's collection.
       required:
@@ -762,7 +893,7 @@ components:
             - PRIVATE
             - PUBLIC
       additionalProperties: false
-    48aedce9-58d7-4570-a510-cb4598bf5f8b:
+    7a0d5c78-b1a8-44d1-b6f8-ae85ac4fd2be:
       title: CreateItemRequest
       description: >-
         Stores information about each item that can be part of a user's
@@ -789,7 +920,7 @@ components:
         locationId:
           description: A physical location where the item is stored.
           type: string
-          minLength: 1
+          format: uuid
         isLendable:
           description: Information about whether the user (owner) would lend the item.
           type: boolean
@@ -814,7 +945,8 @@ components:
       additionalProperties: false
     itemId:
       type: string
-    4ae7047f-7117-4089-af77-8507d0e0ef45:
+      format: uuid
+    e9668716-1b2c-4509-8694-6e55f1f53d24:
       title: UpdateItemRequest
       description: >-
         Stores information about each item that can be part of a user's
@@ -841,7 +973,7 @@ components:
         locationId:
           description: A physical location where the item is stored.
           type: string
-          minLength: 1
+          format: uuid
         isLendable:
           description: Information about whether the user (owner) would lend the item.
           type: boolean
@@ -864,7 +996,7 @@ components:
             - PROCESSING
             - DONE
       additionalProperties: false
-    384ec684-3933-498b-8614-9a9dae6f9ce5:
+    5d993fe4-a57d-478b-92c0-3883890b9f56:
       title: CreateLocationRequest
       description: Represents the physical locations where collection items.
       required:
@@ -884,7 +1016,8 @@ components:
       additionalProperties: false
     locationId:
       type: string
-    c8793222-7ccd-49fc-acf1-8f22eb1cb413:
+      format: uuid
+    0083397b-b7fc-45d7-bc70-71d2037ad69d:
       title: UpdateLocationRequest
       description: Represents the physical locations where collection items.
       required:
@@ -906,6 +1039,31 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
+  examples:
+    400Example:
+      summary: 400 Bad Request error
+      description: An example of an 400 Bad Request error
+      value: >-
+        {"statusCode": 400, "errorCode": "T123", "message": "Bad Request - some
+        value is missing."}
+    401Example:
+      summary: 401 Unauthorized
+      description: An example of an 401 Unauthorized error
+      value: >-
+        {"statusCode": 401, "errorCode": "T123", "message": "Unauthorized - user
+        is not logged in or authorization failed."}
+    500Example:
+      summary: 500 Internal Server error
+      description: An example of an 500 Internal Server error
+      value: >-
+        {"statusCode": 500, "errorCode": "T123", "message": "Internal Server -
+        something went horrably wrong."}
+    404Example:
+      summary: 404 Not Found error
+      description: An example of an 404 Not Found error
+      value: >-
+        {"statusCode": 404, "errorCode": "T123", "message": "Not Found - the
+        requested resource does not exist."}
 info:
   title: Collector API
   description: Serverless application for collection management
@@ -965,8 +1123,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -992,8 +1153,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1019,8 +1183,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1057,7 +1224,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/d8e234f2-601b-49bf-8893-4d45ba8bfc71'
+              $ref: '#/components/schemas/d18fbcf2-b634-4b4d-beea-20a29c91cd76'
       responses:
         '201':
           description: The newly created collection with additional parameters.
@@ -1090,8 +1257,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1117,8 +1287,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1144,8 +1317,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1189,7 +1365,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/86fea3ff-54f4-4d84-b421-a3a8e1f2eb1a'
+              $ref: '#/components/schemas/5cce8c58-4893-46fb-bc69-ce877344cbc0'
       responses:
         '200':
           description: The updated collection with changed parameters.
@@ -1222,8 +1398,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1249,8 +1428,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1276,8 +1458,11 @@ paths:
           description: Not Found - message with additional information what wasn't found.
           content:
             application/json:
+              examples:
+                404Example:
+                  $ref: '#/components/examples/404Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/404ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1303,8 +1488,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1369,8 +1557,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1396,8 +1587,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1423,8 +1617,11 @@ paths:
           description: Not Found - message with additional information what wasn't found.
           content:
             application/json:
+              examples:
+                404Example:
+                  $ref: '#/components/examples/404Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/404ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1450,8 +1647,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1521,8 +1721,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1548,8 +1751,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1575,8 +1781,11 @@ paths:
           description: Not Found - message with additional information what wasn't found.
           content:
             application/json:
+              examples:
+                404Example:
+                  $ref: '#/components/examples/404Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/404ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1602,8 +1811,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1675,8 +1887,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1702,8 +1917,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1729,8 +1947,11 @@ paths:
           description: Not Found - message with additional information what wasn't found.
           content:
             application/json:
+              examples:
+                404Example:
+                  $ref: '#/components/examples/404Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/404ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1756,8 +1977,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1787,13 +2011,13 @@ paths:
       parameters:
         - name: limit
           in: query
-          description: (optional) Iterates over the items with the given limit.
+          description: (optional) Iterates over the collections with the given limit.
           required: false
           schema:
             $ref: '#/components/schemas/limit'
         - name: nextKey
           in: query
-          description: (optional) Iterates over the items with the given nextKey.
+          description: (optional) Iterates over the collections with the given nextKey.
           required: false
           schema:
             $ref: '#/components/schemas/nextKey'
@@ -1833,8 +2057,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1860,8 +2087,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1887,8 +2117,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1925,7 +2158,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/48aedce9-58d7-4570-a510-cb4598bf5f8b'
+              $ref: '#/components/schemas/7a0d5c78-b1a8-44d1-b6f8-ae85ac4fd2be'
       responses:
         '201':
           description: The newly created item with additional parameters.
@@ -1958,8 +2191,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -1985,8 +2221,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2012,8 +2251,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2057,7 +2299,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/4ae7047f-7117-4089-af77-8507d0e0ef45'
+              $ref: '#/components/schemas/e9668716-1b2c-4509-8694-6e55f1f53d24'
       responses:
         '200':
           description: The updated item with changed parameters.
@@ -2090,8 +2332,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2117,8 +2362,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2144,8 +2392,11 @@ paths:
           description: Not Found - message with additional information what wasn't found.
           content:
             application/json:
+              examples:
+                404Example:
+                  $ref: '#/components/examples/404Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/404ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2171,8 +2422,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2237,8 +2491,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2264,8 +2521,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2291,8 +2551,11 @@ paths:
           description: Not Found - message with additional information what wasn't found.
           content:
             application/json:
+              examples:
+                404Example:
+                  $ref: '#/components/examples/404Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/404ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2318,8 +2581,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2389,8 +2655,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2416,8 +2685,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2443,8 +2715,11 @@ paths:
           description: Not Found - message with additional information what wasn't found.
           content:
             application/json:
+              examples:
+                404Example:
+                  $ref: '#/components/examples/404Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/404ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2470,8 +2745,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2543,8 +2821,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2570,8 +2851,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2597,8 +2881,11 @@ paths:
           description: Not Found - message with additional information what wasn't found.
           content:
             application/json:
+              examples:
+                404Example:
+                  $ref: '#/components/examples/404Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/404ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2624,8 +2911,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2655,13 +2945,13 @@ paths:
       parameters:
         - name: limit
           in: query
-          description: (optional) Iterates over the locations with the given limit.
+          description: (optional) Iterates over the collections with the given limit.
           required: false
           schema:
             $ref: '#/components/schemas/limit'
         - name: nextKey
           in: query
-          description: (optional) Iterates over the locations with the given nextKey.
+          description: (optional) Iterates over the collections with the given nextKey.
           required: false
           schema:
             $ref: '#/components/schemas/nextKey'
@@ -2701,8 +2991,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2728,8 +3021,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2755,8 +3051,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2793,7 +3092,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/384ec684-3933-498b-8614-9a9dae6f9ce5'
+              $ref: '#/components/schemas/5d993fe4-a57d-478b-92c0-3883890b9f56'
       responses:
         '201':
           description: The newly created location with additional parameters.
@@ -2826,8 +3125,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2853,8 +3155,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2880,8 +3185,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2925,7 +3233,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/c8793222-7ccd-49fc-acf1-8f22eb1cb413'
+              $ref: '#/components/schemas/0083397b-b7fc-45d7-bc70-71d2037ad69d'
       responses:
         '200':
           description: The updated location with changed parameters.
@@ -2958,8 +3266,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -2985,8 +3296,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -3012,8 +3326,11 @@ paths:
           description: Not Found - message with additional information what wasn't found.
           content:
             application/json:
+              examples:
+                404Example:
+                  $ref: '#/components/examples/404Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/404ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -3039,8 +3356,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -3105,8 +3425,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -3132,8 +3455,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -3159,8 +3485,11 @@ paths:
           description: Not Found - message with additional information what wasn't found.
           content:
             application/json:
+              examples:
+                404Example:
+                  $ref: '#/components/examples/404Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/404ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -3186,8 +3515,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -3258,8 +3590,11 @@ paths:
           description: Bad Request - message with additional information.
           content:
             application/json:
+              examples:
+                400Example:
+                  $ref: '#/components/examples/400Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/400ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -3285,8 +3620,11 @@ paths:
           description: Unauthorized - user is not logged in or authorization failed.
           content:
             application/json:
+              examples:
+                401Example:
+                  $ref: '#/components/examples/401Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/401ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -3312,8 +3650,11 @@ paths:
           description: Not Found - message with additional information what wasn't found.
           content:
             application/json:
+              examples:
+                404Example:
+                  $ref: '#/components/examples/404Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/404ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -3339,8 +3680,11 @@ paths:
           description: Internal Server Error - message with additional information.
           content:
             application/json:
+              examples:
+                500Example:
+                  $ref: '#/components/examples/500Example'
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/500ErrorResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-

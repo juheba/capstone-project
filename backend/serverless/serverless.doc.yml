@@ -85,7 +85,44 @@ documentation:
     # ErrorResponse
     - name: ErrorResponse
       contentType: application/json
-      schema: ${file(schemas/error-response.json)}
+      schema: &ErrorResponse ${file(schemas/error-response.json)}
+    - name: 400ErrorResponse
+      description: &400Description Bad Request - message with additional information.
+      contentType: application/json
+      schema: *ErrorResponse
+      examples:
+        - name: 400Example
+          summary: 400 Bad Request error
+          description: An example of an 400 Bad Request error
+          value: '{"statusCode": 400, "errorCode": "T123", "message": "Bad Request - some value is missing."}'
+    - name: 401ErrorResponse
+      description: &401Description Unauthorized - user is not logged in or authorization failed.
+      contentType: application/json
+      schema: *ErrorResponse
+      examples:
+        - name: 401Example
+          summary: 401 Unauthorized
+          description: An example of an 401 Unauthorized error
+          value: '{"statusCode": 401, "errorCode": "T123", "message": "Unauthorized - user is not logged in or authorization failed."}'
+    - name: 404ErrorResponse
+      description: &404Description Not Found - message with additional information what wasn't found.
+      contentType: application/json
+      schema: *ErrorResponse
+      examples:
+        - name: 404Example
+          summary: 404 Not Found error
+          description: An example of an 404 Not Found error
+          value: '{"statusCode": 404, "errorCode": "T123", "message": "Not Found - the requested resource does not exist."}'
+    - name: 500ErrorResponse
+      description: &500Description Internal Server Error - message with additional information.
+      contentType: application/json
+      schema: *ErrorResponse
+      examples:
+        - name: 500Example
+          summary: 500 Internal Server error
+          description: An example of an 500 Internal Server error
+          value: '{"statusCode": 500, "errorCode": "T123", "message": "Internal Server - something went horrably wrong."}'
+
 
 endpoints:
 ## Attatchment ##
@@ -110,24 +147,24 @@ endpoints:
           application/json: AttatchmentURLResponse
       - statusCode: "400"
         responseBody:
-          description: &400Description Bad Request - message with additional information.
+          description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
-          description: &401Description Unauthorized - user is not logged in or authorization failed.
+          description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "404"
         responseBody:
-          description: &404Description Not Found - message with additional information what wasn't found.
+          description: *404Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 404ErrorResponse
       - statusCode: "500"
         responseBody:
-          description: &500Description Internal Server Error - message with additional information.
+          description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
 ## Collectons ##
 
@@ -140,12 +177,14 @@ endpoints:
       - bearerAuth: []  # No scopes required
     queryParams:
       - name: limit
-        description: (optional) Iterates over the collections with the given limit.
-        schema:
-          type: string
+        description: &LimitDescription (optional) Iterates over the collections with the given limit.
+        schema: &Limit
+          type: number
+          format: int64
+          minimum: 1
       - name: nextKey
-        description: (optional) Iterates over the collections with the given nextKey.
-        schema:
+        description: &NextKeyDescription (optional) Iterates over the collections with the given nextKey.
+        schema: &NextKey
           type: string
     methodResponses:
       - statusCode: "200"
@@ -157,17 +196,17 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
   CreateCollection:
     summary: Create a new collection
@@ -190,17 +229,17 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
   UpdateCollection:
     summary: Update collection
@@ -212,8 +251,9 @@ endpoints:
     pathParams:
       - name: collectionId
         description: ID of the collection which will receive the update.
-        schema:
+        schema: &CollectionId
           type: string
+          format: uuid
         required: true
     responseBody:
       description: The updated collection with changed parameters.
@@ -229,22 +269,22 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "404"
         responseBody:
           description: *404Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 404ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
   DeleteCollection:
     summary: Delete collection
@@ -256,8 +296,7 @@ endpoints:
     pathParams:
       - name: collectionId
         description: ID of the collection which will be deleted.
-        schema:
-          type: string
+        schema: *CollectionId
         required: true
     methodResponses:
       - statusCode: "204"
@@ -267,22 +306,22 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "404"
         responseBody:
           description: *404Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 404ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
   GetCollectionItems:
     summary: Get all items of a collection
@@ -294,8 +333,7 @@ endpoints:
     pathParams:
       - name: collectionId
         description: ID of the collection.
-        schema:
-          type: string
+        schema: *CollectionId
         required: true
     responseBody:
       description: List of all items of a collection.
@@ -309,22 +347,22 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "404"
         responseBody:
           description: *404Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 404ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
 
   # CollectionItems: Item => Collection
@@ -338,8 +376,7 @@ endpoints:
     pathParams:
       - name: collectionId
         description: ID of the collection which will receive the items.
-        schema:
-          type: string
+        schema: *CollectionId
         required: true
     requestBody:
       description: Items to add to the collection.
@@ -353,22 +390,22 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "404"
         responseBody:
           description: *404Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 404ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
 ## Items ##
 
@@ -381,13 +418,11 @@ endpoints:
       - bearerAuth: []  # No scopes required
     queryParams:
       - name: limit
-        description: (optional) Iterates over the items with the given limit.
-        schema:
-          type: string
+        description: *LimitDescription
+        schema: *Limit
       - name: nextKey
-        description: (optional) Iterates over the items with the given nextKey.
-        schema:
-          type: string
+        description: *NextKeyDescription
+        schema: *NextKey
     methodResponses:
       - statusCode: "200"
         responseBody:
@@ -398,17 +433,17 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
   CreateItem:
     summary: Create a new item
@@ -431,17 +466,17 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
   UpdateItem:
     summary: Update item
@@ -453,8 +488,9 @@ endpoints:
     pathParams:
       - name: itemId
         description: ID of the item which will receive the update.
-        schema:
+        schema: &ItemId
           type: string
+          format: uuid
         required: true
     responseBody:
       description: The updated item with changed parameters.
@@ -470,22 +506,22 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "404"
         responseBody:
           description: *404Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 404ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
   DeleteItem:
     summary: Delete item
@@ -497,8 +533,7 @@ endpoints:
     pathParams:
       - name: itemId
         description: ID of the item which will be deleted.
-        schema:
-          type: string
+        schema: *ItemId
         required: true
     methodResponses:
       - statusCode: "204"
@@ -508,22 +543,22 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "404"
         responseBody:
           description: *404Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 404ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
   GetItemCollections:
     summary: Get all collections of a item
@@ -535,8 +570,7 @@ endpoints:
     pathParams:
       - name: itemId
         description: ID of the item.
-        schema:
-          type: string
+        schema: *ItemId
         required: true
     responseBody:
       description: List of all collectons of a item.
@@ -550,22 +584,22 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "404"
         responseBody:
           description: *404Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 404ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
   UpdateItemCollections:
     summary: Adds collections to an item.
@@ -577,8 +611,7 @@ endpoints:
     pathParams:
       - name: itemId
         description: ID of the item which will receive the collections.
-        schema:
-          type: string
+        schema: *ItemId
         required: true
     requestBody:
       description: Collections to add to the item.
@@ -592,22 +625,22 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "404"
         responseBody:
           description: *404Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 404ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
 ## Locations ##
 
@@ -620,13 +653,11 @@ endpoints:
       - bearerAuth: []  # No scopes required
     queryParams:
       - name: limit
-        description: (optional) Iterates over the locations with the given limit.
-        schema:
-          type: string
+        description: *LimitDescription
+        schema: *Limit
       - name: nextKey
-        description: (optional) Iterates over the locations with the given nextKey.
-        schema:
-          type: string
+        description: *NextKeyDescription
+        schema: *NextKey
     methodResponses:
       - statusCode: "200"
         responseBody:
@@ -637,17 +668,17 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
   CreateLocation:
     summary: Create a new location
@@ -670,17 +701,17 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
   UpdateLocation:
     summary: Update location
@@ -692,8 +723,9 @@ endpoints:
     pathParams:
       - name: locationId
         description: ID of the location which will receive the update.
-        schema:
+        schema: &LocationId
           type: string
+          format: uuid
         required: true
     responseBody:
       description: The updated location with changed parameters.
@@ -709,22 +741,22 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "404"
         responseBody:
           description: *404Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 404ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse
 
   DeleteLocation:
     summary: Delete location
@@ -736,8 +768,7 @@ endpoints:
     pathParams:
       - name: locationId
         description: ID of the location which will be deleted.
-        schema:
-          type: string
+        schema: *LocationId
         required: true
     methodResponses:
       - statusCode: "204"
@@ -747,19 +778,19 @@ endpoints:
         responseBody:
           description: *400Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 400ErrorResponse
       - statusCode: "401"
         responseBody:
           description: *401Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 401ErrorResponse
       - statusCode: "404"
         responseBody:
           description: *404Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 404ErrorResponse
       - statusCode: "500"
         responseBody:
           description: *500Description
         responseModels:
-          application/json: ErrorResponse
+          application/json: 500ErrorResponse

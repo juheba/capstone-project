@@ -6,11 +6,13 @@
   "properties": {
     "itemId": {
       "description": "Creates a upload url to attach a file to an item. If itemId is provided, then locationId is unnessary.",
-      "type": "string"
+      "type": "string",
+      "format": "uuid"
     },
     "locationId": {
       "description": "Creates a upload url to attach a file to an location. If locationId is provided, then itemId is unnessary.",
-      "type": "string"
+      "type": "string",
+      "format": "uuid"
     }
   },
   "anyOf": [

@@ -28,7 +28,7 @@
     "locationId": {
       "description": "A physical location where the item is stored.",
       "type": "string",
-      "minLength": 1
+      "format": "uuid"
     },
     "isLendable": {
       "description": "Information about whether the user (owner) would lend the item.",
