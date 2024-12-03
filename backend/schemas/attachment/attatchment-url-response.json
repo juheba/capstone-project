@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "AttatchmentURLResponse",
+  "description": "Creates a attatchment upload url.",
+  "required": [
+    "uploadUrl"
+  ],
+  "type": "object",
+  "properties": {
+    "uploadUrl": {
+      "description": "A upload url to attach a file to an item or location depending on the request parameter.",
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false
+}

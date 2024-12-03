@@ -112,7 +112,7 @@ function parseBody(event): UpdateLocationRequest {
   if (parsedBody === undefined || parsedBody === null) {
     throw new Error('body does not exist.')
   }
-  // Because "pattern": "^.*\\S.*$" in update-location-model.json does not work for inputs like this: " \n\tTest"
+  // Because "pattern": "^.*\\S.*$" in update-location-request.json does not work for inputs like this: " \n\tTest"
   if(parsedBody.name.trim() === '') {
     throw new Error('name is empty.')
   }

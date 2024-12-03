@@ -2,7 +2,7 @@ org: juheba
 app: collector-app
 service: collector-app
 
-frameworkVersion: "3"
+frameworkVersion: '3'
 
 plugins:
   - serverless-webpack
@@ -11,6 +11,7 @@ plugins:
   - serverless-aws-documentation
   - serverless-offline
   - serverless-dynamodb-local
+  - serverless-openapi-documenter
 
 package:
   individually: true
@@ -26,12 +27,7 @@ package:
 custom:
   webpack:
     concurrency: 10 # desired concurrency, defaults to the number of available cores
-  documentation:
-    api:
-      info:
-        version: v.0.0.0
-        title: Collector API
-        description: Serverless application for collection management
+  documentation: ${file(serverless/serverless.doc.yml):documentation}
   serverless-offline:
     httpPort: 3003
   dynamodb:
@@ -42,7 +38,7 @@ custom:
       inMemory: true
       migrate: true
     stages:
-      - dev  # whitelist dev-stage
+      - dev # whitelist dev-stage
       # ${self:provider.stage}  # whitelists all stages
 
 provider:
@@ -50,9 +46,9 @@ provider:
   runtime: nodejs18.x
 
   stage: ${opt:stage, 'dev'}
-  region: ${opt:region, "eu-central-1"}  # "Value is not accepted." ignore this squiggly line. The Serverless IDE Plugins validation feature can't recognise the value.
+  region: ${opt:region, "eu-central-1"} # "Value is not accepted." ignore this squiggly line. The Serverless IDE Plugins validation feature can't recognise the value.
 
-#  tracing: true
+  #  tracing: true
   tracing:
     lambda: true
     apiGateway: true
@@ -76,7 +72,7 @@ provider:
     ATTACHMENTS_S3_BUCKET: ${self:org}-${self:app}-attachments-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
-    NODE_OPTIONS: --enable-source-maps --stack-trace-limit=1000
+    NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
 
   logs:
     # Enable API Gateway logs

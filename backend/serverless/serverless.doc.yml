@@ -1,0 +1,765 @@
+documentation:
+  api:
+    info:
+      version: &version v.0.0.0
+      title: &title Collector API
+      description: &description Serverless application for collection management
+  version: *version
+  title: *title
+  description: *description
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  tags:
+    - name: attatchment
+      description: Operations on attatchments
+    - name: collection
+      description: Operations on collections
+    - name: item
+      description: Operations on items
+    - name: location
+      description: Operations on locations
+  models:
+    # Attatchment
+    - name: CreateAttatchmentRequest
+      contentType: application/json
+      schema: ${file(schemas/attachment/create-attatchment-request.json)}
+    - name: AttatchmentURLResponse
+      contentType: application/json
+      schema: ${file(schemas/attachment/attatchment-url-response.json)}
+
+    # Collection
+    - name: CreateCollectionRequest
+      contentType: application/json
+      schema: ${file(schemas/collection/create-collection-request.json)}
+    - name: UpdateCollectionRequest
+      contentType: application/json
+      schema: ${file(schemas/collection/update-collection-request.json)}
+    - name: CollectionsResponse
+      contentType: application/json
+      schema: ${file(schemas/collection/collections-response.json)}
+    - name: CollectionResponse
+      contentType: application/json
+      schema: ${file(schemas/collection/collection-response.json)}
+    - name: CollectionItemsResponse
+      contentType: application/json
+      schema: ${file(schemas/collection/collection-items-response.json)}
+
+    # Item
+    - name: CreateItemRequest
+      contentType: application/json
+      schema: ${file(schemas/item/create-item-request.json)}
+    - name: UpdateItemRequest
+      contentType: application/json
+      schema: ${file(schemas/item/update-item-request.json)}
+    - name: ItemsResponse
+      contentType: application/json
+      schema: ${file(schemas/item/items-response.json)}
+    - name: ItemResponse
+      contentType: application/json
+      schema: ${file(schemas/item/item-response.json)}
+    - name: ItemCollectionsResponse
+      contentType: application/json
+      schema: ${file(schemas/item/item-collections-response.json)}
+
+    # Location
+    - name: CreateLocationRequest
+      contentType: application/json
+      schema: ${file(schemas/location/create-location-request.json)}
+    - name: UpdateLocationRequest
+      contentType: application/json
+      schema: ${file(schemas/location/update-location-request.json)}
+    - name: LocationsResponse
+      contentType: application/json
+      schema: ${file(schemas/location/locations-response.json)}
+    - name: LocationResponse
+      contentType: application/json
+      schema: ${file(schemas/location/location-response.json)}
+
+    # CollectionItems
+    - name: UpdateCollectionItemsRequest
+      contentType: application/json
+      schema: ${file(schemas/update-collection-items-request.json)}
+
+    # ErrorResponse
+    - name: ErrorResponse
+      contentType: application/json
+      schema: ${file(schemas/error-response.json)}
+
+endpoints:
+## Attatchment ##
+  GenerateUploadUrl:
+    summary: Generates an attatchment upload url
+    description: Generates an upload url for an item or location attatchment
+    tags:
+      - attatchment
+    security:
+      - bearerAuth: []  # No scopes required
+    requestBody:
+      description: Item or Location to attach a file to.
+    requestModels:
+      application/json: CreateAttatchmentRequest
+    responseBody:
+      description: The upload url
+    methodResponses:
+      - statusCode: "201"
+        responseBody:
+          description: The created url to upload a file.
+        responseModels:
+          application/json: AttatchmentURLResponse
+      - statusCode: "400"
+        responseBody:
+          description: &400Description Bad Request - message with additional information.
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: &401Description Unauthorized - user is not logged in or authorization failed.
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "404"
+        responseBody:
+          description: &404Description Not Found - message with additional information what wasn't found.
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: &500Description Internal Server Error - message with additional information.
+        responseModels:
+          application/json: ErrorResponse
+
+## Collectons ##
+
+  GetCollections:
+    summary: Get all collections
+    description: Get all collections of a user
+    tags:
+      - collection
+    security:
+      - bearerAuth: []  # No scopes required
+    queryParams:
+      - name: limit
+        description: (optional) Iterates over the collections with the given limit.
+        schema:
+          type: string
+      - name: nextKey
+        description: (optional) Iterates over the collections with the given nextKey.
+        schema:
+          type: string
+    methodResponses:
+      - statusCode: "200"
+        responseBody:
+          description: A array with all collections of a user
+        responseModels:
+          application/json: CollectionsResponse
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+  CreateCollection:
+    summary: Create a new collection
+    description: Creates a new collection for a user
+    tags:
+      - collection
+    security:
+      - bearerAuth: []  # No scopes required
+    responseBody:
+      description: The new collection.
+    requestModels:
+      application/json: CreateCollectionRequest
+    methodResponses:
+      - statusCode: "201"
+        responseBody:
+          description: The newly created collection with additional parameters.
+        responseModels:
+          application/json: CollectionResponse
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+  UpdateCollection:
+    summary: Update collection
+    description: Updates a collection with new informations.
+    tags:
+      - collection
+    security:
+      - bearerAuth: []  # No scopes required
+    pathParams:
+      - name: collectionId
+        description: ID of the collection which will receive the update.
+        schema:
+          type: string
+        required: true
+    responseBody:
+      description: The updated collection with changed parameters.
+    requestModels:
+      application/json: UpdateCollectionRequest
+    methodResponses:
+      - statusCode: "200"
+        responseBody:
+          description: The updated collection with changed parameters.
+        responseModels:
+          application/json: CollectionResponse
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "404"
+        responseBody:
+          description: *404Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+  DeleteCollection:
+    summary: Delete collection
+    description: Deletes a collection of a user.
+    tags:
+      - collection
+    security:
+      - bearerAuth: []  # No scopes required
+    pathParams:
+      - name: collectionId
+        description: ID of the collection which will be deleted.
+        schema:
+          type: string
+        required: true
+    methodResponses:
+      - statusCode: "204"
+        responseBody:
+          description: No Content.
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "404"
+        responseBody:
+          description: *404Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+  GetCollectionItems:
+    summary: Get all items of a collection
+    description: List all items from a collection.
+    tags:
+      - collection
+    security:
+      - bearerAuth: []  # No scopes required
+    pathParams:
+      - name: collectionId
+        description: ID of the collection.
+        schema:
+          type: string
+        required: true
+    responseBody:
+      description: List of all items of a collection.
+    methodResponses:
+      - statusCode: "200"
+        responseBody:
+          description: A array with all items of a collection.
+        responseModels:
+          application/json: CollectionItemsResponse
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "404"
+        responseBody:
+          description: *404Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+
+  # CollectionItems: Item => Collection
+  UpdateCollectionItems:
+    summary: Adds items to a collection.
+    description: Adds one or multiple items to a collection.
+    tags:
+      - collection
+    security:
+      - bearerAuth: []  # No scopes required
+    pathParams:
+      - name: collectionId
+        description: ID of the collection which will receive the items.
+        schema:
+          type: string
+        required: true
+    requestBody:
+      description: Items to add to the collection.
+    requestModels:
+      application/json: UpdateCollectionItemsRequest
+    methodResponses:
+      - statusCode: "204"
+        responseBody:
+          description: No content.
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "404"
+        responseBody:
+          description: *404Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+## Items ##
+
+  GetItems:
+    summary: Get all items
+    description: Get all itemss of a user
+    tags:
+      - item
+    security:
+      - bearerAuth: []  # No scopes required
+    queryParams:
+      - name: limit
+        description: (optional) Iterates over the items with the given limit.
+        schema:
+          type: string
+      - name: nextKey
+        description: (optional) Iterates over the items with the given nextKey.
+        schema:
+          type: string
+    methodResponses:
+      - statusCode: "200"
+        responseBody:
+          description: A array with all items of a user
+        responseModels:
+          application/json: ItemsResponse
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+  CreateItem:
+    summary: Create a new item
+    description: Creates a new item for a user
+    tags:
+      - item
+    security:
+      - bearerAuth: []  # No scopes required
+    responseBody:
+      description: The new item.
+    requestModels:
+      application/json: CreateItemRequest
+    methodResponses:
+      - statusCode: "201"
+        responseBody:
+          description: The newly created item with additional parameters.
+        responseModels:
+          application/json: ItemResponse
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+  UpdateItem:
+    summary: Update item
+    description: Updates a item with new informations.
+    tags:
+      - item
+    security:
+      - bearerAuth: []  # No scopes required
+    pathParams:
+      - name: itemId
+        description: ID of the item which will receive the update.
+        schema:
+          type: string
+        required: true
+    responseBody:
+      description: The updated item with changed parameters.
+    requestModels:
+      application/json: UpdateItemRequest
+    methodResponses:
+      - statusCode: "200"
+        responseBody:
+          description: The updated item with changed parameters.
+        responseModels:
+          application/json: ItemResponse
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "404"
+        responseBody:
+          description: *404Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+  DeleteItem:
+    summary: Delete item
+    description: Deletes a item of a user.
+    tags:
+      - item
+    security:
+      - bearerAuth: []  # No scopes required
+    pathParams:
+      - name: itemId
+        description: ID of the item which will be deleted.
+        schema:
+          type: string
+        required: true
+    methodResponses:
+      - statusCode: "204"
+        responseBody:
+          description: No Content.
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "404"
+        responseBody:
+          description: *404Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+  GetItemCollections:
+    summary: Get all collections of a item
+    description: List all collections from a item.
+    tags:
+      - item
+    security:
+      - bearerAuth: []  # No scopes required
+    pathParams:
+      - name: itemId
+        description: ID of the item.
+        schema:
+          type: string
+        required: true
+    responseBody:
+      description: List of all collectons of a item.
+    methodResponses:
+      - statusCode: "200"
+        responseBody:
+          description: A array with all collections of a item.
+        responseModels:
+          application/json: CollectionItemsResponse
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "404"
+        responseBody:
+          description: *404Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+  UpdateItemCollections:
+    summary: Adds collections to an item.
+    description: Adds one or multiple collections to an item.
+    tags:
+      - item
+    security:
+      - bearerAuth: []  # No scopes required
+    pathParams:
+      - name: itemId
+        description: ID of the item which will receive the collections.
+        schema:
+          type: string
+        required: true
+    requestBody:
+      description: Collections to add to the item.
+    requestModels:
+      application/json: UpdateCollectionItemsRequest
+    methodResponses:
+      - statusCode: "204"
+        responseBody:
+          description: No content.
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "404"
+        responseBody:
+          description: *404Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+## Locations ##
+
+  GetLocations:
+    summary: Get all locations
+    description: Get all locations of a user
+    tags:
+      - location
+    security:
+      - bearerAuth: []  # No scopes required
+    queryParams:
+      - name: limit
+        description: (optional) Iterates over the locations with the given limit.
+        schema:
+          type: string
+      - name: nextKey
+        description: (optional) Iterates over the locations with the given nextKey.
+        schema:
+          type: string
+    methodResponses:
+      - statusCode: "200"
+        responseBody:
+          description: A array with all locations of a user
+        responseModels:
+          application/json: LocationsResponse
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+  CreateLocation:
+    summary: Create a new location
+    description: Creates a new location for a user
+    tags:
+      - location
+    security:
+      - bearerAuth: []  # No scopes required
+    responseBody:
+      description: The new location.
+    requestModels:
+      application/json: CreateLocationRequest
+    methodResponses:
+      - statusCode: "201"
+        responseBody:
+          description: The newly created location with additional parameters.
+        responseModels:
+          application/json: LocationResponse
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+  UpdateLocation:
+    summary: Update location
+    description: Updates a location with new informations.
+    tags:
+      - location
+    security:
+      - bearerAuth: []  # No scopes required
+    pathParams:
+      - name: locationId
+        description: ID of the location which will receive the update.
+        schema:
+          type: string
+        required: true
+    responseBody:
+      description: The updated location with changed parameters.
+    requestModels:
+      application/json: UpdateLocationRequest
+    methodResponses:
+      - statusCode: "200"
+        responseBody:
+          description: The updated location with changed parameters.
+        responseModels:
+          application/json: LocationResponse
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "404"
+        responseBody:
+          description: *404Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse
+
+  DeleteLocation:
+    summary: Delete location
+    description: Deletes a location of a user.
+    tags:
+      - location
+    security:
+      - bearerAuth: []  # No scopes required
+    pathParams:
+      - name: locationId
+        description: ID of the location which will be deleted.
+        schema:
+          type: string
+        required: true
+    methodResponses:
+      - statusCode: "204"
+        responseBody:
+          description: No Content.
+      - statusCode: "400"
+        responseBody:
+          description: *400Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *401Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "404"
+        responseBody:
+          description: *404Description
+        responseModels:
+          application/json: ErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *500Description
+        responseModels:
+          application/json: ErrorResponse

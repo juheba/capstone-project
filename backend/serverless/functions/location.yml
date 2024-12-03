@@ -7,6 +7,7 @@ GetLocations:
         path: locations
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.GetLocations}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -24,9 +25,10 @@ CreateLocation:
         path: locations
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.CreateLocation}
         request:
           schemas:
-            application/json: ${file(./schemas/location/create-location-model.json)}
+            application/json: ${file(./schemas/location/create-location-request.json)}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -44,9 +46,10 @@ UpdateLocation:
         path: locations/{locationId}
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.UpdateLocation}
         request:
           schemas:
-            application/json: ${file(./schemas/location/update-location-model.json)}
+            application/json: ${file(./schemas/location/update-location-request.json)}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -64,6 +67,7 @@ DeleteLocation:
         path: locations/{locationId}
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.DeleteLocation}
   iamRoleStatements:
     - Effect: Allow
       Action:

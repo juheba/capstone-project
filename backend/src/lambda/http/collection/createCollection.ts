@@ -48,7 +48,7 @@ function parseBody(event) {
     throw new Error('body does not exist.')
   }
 
-  // Because "pattern": "^.*\\S.*$" in create-collection-model.json does not work for inputs like this: " \n\tTest"
+  // Because "pattern": "^.*\\S.*$" in create-collection-request.json does not work for inputs like this: " \n\tTest"
   if(parsedBody.name.trim() === '') {
     throw new Error('name is empty.')
   }

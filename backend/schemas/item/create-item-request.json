@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Item",
+  "title": "CreateItemRequest",
   "description": "Stores information about each item that can be part of a user's collection.",
   "required": [
     "title",

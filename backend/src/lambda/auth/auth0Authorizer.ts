@@ -24,7 +24,7 @@ const handler: APIGatewayAuthorizerHandler = async (event: APIGatewayTokenAuthor
     logger.info({message:'User is authorized', userId: decodedToken.sub})
     return buildAuthorizationResponse(decodedToken.sub)
   } catch (e) {
-    logger.info({message:`User not authorized ${e.message}`, userId: decodedToken.sub})
+    logger.info({message:`User not authorized ${e.message}`})
     return buildUnauthorizedResponse()
   }
 }

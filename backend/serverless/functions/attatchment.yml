@@ -7,6 +7,10 @@ GenerateUploadUrl:
         path: attachments
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.GenerateUploadUrl}
+        request:
+          schemas:
+            application/json: ${file(./schemas/attachment/create-attatchment-request.json)}
   iamRoleStatements:
     - Effect: Allow
       Action: 

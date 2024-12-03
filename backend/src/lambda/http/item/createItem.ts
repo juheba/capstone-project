@@ -48,7 +48,7 @@ function parseBody(event) {
     throw new Error('body does not exist.')
   }
 
-  // Because "pattern": "^.*\\S.*$" in create-item-model.json does not work for inputs like this: " \n\tTest"
+  // Because "pattern": "^.*\\S.*$" in create-item-request.json does not work for inputs like this: " \n\tTest"
   if(parsedBody.title.trim() === '') {
     throw new Error('title is empty.')
   }

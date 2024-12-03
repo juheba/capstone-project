@@ -7,6 +7,7 @@ GetItems:
         path: items
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.GetItems}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -24,9 +25,10 @@ CreateItem:
         path: items
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.CreateItem}
         request:
           schemas:
-            application/json: ${file(./schemas/item/create-item-model.json)}
+            application/json: ${file(./schemas/item/create-item-request.json)}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -44,9 +46,10 @@ UpdateItem:
         path: items/{itemId}
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.UpdateItem}
         request:
           schemas:
-            application/json: ${file(./schemas/item/update-item-model.json)}
+            application/json: ${file(./schemas/item/update-item-request.json)}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -64,6 +67,7 @@ DeleteItem:
         path: items/{itemId}
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.DeleteItem}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -81,6 +85,7 @@ GetItemCollections:
         path: items/{itemId}/collections
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.GetItemCollections}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -107,9 +112,10 @@ UpdateItemCollections:
         path: items/{itemId}/collections
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.UpdateItemCollections}
         request:
           schemas:
-            application/json: ${file(./schemas/update-collection-items-model.json)}
+            application/json: ${file(./schemas/update-collection-items-request.json)}
   iamRoleStatements:
     - Effect: Allow
       Action:

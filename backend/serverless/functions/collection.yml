@@ -9,13 +9,14 @@ GetCollections:
         path: collections
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.GetCollections}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:Query
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}'
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}
 
 # Configure this function - 
 # Provide iamRoleStatements property. Decide the Actions and AWS Resource. 
@@ -30,16 +31,17 @@ CreateCollection:
         path: collections
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.CreateCollection}
         request:
           schemas:
-            application/json: ${file(./schemas/collection/create-collection-model.json)}
+            application/json: ${file(./schemas/collection/create-collection-request.json)}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:PutItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}'
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}
 
 # Configure this function
 # Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
@@ -52,16 +54,17 @@ UpdateCollection:
         path: collections/{collectionId}
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.UpdateCollection}
         request:
           schemas:
-            application/json: ${file(./schemas/collection/update-collection-model.json)}
+            application/json: ${file(./schemas/collection/update-collection-request.json)}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:UpdateItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}'
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}
 
 # Configure this function
 # Provide property for setting up CORS, Authorizer, iamRoleStatements
@@ -74,13 +77,14 @@ DeleteCollection:
         path: collections/{collectionId}
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.DeleteCollection}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:DeleteItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}'
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}
 
 GetCollectionItems:
   tracing: true
@@ -91,6 +95,7 @@ GetCollectionItems:
         path: collections/{collectionId}/items
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.GetCollectionItems}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -98,14 +103,14 @@ GetCollectionItems:
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
       Resource:
-        - 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_ITEM_TABLE}'
+        - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_ITEM_TABLE}
     - Effect: Allow
       Action:
         - dynamodb:BatchGetItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
       Resource:
-        - 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}'
+        - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}
 
 UpdateCollectionItems:
   tracing: true
@@ -116,9 +121,10 @@ UpdateCollectionItems:
         path: collections/{collectionId}/items
         cors: true
         authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.UpdateCollectionItems}
         request:
           schemas:
-            application/json: ${file(./schemas/update-collection-items-model.json)}
+            application/json: ${file(./schemas/update-collection-items-request.json)}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -126,4 +132,4 @@ UpdateCollectionItems:
         - dynamodb:BatchWriteItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_ITEM_TABLE}'
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_ITEM_TABLE}

@@ -1,0 +1,3373 @@
+openapi: 3.0.0
+components:
+  schemas:
+    CreateAttatchmentRequest:
+      title: CreateAttatchmentRequest
+      description: Creates a attatchment upload url.
+      type: object
+      properties:
+        itemId:
+          description: >-
+            Creates a upload url to attach a file to an item. If itemId is
+            provided, then locationId is unnessary.
+          type: string
+        locationId:
+          description: >-
+            Creates a upload url to attach a file to an location. If locationId
+            is provided, then itemId is unnessary.
+          type: string
+      anyOf:
+        - required:
+            - itemIds
+        - required:
+            - locationId
+      not:
+        required:
+          - itemIds
+          - locationId
+      additionalProperties: false
+    AttatchmentURLResponse:
+      title: AttatchmentURLResponse
+      description: Creates a attatchment upload url.
+      required:
+        - uploadUrl
+      type: object
+      properties:
+        uploadUrl:
+          description: >-
+            A upload url to attach a file to an item or location depending on
+            the request parameter.
+          type: string
+          minLength: 1
+      additionalProperties: false
+    CreateCollectionRequest:
+      title: CreateCollectionRequest
+      description: Stores information about the items in each user's collection.
+      required:
+        - name
+        - visibility
+      type: object
+      properties:
+        name:
+          description: >-
+            The name of the collection (e.g., "Science Fiction Books", "Marvel
+            Movies").
+          type: string
+          minLength: 1
+        description:
+          description: A brief description of the collection.
+          type: string
+          minLength: 1
+        visibility:
+          description: >-
+            Settings to control who can view the collection (public, private,
+            shared with specific users).
+          type: string
+          enum:
+            - PRIVATE
+            - PUBLIC
+      additionalProperties: false
+    UpdateCollectionRequest:
+      title: UpdateCollectionRequest
+      description: Stores information about the items in each user's collection.
+      required:
+        - name
+        - visibility
+      type: object
+      properties:
+        name:
+          description: >-
+            The name of the collection (e.g., "Science Fiction Books", "Marvel
+            Movies").
+          type: string
+          minLength: 1
+        description:
+          description: A brief description of the collection.
+          type: string
+          minLength: 1
+        visibility:
+          description: >-
+            Settings to control who can view the collection (public, private,
+            shared with specific users).
+          type: string
+          enum:
+            - PRIVATE
+            - PUBLIC
+      additionalProperties: false
+    CollectionsResponse:
+      title: CollectionsResponse
+      description: A array with all collections of a user.
+      type: object
+      required:
+        - collections
+        - nextKey
+      properties:
+        collections:
+          type: array
+          items:
+            type: object
+            properties:
+              collectionId:
+                type: string
+              userId:
+                type: string
+              lastModified:
+                type: string
+                format: date
+              createdAt:
+                type: string
+                format: date
+              name:
+                description: >-
+                  The name of the collection (e.g., "Science Fiction Books",
+                  "Marvel Movies").
+                type: string
+                minLength: 1
+              description:
+                description: A brief description of the collection.
+                type: string
+                minLength: 1
+              visibility:
+                description: >-
+                  Settings to control who can view the collection (public,
+                  private, shared with specific users).
+                type: string
+                enum:
+                  - PRIVATE
+                  - PUBLIC
+        nextKey:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CollectionResponse:
+      title: CollectionResponse
+      description: A collection of a user.
+      type: object
+      properties:
+        collection:
+          type: object
+          properties:
+            collectionId:
+              type: string
+            userId:
+              type: string
+            lastModified:
+              type: string
+              format: date
+            createdAt:
+              type: string
+              format: date
+            name:
+              description: >-
+                The name of the collection (e.g., "Science Fiction Books",
+                "Marvel Movies").
+              type: string
+              minLength: 1
+            description:
+              description: A brief description of the collection.
+              type: string
+              minLength: 1
+            visibility:
+              description: >-
+                Settings to control who can view the collection (public,
+                private, shared with specific users).
+              type: string
+              enum:
+                - PRIVATE
+                - PUBLIC
+      additionalProperties: false
+    CollectionItemsResponse:
+      title: CollectionItemsResponse
+      description: A array with all items of a collection.
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              itemId:
+                type: string
+              title:
+                description: >-
+                  The title of the item (e.g., the name of the book, movie, or
+                  comic).
+                type: string
+                minLength: 1
+              description:
+                description: A brief description or summary of the item.
+                type: string
+                minLength: 1
+              itemType:
+                description: The type of the item (e.g., book, movie, game, comic).
+                type: string
+                minLength: 1
+              userId:
+                type: string
+              addedAt:
+                type: string
+                format: date
+              lastModified:
+                type: string
+                format: date
+              attachmentUrl:
+                description: >-
+                  A upload url to attach a file to an item or location depending
+                  on the request parameter.
+                type: string
+                minLength: 1
+              locationId:
+                description: A physical location where the item is stored.
+                type: string
+                minLength: 1
+              isLendable:
+                description: >-
+                  Information about whether the user (owner) would lend the
+                  item.
+                type: boolean
+              ownershipStatus:
+                description: >-
+                  Information about whether the user owns the item, wishes to
+                  buy it, has borrowed it, etc.
+                type: string
+                enum:
+                  - OWNER
+                  - BORROWER
+                  - WISHLIST
+              status:
+                description: >-
+                  Information about whether the item has been read/watched, is
+                  currently being read/watched, or is on a to-read/to-watch
+                  list.
+                type: string
+                enum:
+                  - TODO
+                  - PROCESSING
+                  - DONE
+      additionalProperties: false
+    CreateItemRequest:
+      title: CreateItemRequest
+      description: >-
+        Stores information about each item that can be part of a user's
+        collection.
+      required:
+        - title
+        - isLendable
+        - ownershipStatus
+        - status
+      type: object
+      properties:
+        title:
+          description: The title of the item (e.g., the name of the book, movie, or comic).
+          type: string
+          minLength: 1
+        itemType:
+          description: The type of the item (e.g., book, movie, game, comic).
+          type: string
+          minLength: 1
+        description:
+          description: A brief description or summary of the item.
+          type: string
+          minLength: 1
+        locationId:
+          description: A physical location where the item is stored.
+          type: string
+          minLength: 1
+        isLendable:
+          description: Information about whether the user (owner) would lend the item.
+          type: boolean
+        ownershipStatus:
+          description: >-
+            Information about whether the user owns the item, wishes to buy it,
+            has borrowed it, etc.
+          type: string
+          enum:
+            - OWNER
+            - BORROWER
+            - WISHLIST
+        status:
+          description: >-
+            Information about whether the item has been read/watched, is
+            currently being read/watched, or is on a to-read/to-watch list.
+          type: string
+          enum:
+            - TODO
+            - PROCESSING
+            - DONE
+      additionalProperties: false
+    UpdateItemRequest:
+      title: UpdateItemRequest
+      description: >-
+        Stores information about each item that can be part of a user's
+        collection.
+      required:
+        - title
+        - isLendable
+        - ownershipStatus
+        - status
+      type: object
+      properties:
+        title:
+          description: The title of the item (e.g., the name of the book, movie, or comic).
+          type: string
+          minLength: 1
+        itemType:
+          description: The type of the item (e.g., book, movie, game, comic).
+          type: string
+          minLength: 1
+        description:
+          description: A brief description or summary of the item.
+          type: string
+          minLength: 1
+        locationId:
+          description: A physical location where the item is stored.
+          type: string
+          minLength: 1
+        isLendable:
+          description: Information about whether the user (owner) would lend the item.
+          type: boolean
+        ownershipStatus:
+          description: >-
+            Information about whether the user owns the item, wishes to buy it,
+            has borrowed it, etc.
+          type: string
+          enum:
+            - OWNER
+            - BORROWER
+            - WISHLIST
+        status:
+          description: >-
+            Information about whether the item has been read/watched, is
+            currently being read/watched, or is on a to-read/to-watch list.
+          type: string
+          enum:
+            - TODO
+            - PROCESSING
+            - DONE
+      additionalProperties: false
+    ItemsResponse:
+      title: ItemsResponse
+      description: A array with all items of a collection.
+      type: object
+      required:
+        - collections
+        - nextKey
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              itemId:
+                type: string
+              title:
+                description: >-
+                  The title of the item (e.g., the name of the book, movie, or
+                  comic).
+                type: string
+                minLength: 1
+              description:
+                description: A brief description or summary of the item.
+                type: string
+                minLength: 1
+              itemType:
+                description: The type of the item (e.g., book, movie, game, comic).
+                type: string
+                minLength: 1
+              userId:
+                type: string
+              addedAt:
+                type: string
+                format: date
+              lastModified:
+                type: string
+                format: date
+              attachmentUrl:
+                description: >-
+                  A upload url to attach a file to an item or location depending
+                  on the request parameter.
+                type: string
+                minLength: 1
+              locationId:
+                description: A physical location where the item is stored.
+                type: string
+                minLength: 1
+              isLendable:
+                description: >-
+                  Information about whether the user (owner) would lend the
+                  item.
+                type: boolean
+              ownershipStatus:
+                description: >-
+                  Information about whether the user owns the item, wishes to
+                  buy it, has borrowed it, etc.
+                type: string
+                enum:
+                  - OWNER
+                  - BORROWER
+                  - WISHLIST
+              status:
+                description: >-
+                  Information about whether the item has been read/watched, is
+                  currently being read/watched, or is on a to-read/to-watch
+                  list.
+                type: string
+                enum:
+                  - TODO
+                  - PROCESSING
+                  - DONE
+        nextKey:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ItemResponse:
+      title: ItemResponse
+      description: >-
+        Stores information about each item that can be part of a user's
+        collection.
+      required:
+        - title
+        - isLendable
+        - ownershipStatus
+        - status
+      type: object
+      properties:
+        itemId:
+          type: string
+        title:
+          description: The title of the item (e.g., the name of the book, movie, or comic).
+          type: string
+          minLength: 1
+        description:
+          description: A brief description or summary of the item.
+          type: string
+          minLength: 1
+        itemType:
+          description: The type of the item (e.g., book, movie, game, comic).
+          type: string
+          minLength: 1
+        userId:
+          type: string
+        addedAt:
+          type: string
+          format: date
+        lastModified:
+          type: string
+          format: date
+        attachmentUrl:
+          description: >-
+            A upload url to attach a file to an item or location depending on
+            the request parameter.
+          type: string
+          minLength: 1
+        locationId:
+          description: A physical location where the item is stored.
+          type: string
+          minLength: 1
+        isLendable:
+          description: Information about whether the user (owner) would lend the item.
+          type: boolean
+        ownershipStatus:
+          description: >-
+            Information about whether the user owns the item, wishes to buy it,
+            has borrowed it, etc.
+          type: string
+          enum:
+            - OWNER
+            - BORROWER
+            - WISHLIST
+        status:
+          description: >-
+            Information about whether the item has been read/watched, is
+            currently being read/watched, or is on a to-read/to-watch list.
+          type: string
+          enum:
+            - TODO
+            - PROCESSING
+            - DONE
+      additionalProperties: false
+    ItemCollectionsResponse:
+      title: ItemCollectionsResponse
+      description: A array with all collections of a item.
+      type: object
+      properties:
+        collections:
+          type: array
+          items:
+            type: object
+            properties:
+              collectionId:
+                type: string
+              userId:
+                type: string
+              lastModified:
+                type: string
+                format: date
+              createdAt:
+                type: string
+                format: date
+              name:
+                description: >-
+                  The name of the collection (e.g., "Science Fiction Books",
+                  "Marvel Movies").
+                type: string
+                minLength: 1
+              description:
+                description: A brief description of the collection.
+                type: string
+                minLength: 1
+              visibility:
+                description: >-
+                  Settings to control who can view the collection (public,
+                  private, shared with specific users).
+                type: string
+                enum:
+                  - PRIVATE
+                  - PUBLIC
+      additionalProperties: false
+    CreateLocationRequest:
+      title: CreateLocationRequest
+      description: Represents the physical locations where collection items.
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          description: The name of the location (e.g., Living Room Bookshelf, Storage Box).
+          type: string
+          minLength: 1
+        description:
+          description: >-
+            A description of the location. Provides users with more information
+            about each location.
+          type: string
+          minLength: 1
+      additionalProperties: false
+    UpdateLocationRequest:
+      title: UpdateLocationRequest
+      description: Represents the physical locations where collection items.
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          description: The name of the location (e.g., Living Room Bookshelf, Storage Box).
+          type: string
+          minLength: 1
+        description:
+          description: >-
+            A description of the location. Provides users with more information
+            about each location.
+          type: string
+          minLength: 1
+      additionalProperties: false
+    LocationsResponse:
+      title: LocationsResponse
+      description: A array with all locations of a user.
+      type: object
+      required:
+        - locations
+        - nextKey
+      properties:
+        locations:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                description: >-
+                  The name of the location (e.g., Living Room Bookshelf, Storage
+                  Box).
+                type: string
+                minLength: 1
+              description:
+                description: >-
+                  A description of the location. Provides users with more
+                  information about each location.
+                type: string
+                minLength: 1
+              userId:
+                type: string
+              addedAt:
+                type: string
+                format: date
+              lastModified:
+                type: string
+                format: date
+              attachmentUrl:
+                description: >-
+                  A upload url to attach a file to an item or location depending
+                  on the request parameter.
+                type: string
+                minLength: 1
+              locationId:
+                description: A physical location where the item is stored.
+                type: string
+                minLength: 1
+        nextKey:
+          type: string
+          nullable: true
+      additionalProperties: false
+    LocationResponse:
+      title: LocationResponse
+      description: Represents the physical locations where collection items.
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          description: The name of the location (e.g., Living Room Bookshelf, Storage Box).
+          type: string
+          minLength: 1
+        description:
+          description: >-
+            A description of the location. Provides users with more information
+            about each location.
+          type: string
+          minLength: 1
+        userId:
+          type: string
+        addedAt:
+          type: string
+          format: date
+        lastModified:
+          type: string
+          format: date
+        attachmentUrl:
+          description: >-
+            A upload url to attach a file to an item or location depending on
+            the request parameter.
+          type: string
+          minLength: 1
+        locationId:
+          description: A physical location where the item is stored.
+          type: string
+          minLength: 1
+      additionalProperties: false
+    UpdateCollectionItemsRequest:
+      title: UpdateCollectionItemsRequest
+      type: object
+      properties:
+        itemIds:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+        collectionIds:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+      anyOf:
+        - required:
+            - itemIds
+        - required:
+            - collectionIds
+      not:
+        required:
+          - itemIds
+          - collectionIds
+      additionalProperties: false
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error.
+      required:
+        - statusCode
+        - errorCode
+        - message
+      type: object
+      properties:
+        statusCode:
+          description: The http status code.
+          type: number
+          minimum: 100
+          maximum: 599
+        errorCode:
+          description: An unique error code.
+          type: string
+          minLength: 1
+        message:
+          description: Short error message.
+          type: string
+          minLength: 1
+        details:
+          description: Additional details about the error (optional).
+          type: string
+          minLength: 1
+      additionalProperties: false
+    limit:
+      type: string
+    nextKey:
+      type: string
+    Access-Control-Allow-Origin:
+      type: string
+      default: '*'
+      example: https://developer.mozilla.org
+    Access-Control-Allow-Credentials:
+      type: boolean
+      default: true
+    d8e234f2-601b-49bf-8893-4d45ba8bfc71:
+      title: CreateCollectionRequest
+      description: Stores information about the items in each user's collection.
+      required:
+        - name
+        - visibility
+      type: object
+      properties:
+        name:
+          description: >-
+            The name of the collection (e.g., "Science Fiction Books", "Marvel
+            Movies").
+          type: string
+          minLength: 1
+        description:
+          description: A brief description of the collection.
+          type: string
+          minLength: 1
+        visibility:
+          description: >-
+            Settings to control who can view the collection (public, private,
+            shared with specific users).
+          type: string
+          enum:
+            - PRIVATE
+            - PUBLIC
+      additionalProperties: false
+    collectionId:
+      type: string
+    86fea3ff-54f4-4d84-b421-a3a8e1f2eb1a:
+      title: UpdateCollectionRequest
+      description: Stores information about the items in each user's collection.
+      required:
+        - name
+        - visibility
+      type: object
+      properties:
+        name:
+          description: >-
+            The name of the collection (e.g., "Science Fiction Books", "Marvel
+            Movies").
+          type: string
+          minLength: 1
+        description:
+          description: A brief description of the collection.
+          type: string
+          minLength: 1
+        visibility:
+          description: >-
+            Settings to control who can view the collection (public, private,
+            shared with specific users).
+          type: string
+          enum:
+            - PRIVATE
+            - PUBLIC
+      additionalProperties: false
+    48aedce9-58d7-4570-a510-cb4598bf5f8b:
+      title: CreateItemRequest
+      description: >-
+        Stores information about each item that can be part of a user's
+        collection.
+      required:
+        - title
+        - isLendable
+        - ownershipStatus
+        - status
+      type: object
+      properties:
+        title:
+          description: The title of the item (e.g., the name of the book, movie, or comic).
+          type: string
+          minLength: 1
+        itemType:
+          description: The type of the item (e.g., book, movie, game, comic).
+          type: string
+          minLength: 1
+        description:
+          description: A brief description or summary of the item.
+          type: string
+          minLength: 1
+        locationId:
+          description: A physical location where the item is stored.
+          type: string
+          minLength: 1
+        isLendable:
+          description: Information about whether the user (owner) would lend the item.
+          type: boolean
+        ownershipStatus:
+          description: >-
+            Information about whether the user owns the item, wishes to buy it,
+            has borrowed it, etc.
+          type: string
+          enum:
+            - OWNER
+            - BORROWER
+            - WISHLIST
+        status:
+          description: >-
+            Information about whether the item has been read/watched, is
+            currently being read/watched, or is on a to-read/to-watch list.
+          type: string
+          enum:
+            - TODO
+            - PROCESSING
+            - DONE
+      additionalProperties: false
+    itemId:
+      type: string
+    4ae7047f-7117-4089-af77-8507d0e0ef45:
+      title: UpdateItemRequest
+      description: >-
+        Stores information about each item that can be part of a user's
+        collection.
+      required:
+        - title
+        - isLendable
+        - ownershipStatus
+        - status
+      type: object
+      properties:
+        title:
+          description: The title of the item (e.g., the name of the book, movie, or comic).
+          type: string
+          minLength: 1
+        itemType:
+          description: The type of the item (e.g., book, movie, game, comic).
+          type: string
+          minLength: 1
+        description:
+          description: A brief description or summary of the item.
+          type: string
+          minLength: 1
+        locationId:
+          description: A physical location where the item is stored.
+          type: string
+          minLength: 1
+        isLendable:
+          description: Information about whether the user (owner) would lend the item.
+          type: boolean
+        ownershipStatus:
+          description: >-
+            Information about whether the user owns the item, wishes to buy it,
+            has borrowed it, etc.
+          type: string
+          enum:
+            - OWNER
+            - BORROWER
+            - WISHLIST
+        status:
+          description: >-
+            Information about whether the item has been read/watched, is
+            currently being read/watched, or is on a to-read/to-watch list.
+          type: string
+          enum:
+            - TODO
+            - PROCESSING
+            - DONE
+      additionalProperties: false
+    384ec684-3933-498b-8614-9a9dae6f9ce5:
+      title: CreateLocationRequest
+      description: Represents the physical locations where collection items.
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          description: The name of the location (e.g., Living Room Bookshelf, Storage Box).
+          type: string
+          minLength: 1
+        description:
+          description: >-
+            A description of the location. Provides users with more information
+            about each location.
+          type: string
+          minLength: 1
+      additionalProperties: false
+    locationId:
+      type: string
+    c8793222-7ccd-49fc-acf1-8f22eb1cb413:
+      title: UpdateLocationRequest
+      description: Represents the physical locations where collection items.
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          description: The name of the location (e.g., Living Room Bookshelf, Storage Box).
+          type: string
+          minLength: 1
+        description:
+          description: >-
+            A description of the location. Provides users with more information
+            about each location.
+          type: string
+          minLength: 1
+      additionalProperties: false
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+info:
+  title: Collector API
+  description: Serverless application for collection management
+  version: v.0.0.0
+paths:
+  /collections:
+    get:
+      summary: Get all collections
+      description: Get all collections of a user
+      operationId: GetCollections
+      parameters:
+        - name: limit
+          in: query
+          description: (optional) Iterates over the collections with the given limit.
+          required: false
+          schema:
+            $ref: '#/components/schemas/limit'
+        - name: nextKey
+          in: query
+          description: (optional) Iterates over the collections with the given nextKey.
+          required: false
+          schema:
+            $ref: '#/components/schemas/nextKey'
+      tags:
+        - collection
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A array with all collections of a user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionsResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+    post:
+      summary: Create a new collection
+      description: Creates a new collection for a user
+      operationId: CreateCollection
+      parameters: []
+      tags:
+        - collection
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: ''
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/d8e234f2-601b-49bf-8893-4d45ba8bfc71'
+      responses:
+        '201':
+          description: The newly created collection with additional parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+  /collections/{collectionId}:
+    patch:
+      summary: Update collection
+      description: Updates a collection with new informations.
+      operationId: UpdateCollection
+      parameters:
+        - name: collectionId
+          in: path
+          description: ID of the collection which will receive the update.
+          required: true
+          schema:
+            $ref: '#/components/schemas/collectionId'
+      tags:
+        - collection
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: ''
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/86fea3ff-54f4-4d84-b421-a3a8e1f2eb1a'
+      responses:
+        '200':
+          description: The updated collection with changed parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+    delete:
+      summary: Delete collection
+      description: Deletes a collection of a user.
+      operationId: DeleteCollection
+      parameters:
+        - name: collectionId
+          in: path
+          description: ID of the collection which will be deleted.
+          required: true
+          schema:
+            $ref: '#/components/schemas/collectionId'
+      tags:
+        - collection
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: No Content.
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+  /collections/{collectionId}/items:
+    get:
+      summary: Get all items of a collection
+      description: List all items from a collection.
+      operationId: GetCollectionItems
+      parameters:
+        - name: collectionId
+          in: path
+          description: ID of the collection.
+          required: true
+          schema:
+            $ref: '#/components/schemas/collectionId'
+      tags:
+        - collection
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A array with all items of a collection.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionItemsResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+    post:
+      summary: Adds items to a collection.
+      description: Adds one or multiple items to a collection.
+      operationId: UpdateCollectionItems
+      parameters:
+        - name: collectionId
+          in: path
+          description: ID of the collection which will receive the items.
+          required: true
+          schema:
+            $ref: '#/components/schemas/collectionId'
+      tags:
+        - collection
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Items to add to the collection.
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCollectionItemsRequest'
+      responses:
+        '204':
+          description: No content.
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+  /items:
+    get:
+      summary: Get all items
+      description: Get all itemss of a user
+      operationId: GetItems
+      parameters:
+        - name: limit
+          in: query
+          description: (optional) Iterates over the items with the given limit.
+          required: false
+          schema:
+            $ref: '#/components/schemas/limit'
+        - name: nextKey
+          in: query
+          description: (optional) Iterates over the items with the given nextKey.
+          required: false
+          schema:
+            $ref: '#/components/schemas/nextKey'
+      tags:
+        - item
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A array with all items of a user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+    post:
+      summary: Create a new item
+      description: Creates a new item for a user
+      operationId: CreateItem
+      parameters: []
+      tags:
+        - item
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: ''
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/48aedce9-58d7-4570-a510-cb4598bf5f8b'
+      responses:
+        '201':
+          description: The newly created item with additional parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+  /items/{itemId}:
+    patch:
+      summary: Update item
+      description: Updates a item with new informations.
+      operationId: UpdateItem
+      parameters:
+        - name: itemId
+          in: path
+          description: ID of the item which will receive the update.
+          required: true
+          schema:
+            $ref: '#/components/schemas/itemId'
+      tags:
+        - item
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: ''
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/4ae7047f-7117-4089-af77-8507d0e0ef45'
+      responses:
+        '200':
+          description: The updated item with changed parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+    delete:
+      summary: Delete item
+      description: Deletes a item of a user.
+      operationId: DeleteItem
+      parameters:
+        - name: itemId
+          in: path
+          description: ID of the item which will be deleted.
+          required: true
+          schema:
+            $ref: '#/components/schemas/itemId'
+      tags:
+        - item
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: No Content.
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+  /items/{itemId}/collections:
+    get:
+      summary: Get all collections of a item
+      description: List all collections from a item.
+      operationId: GetItemCollections
+      parameters:
+        - name: itemId
+          in: path
+          description: ID of the item.
+          required: true
+          schema:
+            $ref: '#/components/schemas/itemId'
+      tags:
+        - item
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A array with all collections of a item.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionItemsResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+    post:
+      summary: Adds collections to an item.
+      description: Adds one or multiple collections to an item.
+      operationId: UpdateItemCollections
+      parameters:
+        - name: itemId
+          in: path
+          description: ID of the item which will receive the collections.
+          required: true
+          schema:
+            $ref: '#/components/schemas/itemId'
+      tags:
+        - item
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Collections to add to the item.
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCollectionItemsRequest'
+      responses:
+        '204':
+          description: No content.
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+  /locations:
+    get:
+      summary: Get all locations
+      description: Get all locations of a user
+      operationId: GetLocations
+      parameters:
+        - name: limit
+          in: query
+          description: (optional) Iterates over the locations with the given limit.
+          required: false
+          schema:
+            $ref: '#/components/schemas/limit'
+        - name: nextKey
+          in: query
+          description: (optional) Iterates over the locations with the given nextKey.
+          required: false
+          schema:
+            $ref: '#/components/schemas/nextKey'
+      tags:
+        - location
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A array with all locations of a user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationsResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+    post:
+      summary: Create a new location
+      description: Creates a new location for a user
+      operationId: CreateLocation
+      parameters: []
+      tags:
+        - location
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: ''
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/384ec684-3933-498b-8614-9a9dae6f9ce5'
+      responses:
+        '201':
+          description: The newly created location with additional parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+  /locations/{locationId}:
+    patch:
+      summary: Update location
+      description: Updates a location with new informations.
+      operationId: UpdateLocation
+      parameters:
+        - name: locationId
+          in: path
+          description: ID of the location which will receive the update.
+          required: true
+          schema:
+            $ref: '#/components/schemas/locationId'
+      tags:
+        - location
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: ''
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/c8793222-7ccd-49fc-acf1-8f22eb1cb413'
+      responses:
+        '200':
+          description: The updated location with changed parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+    delete:
+      summary: Delete location
+      description: Deletes a location of a user.
+      operationId: DeleteLocation
+      parameters:
+        - name: locationId
+          in: path
+          description: ID of the location which will be deleted.
+          required: true
+          schema:
+            $ref: '#/components/schemas/locationId'
+      tags:
+        - location
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: No Content.
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+  /attachments:
+    post:
+      summary: Generates an attatchment upload url
+      description: Generates an upload url for an item or location attatchment
+      operationId: GenerateUploadUrl
+      parameters: []
+      tags:
+        - attatchment
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Item or Location to attach a file to.
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAttatchmentRequest'
+      responses:
+        '201':
+          description: The created url to upload a file.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttatchmentURLResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          headers:
+            Access-Control-Allow-Origin:
+              description: >-
+                The Access-Control-Allow-Origin response header indicates
+                whether the response can be shared with requesting code from the
+                given
+                [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin).
+                - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Origin'
+            Access-Control-Allow-Credentials:
+              description: >-
+                The Access-Control-Allow-Credentials response header tells
+                browsers whether to expose the response to the frontend
+                JavaScript code when the request's credentials mode
+                ([Request.credentials](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials))
+                is include. - [MDN
+                Link](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+              schema:
+                $ref: '#/components/schemas/Access-Control-Allow-Credentials'
+tags:
+  - name: attatchment
+    description: Operations on attatchments
+  - name: collection
+    description: Operations on collections
+  - name: item
+    description: Operations on items
+  - name: location
+    description: Operations on locations

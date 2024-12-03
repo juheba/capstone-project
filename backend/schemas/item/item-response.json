@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Item",
+  "title": "ItemResponse",
   "description": "Stores information about each item that can be part of a user's collection.",
   "required": [
     "title",
@@ -10,8 +10,16 @@
   ],
   "type": "object",
   "properties": {
+    "itemId": {
+      "type": "string"
+    },
     "title": {
       "description": "The title of the item (e.g., the name of the book, movie, or comic).",
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "description": "A brief description or summary of the item.",
       "type": "string",
       "minLength": 1
     },
@@ -20,8 +28,19 @@
       "type": "string",
       "minLength": 1
     },
-    "description": {
-      "description": "A brief description or summary of the item.",
+    "userId": {
+      "type": "string"
+    },
+    "addedAt": {
+      "type": "string",
+      "format": "date"
+    },
+    "lastModified": {
+      "type": "string",
+      "format": "date"
+    },
+    "attachmentUrl": {
+      "description": "A upload url to attach a file to an item or location depending on the request parameter.",
       "type": "string",
       "minLength": 1
     },

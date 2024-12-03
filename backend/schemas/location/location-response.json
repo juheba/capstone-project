@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "location",
+  "title": "LocationResponse",
   "description": "Represents the physical locations where collection items.",
   "required": [
     "name"
@@ -14,6 +14,27 @@
     },
     "description": {
       "description": "A description of the location. Provides users with more information about each location.",
+      "type": "string",
+      "minLength": 1
+    },
+    "userId": {
+      "type": "string"
+    },
+    "addedAt": {
+      "type": "string",
+      "format": "date"
+    },
+    "lastModified": {
+      "type": "string",
+      "format": "date"
+    },
+    "attachmentUrl": {
+      "description": "A upload url to attach a file to an item or location depending on the request parameter.",
+      "type": "string",
+      "minLength": 1
+    },
+    "locationId": {
+      "description": "A physical location where the item is stored.",
       "type": "string",
       "minLength": 1
     }

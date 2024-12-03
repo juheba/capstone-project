@@ -15,7 +15,7 @@ GetTodos:
         - dynamodb:Query
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
 # Configure this function - 
 # Provide iamRoleStatements property. Decide the Actions and AWS Resource. 
@@ -39,7 +39,7 @@ CreateTodo:
         - dynamodb:PutItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
 # Configure this function
 # Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
@@ -61,7 +61,7 @@ UpdateTodo:
         - dynamodb:UpdateItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
 # Configure this function
 # Provide property for setting up CORS, Authorizer, iamRoleStatements
@@ -80,7 +80,7 @@ DeleteTodo:
         - dynamodb:DeleteItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
 # Configure this function
 # Provide property for setting up CORS, Authorizer, iamRoleStatements
@@ -95,7 +95,7 @@ GenerateTodoUploadUrl:
         authorizer: Auth
   iamRoleStatements:
     - Effect: Allow
-      Action: 
+      Action:
         - s3:*
       Resource: arn:aws:s3:::${self:provider.environment.TODOS_ATTACHMENTS_S3_BUCKET}/*
     - Effect: Allow
@@ -103,4 +103,4 @@ GenerateTodoUploadUrl:
         - dynamodb:UpdateItem
         - xray:PutTelemetryRecords
         - xray:PutTraceSegments
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}

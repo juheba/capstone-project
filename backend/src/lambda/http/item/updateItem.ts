@@ -112,7 +112,7 @@ function parseBody(event): UpdateItemRequest {
   if (parsedBody === undefined || parsedBody === null) {
     throw new Error('body does not exist.')
   }
-  // Because "pattern": "^.*\\S.*$" in update-item-model.json does not work for inputs like this: " \n\tTest"
+  // Because "pattern": "^.*\\S.*$" in update-item-request.json does not work for inputs like this: " \n\tTest"
   if(parsedBody.title.trim() === '') {
     throw new Error('title is empty.')
   }

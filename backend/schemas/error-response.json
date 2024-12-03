@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "ErrorResponse",
+  "description": "Represents an error.",
+  "required": [
+    "statusCode",
+    "errorCode",
+    "message"
+  ],
+  "type": "object",
+  "properties": {
+    "statusCode": {
+      "description": "The http status code.",
+      "type": "number",
+      "minimum": 100,
+      "maximum": 599
+    },
+    "errorCode": {
+      "description": "An unique error code.",
+      "type": "string",
+      "minLength": 1
+    },
+    "message": {
+      "description": "Short error message.",
+      "type": "string",
+      "minLength": 1
+    },
+    "details": {
+      "description": "Additional details about the error (optional).",
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false
+}

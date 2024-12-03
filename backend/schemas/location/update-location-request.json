@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "location",
+  "title": "UpdateLocationRequest",
   "description": "Represents the physical locations where collection items.",
   "required": [
     "name"

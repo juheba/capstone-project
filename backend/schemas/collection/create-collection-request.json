@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Collection",
+  "title": "CreateCollectionRequest",
   "description": "Stores information about the items in each user's collection.",
   "required": [
     "name",
@@ -21,7 +21,10 @@
     "visibility": {
       "description": "Settings to control who can view the collection (public, private, shared with specific users).",
       "type": "string",
-      "enum": ["PRIVATE", "PUBLIC"]
+      "enum": [
+        "PRIVATE",
+        "PUBLIC"
+      ]
     }
   },
   "additionalProperties": false

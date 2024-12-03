@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Collection",
+  "title": "UpdateCollectionRequest",
   "description": "Stores information about the items in each user's collection.",
   "required": [
     "name",

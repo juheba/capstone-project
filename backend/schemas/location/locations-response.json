@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "LocationsResponse",
+  "description": "A array with all locations of a user.",
+  "type": "object",
+  "required": [
+    "locations",
+    "nextKey"
+  ],
+  "properties": {
+    "locations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The name of the location (e.g., Living Room Bookshelf, Storage Box).",
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "description": "A description of the location. Provides users with more information about each location.",
+            "type": "string",
+            "minLength": 1
+          },
+          "userId": {
+            "type": "string"
+          },
+          "addedAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date"
+          },
+          "attachmentUrl": {
+            "description": "A upload url to attach a file to an item or location depending on the request parameter.",
+            "type": "string",
+            "minLength": 1
+          },
+          "locationId": {
+            "description": "A physical location where the item is stored.",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "nextKey": {
+      "type": [ "string", "null" ]
+    }
+  },
+  "additionalProperties": false
+}
