@@ -1,9 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "LocationResponse",
-  "description": "Represents the physical locations where collection items.",
+  "title": "Location",
+  "description": "Represents a physical location where collection items can be stored.",
   "required": [
-    "name"
+    "locationId",
+    "name",
+    "userId",
+    "addedAt",
+    "lastModified"
   ],
   "type": "object",
   "properties": {

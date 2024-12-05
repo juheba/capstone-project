@@ -30,6 +30,9 @@ documentation:
       schema: ${file(schemas/attachment/attatchment-url-response.json)}
 
     # Collection
+    - name: Collection
+      contentType: application/json
+      schema: ${file(schemas/collection/collection-model.json)}
     - name: CreateCollectionRequest
       contentType: application/json
       schema: ${file(schemas/collection/create-collection-request.json)}
@@ -38,15 +41,51 @@ documentation:
       schema: ${file(schemas/collection/update-collection-request.json)}
     - name: CollectionsResponse
       contentType: application/json
-      schema: ${file(schemas/collection/collections-response.json)}
+      description: A list with collections of a user and a 'nextKey' if there are more.
+      schema:
+        type: object
+        properties:
+          collections:
+            type: array
+            items:
+              $ref: '#/components/schemas/Collection'
+          nextKey:
+            type:
+             - string
+             - 'null'
+        required:
+          - collections
     - name: CollectionResponse
       contentType: application/json
-      schema: ${file(schemas/collection/collection-response.json)}
+      description: A collection of a user.
+      schema:
+        type: object
+        properties:
+          collection:
+            $ref: '#/components/schemas/Collection'
+        required:
+          - collection
     - name: CollectionItemsResponse
       contentType: application/json
-      schema: ${file(schemas/collection/collection-items-response.json)}
+      description: A list with items that are assigned to a specific collection.
+      schema:
+        type: object
+        properties:
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/Item'
+          nextKey:
+            type:
+             - string
+             - 'null'
+        required:
+          - items
 
     # Item
+    - name: Item
+      contentType: application/json
+      schema: ${file(schemas/item/item-model.json)}
     - name: CreateItemRequest
       contentType: application/json
       schema: ${file(schemas/item/create-item-request.json)}
@@ -55,15 +94,47 @@ documentation:
       schema: ${file(schemas/item/update-item-request.json)}
     - name: ItemsResponse
       contentType: application/json
-      schema: ${file(schemas/item/items-response.json)}
+      description: A list with items of a user and a 'nextKey' if there are more.
+      schema:
+        type: object
+        properties:
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/Item'
+          nextKey:
+            type:
+             - string
+             - 'null'
+        required:
+          - items
     - name: ItemResponse
       contentType: application/json
-      schema: ${file(schemas/item/item-response.json)}
+      description: Stores information about each item that can be part of a user's collection.
+      schema:
+        type: object
+        properties:
+          item:
+            $ref: '#/components/schemas/Item'
+        required:
+          - item
     - name: ItemCollectionsResponse
       contentType: application/json
-      schema: ${file(schemas/item/item-collections-response.json)}
+      description: A list with collections that are assigned to a specific item.
+      schema:
+        type: object
+        properties:
+          collections:
+            type: array
+            items:
+              $ref: '#/components/schemas/Collection'
+        required:
+          - collections
 
     # Location
+    - name: Location
+      contentType: application/json
+      schema: ${file(schemas/location/location-model.json)}
     - name: CreateLocationRequest
       contentType: application/json
       schema: ${file(schemas/location/create-location-request.json)}
@@ -72,10 +143,30 @@ documentation:
       schema: ${file(schemas/location/update-location-request.json)}
     - name: LocationsResponse
       contentType: application/json
-      schema: ${file(schemas/location/locations-response.json)}
+      description: A list with locations of a user and a 'nextKey' if there are more.
+      schema:
+        type: object
+        properties:
+          locations:
+            type: array
+            items:
+              $ref: '#/components/schemas/Location'
+          nextKey:
+            type:
+             - string
+             - 'null'
+        required:
+          - locations
     - name: LocationResponse
       contentType: application/json
-      schema: ${file(schemas/location/location-response.json)}
+      description: Represents a physical location where collection items can be stored.
+      schema:
+        type: object
+        properties:
+          location:
+            $ref: '#/components/schemas/Location'
+        required:
+          - location
 
     # CollectionItems
     - name: UpdateCollectionItemsRequest
@@ -86,39 +177,40 @@ documentation:
     - name: ErrorResponse
       contentType: application/json
       schema: &ErrorResponse ${file(schemas/error-response.json)}
-    - name: 400ErrorResponse
-      description: &400Description Bad Request - message with additional information.
+    - name: BadRequestErrorResponse
+      title: BadRequestErrorResponse
+      description: &Description400 Bad Request - message with additional information.
       contentType: application/json
       schema: *ErrorResponse
       examples:
-        - name: 400Example
+        - name: BadRequestExample
           summary: 400 Bad Request error
           description: An example of an 400 Bad Request error
           value: '{"statusCode": 400, "errorCode": "T123", "message": "Bad Request - some value is missing."}'
-    - name: 401ErrorResponse
-      description: &401Description Unauthorized - user is not logged in or authorization failed.
+    - name: UnauthorizedErrorResponse
+      description: &Description401 Unauthorized - user is not logged in or authorization failed.
       contentType: application/json
       schema: *ErrorResponse
       examples:
-        - name: 401Example
+        - name: UnauthorizedExample
           summary: 401 Unauthorized
           description: An example of an 401 Unauthorized error
           value: '{"statusCode": 401, "errorCode": "T123", "message": "Unauthorized - user is not logged in or authorization failed."}'
-    - name: 404ErrorResponse
-      description: &404Description Not Found - message with additional information what wasn't found.
+    - name: NotFoundErrorResponse
+      description: &Description404 Not Found - message with additional information what wasn't found.
       contentType: application/json
       schema: *ErrorResponse
       examples:
-        - name: 404Example
+        - name: NotFoundExample
           summary: 404 Not Found error
           description: An example of an 404 Not Found error
           value: '{"statusCode": 404, "errorCode": "T123", "message": "Not Found - the requested resource does not exist."}'
-    - name: 500ErrorResponse
-      description: &500Description Internal Server Error - message with additional information.
+    - name: InternalServerErrorResponse
+      description: &Description500 Internal Server Error - message with additional information.
       contentType: application/json
       schema: *ErrorResponse
       examples:
-        - name: 500Example
+        - name: InternalServerErrorExample
           summary: 500 Internal Server error
           description: An example of an 500 Internal Server error
           value: '{"statusCode": 500, "errorCode": "T123", "message": "Internal Server - something went horrably wrong."}'
@@ -147,24 +239,24 @@ endpoints:
           application/json: AttatchmentURLResponse
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "404"
         responseBody:
-          description: *404Description
+          description: *Description404
         responseModels:
-          application/json: 404ErrorResponse
+          application/json: NotFoundErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
 ## Collectons ##
 
@@ -194,19 +286,19 @@ endpoints:
           application/json: CollectionsResponse
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
   CreateCollection:
     summary: Create a new collection
@@ -227,19 +319,19 @@ endpoints:
           application/json: CollectionResponse
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
   UpdateCollection:
     summary: Update collection
@@ -267,24 +359,24 @@ endpoints:
           application/json: CollectionResponse
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "404"
         responseBody:
-          description: *404Description
+          description: *Description404
         responseModels:
-          application/json: 404ErrorResponse
+          application/json: NotFoundErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
   DeleteCollection:
     summary: Delete collection
@@ -304,24 +396,24 @@ endpoints:
           description: No Content.
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "404"
         responseBody:
-          description: *404Description
+          description: *Description404
         responseModels:
-          application/json: 404ErrorResponse
+          application/json: NotFoundErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
   GetCollectionItems:
     summary: Get all items of a collection
@@ -345,24 +437,24 @@ endpoints:
           application/json: CollectionItemsResponse
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "404"
         responseBody:
-          description: *404Description
+          description: *Description404
         responseModels:
-          application/json: 404ErrorResponse
+          application/json: NotFoundErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
 
   # CollectionItems: Item => Collection
@@ -388,24 +480,24 @@ endpoints:
           description: No content.
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "404"
         responseBody:
-          description: *404Description
+          description: *Description404
         responseModels:
-          application/json: 404ErrorResponse
+          application/json: NotFoundErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
 ## Items ##
 
@@ -431,19 +523,19 @@ endpoints:
           application/json: ItemsResponse
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
   CreateItem:
     summary: Create a new item
@@ -464,19 +556,19 @@ endpoints:
           application/json: ItemResponse
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
   UpdateItem:
     summary: Update item
@@ -504,24 +596,24 @@ endpoints:
           application/json: ItemResponse
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "404"
         responseBody:
-          description: *404Description
+          description: *Description404
         responseModels:
-          application/json: 404ErrorResponse
+          application/json: NotFoundErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
   DeleteItem:
     summary: Delete item
@@ -541,28 +633,28 @@ endpoints:
           description: No Content.
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "404"
         responseBody:
-          description: *404Description
+          description: *Description404
         responseModels:
-          application/json: 404ErrorResponse
+          application/json: NotFoundErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
   GetItemCollections:
     summary: Get all collections of a item
-    description: List all collections from a item.
+    description: List all collections an item is assigned to.
     tags:
       - item
     security:
@@ -573,33 +665,33 @@ endpoints:
         schema: *ItemId
         required: true
     responseBody:
-      description: List of all collectons of a item.
+      description: List collections an item is assigned to.
     methodResponses:
       - statusCode: "200"
         responseBody:
-          description: A array with all collections of a item.
+          description: A array with collections.
         responseModels:
-          application/json: CollectionItemsResponse
+          application/json: ItemCollectionsResponse
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "404"
         responseBody:
-          description: *404Description
+          description: *Description404
         responseModels:
-          application/json: 404ErrorResponse
+          application/json: NotFoundErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
   UpdateItemCollections:
     summary: Adds collections to an item.
@@ -623,24 +715,24 @@ endpoints:
           description: No content.
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "404"
         responseBody:
-          description: *404Description
+          description: *Description404
         responseModels:
-          application/json: 404ErrorResponse
+          application/json: NotFoundErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
 ## Locations ##
 
@@ -666,19 +758,19 @@ endpoints:
           application/json: LocationsResponse
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
   CreateLocation:
     summary: Create a new location
@@ -699,19 +791,19 @@ endpoints:
           application/json: LocationResponse
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
   UpdateLocation:
     summary: Update location
@@ -739,24 +831,24 @@ endpoints:
           application/json: LocationResponse
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "404"
         responseBody:
-          description: *404Description
+          description: *Description404
         responseModels:
-          application/json: 404ErrorResponse
+          application/json: NotFoundErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse
 
   DeleteLocation:
     summary: Delete location
@@ -776,21 +868,21 @@ endpoints:
           description: No Content.
       - statusCode: "400"
         responseBody:
-          description: *400Description
+          description: *Description400
         responseModels:
-          application/json: 400ErrorResponse
+          application/json: BadRequestErrorResponse
       - statusCode: "401"
         responseBody:
-          description: *401Description
+          description: *Description401
         responseModels:
-          application/json: 401ErrorResponse
+          application/json: UnauthorizedErrorResponse
       - statusCode: "404"
         responseBody:
-          description: *404Description
+          description: *Description404
         responseModels:
-          application/json: 404ErrorResponse
+          application/json: NotFoundErrorResponse
       - statusCode: "500"
         responseBody:
-          description: *500Description
+          description: *Description500
         responseModels:
-          application/json: 500ErrorResponse
+          application/json: InternalServerErrorResponse

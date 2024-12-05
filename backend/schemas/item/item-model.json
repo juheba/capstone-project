@@ -1,9 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "ItemResponse",
+  "title": "Item",
   "description": "Stores information about each item that can be part of a user's collection.",
   "required": [
+    "itemId",
     "title",
+    "userId",
+    "addedAt",
+    "lastModified",
     "isLendable",
     "ownershipStatus",
     "status"
