@@ -10,7 +10,7 @@ GenerateUploadUrl:
         documentation: ${file(./serverless/serverless.doc.yml):endpoints.GenerateUploadUrl}
         request:
           schemas:
-            application/json: ${file(./schemas/attachment/create-attatchment-request.json)}
+            application/json: ${file(./schemas/attachment/create-attachment-request.json)}
   iamRoleStatements:
     - Effect: Allow
       Action: 

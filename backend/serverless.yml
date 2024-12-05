@@ -83,7 +83,7 @@ functions:
   - ${file(serverless/functions/collection.yml)}
   - ${file(serverless/functions/item.yml)}
   - ${file(serverless/functions/location.yml)}
-  - ${file(serverless/functions/attatchment.yml)}
+  - ${file(serverless/functions/attachment.yml)}
 #  - ${file(serverless/functions.yml)}
 
 resources: ${file(serverless/ressources.yml)}

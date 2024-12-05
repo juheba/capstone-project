@@ -1,36 +1,40 @@
 openapi: 3.0.0
 components:
   schemas:
-    CreateAttatchmentRequest:
-      title: CreateAttatchmentRequest
-      description: Creates a attatchment upload url.
+    CreateAttachmentRequest:
+      title: CreateAttachmentRequest
+      description: Creates an attachment upload URL.
       type: object
       properties:
         itemId:
           description: >-
-            Creates a upload url to attach a file to an item. If itemId is
-            provided, then locationId is unnessary.
+            Creates an upload URL to attach a file to an item. If itemId is
+            provided, locationId is unnecessary.
           type: string
           format: uuid
         locationId:
           description: >-
-            Creates a upload url to attach a file to an location. If locationId
-            is provided, then itemId is unnessary.
+            Creates an upload URL to attach a file to a location. If locationId
+            is provided, itemId is unnecessary.
           type: string
           format: uuid
       anyOf:
-        - required:
-            - itemIds
-        - required:
+        - properties:
+            itemId:
+              type: string
+              minLength: 1
+          required:
+            - itemId
+        - properties:
+            locationId:
+              type: string
+              minLength: 1
+          required:
             - locationId
-      not:
-        required:
-          - itemIds
-          - locationId
       additionalProperties: false
-    AttatchmentURLResponse:
-      title: AttatchmentURLResponse
-      description: Creates a attatchment upload url.
+    AttachmentURLResponse:
+      title: AttachmentURLResponse
+      description: Creates a attachment upload url.
       required:
         - uploadUrl
       type: object
@@ -640,7 +644,7 @@ components:
     Access-Control-Allow-Credentials:
       type: boolean
       default: true
-    6b1eb4ac-1651-4a32-be5f-cb5a6b8caf83:
+    15dd1666-f736-4971-bcdf-3407045f65ef:
       title: CreateCollectionRequest
       description: Stores information about the items in each user's collection.
       required:
@@ -670,7 +674,7 @@ components:
     collectionId:
       type: string
       format: uuid
-    a2b6deb2-2ee9-4813-bb52-7967073f2ec4:
+    6c5325ed-06fd-49fb-b44f-ab9218a309ea:
       title: UpdateCollectionRequest
       description: Stores information about the items in each user's collection.
       required:
@@ -697,7 +701,7 @@ components:
             - PRIVATE
             - PUBLIC
       additionalProperties: false
-    b31c75af-e831-4e05-ab96-97c88b906ccf:
+    b4af4d37-3bb3-4615-9daf-cf417b0e13fc:
       title: CreateItemRequest
       description: >-
         Stores information about each item that can be part of a user's
@@ -750,7 +754,7 @@ components:
     itemId:
       type: string
       format: uuid
-    dc37a6ba-fe90-4717-98ea-1f5ae4459159:
+    2b453c63-0ec4-4b9b-934a-fb7ecb2711fa:
       title: UpdateItemRequest
       description: >-
         Stores information about each item that can be part of a user's
@@ -800,7 +804,7 @@ components:
             - PROCESSING
             - DONE
       additionalProperties: false
-    be9fb52f-569b-4e48-b874-83e3e7a8b63d:
+    ffa408a8-3a79-4d82-869e-30a281622889:
       title: CreateLocationRequest
       description: Represents the physical locations where collection items.
       required:
@@ -821,7 +825,7 @@ components:
     locationId:
       type: string
       format: uuid
-    9a91f70f-8815-48d3-81a7-026067cefb1a:
+    06ae063a-315a-4a68-91b1-e946718b0afa:
       title: UpdateLocationRequest
       description: Represents the physical locations where collection items.
       required:
@@ -1028,7 +1032,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/6b1eb4ac-1651-4a32-be5f-cb5a6b8caf83'
+              $ref: '#/components/schemas/15dd1666-f736-4971-bcdf-3407045f65ef'
       responses:
         '201':
           description: The newly created collection with additional parameters.
@@ -1169,7 +1173,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/a2b6deb2-2ee9-4813-bb52-7967073f2ec4'
+              $ref: '#/components/schemas/6c5325ed-06fd-49fb-b44f-ab9218a309ea'
       responses:
         '200':
           description: The updated collection with changed parameters.
@@ -1962,7 +1966,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/b31c75af-e831-4e05-ab96-97c88b906ccf'
+              $ref: '#/components/schemas/b4af4d37-3bb3-4615-9daf-cf417b0e13fc'
       responses:
         '201':
           description: The newly created item with additional parameters.
@@ -2103,7 +2107,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/dc37a6ba-fe90-4717-98ea-1f5ae4459159'
+              $ref: '#/components/schemas/2b453c63-0ec4-4b9b-934a-fb7ecb2711fa'
       responses:
         '200':
           description: The updated item with changed parameters.
@@ -2896,7 +2900,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/be9fb52f-569b-4e48-b874-83e3e7a8b63d'
+              $ref: '#/components/schemas/ffa408a8-3a79-4d82-869e-30a281622889'
       responses:
         '201':
           description: The newly created location with additional parameters.
@@ -3037,7 +3041,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/9a91f70f-8815-48d3-81a7-026067cefb1a'
+              $ref: '#/components/schemas/06ae063a-315a-4a68-91b1-e946718b0afa'
       responses:
         '200':
           description: The updated location with changed parameters.
@@ -3347,12 +3351,12 @@ paths:
                 $ref: '#/components/schemas/Access-Control-Allow-Credentials'
   /attachments:
     post:
-      summary: Generates an attatchment upload url
-      description: Generates an upload url for an item or location attatchment
+      summary: Generates an attachment upload url
+      description: Generates an upload url for an item or location attachment
       operationId: GenerateUploadUrl
       parameters: []
       tags:
-        - attatchment
+        - attachment
       security:
         - bearerAuth: []
       requestBody:
@@ -3361,14 +3365,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateAttatchmentRequest'
+              $ref: '#/components/schemas/CreateAttachmentRequest'
       responses:
         '201':
           description: The created url to upload a file.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AttatchmentURLResponse'
+                $ref: '#/components/schemas/AttachmentURLResponse'
           headers:
             Access-Control-Allow-Origin:
               description: >-
@@ -3511,8 +3515,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Access-Control-Allow-Credentials'
 tags:
-  - name: attatchment
-    description: Operations on attatchments
+  - name: attachment
+    description: Operations on attachments
   - name: collection
     description: Operations on collections
   - name: item

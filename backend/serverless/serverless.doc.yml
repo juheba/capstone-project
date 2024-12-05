@@ -12,8 +12,8 @@ documentation:
       type: http
       scheme: bearer
   tags:
-    - name: attatchment
-      description: Operations on attatchments
+    - name: attachment
+      description: Operations on attachments
     - name: collection
       description: Operations on collections
     - name: item
@@ -21,13 +21,13 @@ documentation:
     - name: location
       description: Operations on locations
   models:
-    # Attatchment
-    - name: CreateAttatchmentRequest
+    # Attachment
+    - name: CreateAttachmentRequest
       contentType: application/json
-      schema: ${file(schemas/attachment/create-attatchment-request.json)}
-    - name: AttatchmentURLResponse
+      schema: ${file(schemas/attachment/create-attachment-request.json)}
+    - name: AttachmentURLResponse
       contentType: application/json
-      schema: ${file(schemas/attachment/attatchment-url-response.json)}
+      schema: ${file(schemas/attachment/attachment-url-response.json)}
 
     # Collection
     - name: Collection
@@ -217,18 +217,18 @@ documentation:
 
 
 endpoints:
-## Attatchment ##
+## Attachment ##
   GenerateUploadUrl:
-    summary: Generates an attatchment upload url
-    description: Generates an upload url for an item or location attatchment
+    summary: Generates an attachment upload url
+    description: Generates an upload url for an item or location attachment
     tags:
-      - attatchment
+      - attachment
     security:
       - bearerAuth: []  # No scopes required
     requestBody:
       description: Item or Location to attach a file to.
     requestModels:
-      application/json: CreateAttatchmentRequest
+      application/json: CreateAttachmentRequest
     responseBody:
       description: The upload url
     methodResponses:
@@ -236,7 +236,7 @@ endpoints:
         responseBody:
           description: The created url to upload a file.
         responseModels:
-          application/json: AttatchmentURLResponse
+          application/json: AttachmentURLResponse
       - statusCode: "400"
         responseBody:
           description: *Description400

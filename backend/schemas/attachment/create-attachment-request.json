@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "CreateAttachmentRequest",
+  "description": "Creates an attachment upload URL.",
+  "type": "object",
+  "properties": {
+    "itemId": {
+      "description": "Creates an upload URL to attach a file to an item. If itemId is provided, locationId is unnecessary.",
+      "type": "string",
+      "format": "uuid"
+    },
+    "locationId": {
+      "description": "Creates an upload URL to attach a file to a location. If locationId is provided, itemId is unnecessary.",
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "anyOf": [
+    {
+      "properties": {
+        "itemId": { "type": "string", "minLength": 1 }
+      },
+      "required": ["itemId"]
+    },
+    {
+      "properties": {
+        "locationId": { "type": "string", "minLength": 1 }
+      },
+      "required": ["locationId"]
+    }
+  ],
+  "additionalProperties": false
+}

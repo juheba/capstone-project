@@ -2,8 +2,8 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 
-import { createAttachmentPresignedUrl } from '@businessLogic/Attatchments';
-import { CreateAttatchmentRequest } from '@requests/attatchment'
+import { createAttachmentPresignedUrl } from '@businessLogic/Attachments';
+import { CreateAttachmentRequest } from '@requests/attachment'
 
 import { createLogger, middyfy, getUserId } from '@utils'
 
@@ -13,21 +13,27 @@ const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResu
   logger.info(`Processing event: ${event}`)
 
   let userId = getUserId(event);
-  var attatchment: CreateAttatchmentRequest;
+  var attachment: CreateAttachmentRequest;
 
   try {
-    attatchment = parseBody(event)
+    attachment = parseBody(event)
   } catch (e) {
     return createBadRequestResponse(e.message)
   }
 
+  if ((attachment.itemId == null || attachment.itemId === undefined) && (attachment.locationId == null || attachment.locationId === undefined)) {
+    return createBadRequestResponse('\'itemId\' or \'locationId\' is required.')
+  } else if (attachment.itemId?.length > 0 && attachment.locationId?.length > 0) {
+    return createBadRequestResponse('\'itemId\' and \'locationId\' are mutually exclusive.')
+  }
+
   let result;
   try {
-    result = await createAttachmentPresignedUrl(userId, attatchment)
+    result = await createAttachmentPresignedUrl(userId, attachment)
   } catch (error) {
     if (error.code === 'ConditionalCheckFailedException') {
-      logger.info({message: 'No item found with the provided id', userId: userId})
-      return createNotFoundResponse(`No item found with the provided id`)
+      logger.info({message: 'No entry found with the provided id', userId: userId})
+      return createNotFoundResponse(`No entry found with the provided id`)
     }
     throw error;
   }

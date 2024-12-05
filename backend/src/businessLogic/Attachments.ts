@@ -2,19 +2,19 @@ import { v4 as uuidv4 } from 'uuid';
 import { AttachmentsAccess } from '@dataLayer/attachmentsAccess'
 import { updateAttachmentUrl as updateItemAttachmentUrl } from '@businessLogic/Items';
 import { updateAttachmentUrl as updateLocationAttachmentUrl } from '@businessLogic/Locations';
-import { CreateAttatchmentRequest } from '@requests/attatchment'
+import { CreateAttachmentRequest } from '@requests/attachment'
 
 const attachmentsAccess = new AttachmentsAccess()
 
-export async function createAttachmentPresignedUrl(userId: string, attatchment: CreateAttatchmentRequest) {
+export async function createAttachmentPresignedUrl(userId: string, attachment: CreateAttachmentRequest) {
   const attachmentId = uuidv4()
 
   const attachmentUrl = attachmentsAccess.getAttachmentUrl(attachmentId)
 
-  if (attatchment.itemId !== undefined) {
-    await updateItemAttachmentUrl(userId, attatchment.itemId, attachmentUrl)
-  } else if (attatchment.locationId !== undefined) {
-    await updateLocationAttachmentUrl(userId, attatchment.locationId, attachmentUrl)
+  if (attachment.itemId !== undefined) {
+    await updateItemAttachmentUrl(userId, attachment.itemId, attachmentUrl)
+  } else if (attachment.locationId !== undefined) {
+    await updateLocationAttachmentUrl(userId, attachment.locationId, attachmentUrl)
   } else {
     throw new Error('\'itemId\' or \'locationId\' is missing.')
   }

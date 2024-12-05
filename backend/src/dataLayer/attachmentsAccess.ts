@@ -1,6 +1,6 @@
 import { createLogger, initAWS } from '@utils'
 
-const logger = createLogger('attatchmentsAccess')
+const logger = createLogger('attachmentsAccess')
 const AWS = initAWS()
 
 export class AttachmentsAccess {
