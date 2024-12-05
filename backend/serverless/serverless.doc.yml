@@ -32,7 +32,7 @@ documentation:
     # Collection
     - name: Collection
       contentType: application/json
-      schema: ${file(schemas/collection/collection-model.json)}
+      schema: &Collection ${file(schemas/collection/collection-model.json)}
     - name: CreateCollectionRequest
       contentType: application/json
       schema: ${file(schemas/collection/create-collection-request.json)}
@@ -47,8 +47,7 @@ documentation:
         properties:
           collections:
             type: array
-            items:
-              $ref: '#/components/schemas/Collection'
+            items: *Collection
           nextKey:
             type:
              - string
@@ -61,31 +60,14 @@ documentation:
       schema:
         type: object
         properties:
-          collection:
-            $ref: '#/components/schemas/Collection'
+          collection: *Collection
         required:
           - collection
-    - name: CollectionItemsResponse
-      contentType: application/json
-      description: A list with items that are assigned to a specific collection.
-      schema:
-        type: object
-        properties:
-          items:
-            type: array
-            items:
-              $ref: '#/components/schemas/Item'
-          nextKey:
-            type:
-             - string
-             - 'null'
-        required:
-          - items
 
     # Item
     - name: Item
       contentType: application/json
-      schema: ${file(schemas/item/item-model.json)}
+      schema: &Item ${file(schemas/item/item-model.json)}
     - name: CreateItemRequest
       contentType: application/json
       schema: ${file(schemas/item/create-item-request.json)}
@@ -100,8 +82,7 @@ documentation:
         properties:
           items:
             type: array
-            items:
-              $ref: '#/components/schemas/Item'
+            items: *Item
           nextKey:
             type:
              - string
@@ -114,10 +95,28 @@ documentation:
       schema:
         type: object
         properties:
-          item:
-            $ref: '#/components/schemas/Item'
+          item: *Item
         required:
           - item
+
+    # CollectionItems: Multiple items in a collection
+    - name: CollectionItemsResponse
+      contentType: application/json
+      description: A list with items that are assigned to a specific collection.
+      schema:
+        type: object
+        properties:
+          items:
+            type: array
+            items: *Item
+          nextKey:
+            type:
+             - string
+             - 'null'
+        required:
+          - items
+    
+    # ItemCollections: Multiple collections for an item
     - name: ItemCollectionsResponse
       contentType: application/json
       description: A list with collections that are assigned to a specific item.
@@ -126,15 +125,14 @@ documentation:
         properties:
           collections:
             type: array
-            items:
-              $ref: '#/components/schemas/Collection'
+            items: *Collection
         required:
           - collections
 
     # Location
     - name: Location
       contentType: application/json
-      schema: ${file(schemas/location/location-model.json)}
+      schema: &Location ${file(schemas/location/location-model.json)}
     - name: CreateLocationRequest
       contentType: application/json
       schema: ${file(schemas/location/create-location-request.json)}
@@ -149,8 +147,7 @@ documentation:
         properties:
           locations:
             type: array
-            items:
-              $ref: '#/components/schemas/Location'
+            items: *Location
           nextKey:
             type:
              - string
@@ -163,8 +160,7 @@ documentation:
       schema:
         type: object
         properties:
-          location:
-            $ref: '#/components/schemas/Location'
+          location: *Location
         required:
           - location
 
