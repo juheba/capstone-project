@@ -1,0 +1,1535 @@
+openapi: 3.0.0
+info:
+  title: Collector API
+  description: Serverless application for collection management
+  version: v.0.0.0
+tags:
+  - name: attachment
+    description: Operations on attachments
+  - name: collection
+    description: Operations on collections
+  - name: item
+    description: Operations on items
+  - name: location
+    description: Operations on locations
+paths:
+  /collections:
+    get:
+      summary: Get all collections
+      description: Get all collections of a user
+      operationId: GetCollections
+      parameters:
+        - name: limit
+          in: query
+          description: (optional) Iterates over the collections with the given limit.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Limit'
+        - name: nextKey
+          in: query
+          description: (optional) Iterates over the collections with the given nextKey.
+          required: false
+          schema:
+            $ref: '#/components/schemas/NextKey'
+      tags:
+        - collection
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A array with all collections of a user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionsResponse'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Create a new collection
+      description: Creates a new collection for a user
+      operationId: CreateCollection
+      parameters: []
+      tags:
+        - collection
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: ''
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCollectionRequest'
+      responses:
+        '201':
+          description: The newly created collection with additional parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionResponse'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /collections/{collectionId}:
+    patch:
+      summary: Update collection
+      description: Updates a collection with new informations.
+      operationId: UpdateCollection
+      parameters:
+        - name: collectionId
+          in: path
+          description: ID of the collection which will receive the update.
+          required: true
+          schema:
+            $ref: '#/components/schemas/CollectionId'
+      tags:
+        - collection
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: ''
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCollectionRequest'
+      responses:
+        '200':
+          description: The updated collection with changed parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionResponse'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              examples:
+                NotFoundExample:
+                  $ref: '#/components/examples/NotFoundExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Delete collection
+      description: Deletes a collection of a user.
+      operationId: DeleteCollection
+      parameters:
+        - name: collectionId
+          in: path
+          description: ID of the collection which will be deleted.
+          required: true
+          schema:
+            $ref: '#/components/schemas/CollectionId'
+      tags:
+        - collection
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: No Content.
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              examples:
+                NotFoundExample:
+                  $ref: '#/components/examples/NotFoundExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /collections/{collectionId}/items:
+    get:
+      summary: Get all items of a collection
+      description: List all items from a collection.
+      operationId: GetCollectionItems
+      parameters:
+        - name: collectionId
+          in: path
+          description: ID of the collection.
+          required: true
+          schema:
+            $ref: '#/components/schemas/CollectionId'
+      tags:
+        - collection
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A array with all items of a collection.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionItemsResponse'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              examples:
+                NotFoundExample:
+                  $ref: '#/components/examples/NotFoundExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Adds items to a collection.
+      description: Adds one or multiple items to a collection.
+      operationId: UpdateCollectionItems
+      parameters:
+        - name: collectionId
+          in: path
+          description: ID of the collection which will receive the items.
+          required: true
+          schema:
+            $ref: '#/components/schemas/CollectionId'
+      tags:
+        - collection
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Items to add to the collection.
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCollectionItemsRequest'
+      responses:
+        '204':
+          description: No content.
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              examples:
+                NotFoundExample:
+                  $ref: '#/components/examples/NotFoundExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /items:
+    get:
+      summary: Get all items
+      description: Get all itemss of a user
+      operationId: GetItems
+      parameters:
+        - name: limit
+          in: query
+          description: (optional) Iterates over the collections with the given limit.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Limit'
+        - name: nextKey
+          in: query
+          description: (optional) Iterates over the collections with the given nextKey.
+          required: false
+          schema:
+            $ref: '#/components/schemas/NextKey'
+      tags:
+        - item
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A array with all items of a user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResponse'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Create a new item
+      description: Creates a new item for a user
+      operationId: CreateItem
+      parameters: []
+      tags:
+        - item
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: ''
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItemRequest'
+      responses:
+        '201':
+          description: The newly created item with additional parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemResponse'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /items/{itemId}:
+    patch:
+      summary: Update item
+      description: Updates a item with new informations.
+      operationId: UpdateItem
+      parameters:
+        - name: itemId
+          in: path
+          description: ID of the item which will receive the update.
+          required: true
+          schema:
+            $ref: '#/components/schemas/ItemId'
+      tags:
+        - item
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: ''
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateItemRequest'
+      responses:
+        '200':
+          description: The updated item with changed parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemResponse'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              examples:
+                NotFoundExample:
+                  $ref: '#/components/examples/NotFoundExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Delete item
+      description: Deletes a item of a user.
+      operationId: DeleteItem
+      parameters:
+        - name: itemId
+          in: path
+          description: ID of the item which will be deleted.
+          required: true
+          schema:
+            $ref: '#/components/schemas/ItemId'
+      tags:
+        - item
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: No Content.
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              examples:
+                NotFoundExample:
+                  $ref: '#/components/examples/NotFoundExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /items/{itemId}/collections:
+    get:
+      summary: Get all collections of a item
+      description: List all collections an item is assigned to.
+      operationId: GetItemCollections
+      parameters:
+        - name: itemId
+          in: path
+          description: ID of the item.
+          required: true
+          schema:
+            $ref: '#/components/schemas/ItemId'
+      tags:
+        - item
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A array with collections.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemCollectionsResponse'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              examples:
+                NotFoundExample:
+                  $ref: '#/components/examples/NotFoundExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Adds collections to an item.
+      description: Adds one or multiple collections to an item.
+      operationId: UpdateItemCollections
+      parameters:
+        - name: itemId
+          in: path
+          description: ID of the item which will receive the collections.
+          required: true
+          schema:
+            $ref: '#/components/schemas/ItemId'
+      tags:
+        - item
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Collections to add to the item.
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCollectionItemsRequest'
+      responses:
+        '204':
+          description: No content.
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              examples:
+                NotFoundExample:
+                  $ref: '#/components/examples/NotFoundExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /locations:
+    get:
+      summary: Get all locations
+      description: Get all locations of a user
+      operationId: GetLocations
+      parameters:
+        - name: limit
+          in: query
+          description: (optional) Iterates over the collections with the given limit.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Limit'
+        - name: nextKey
+          in: query
+          description: (optional) Iterates over the collections with the given nextKey.
+          required: false
+          schema:
+            $ref: '#/components/schemas/NextKey'
+      tags:
+        - location
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A array with all locations of a user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationsResponse'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Create a new location
+      description: Creates a new location for a user
+      operationId: CreateLocation
+      parameters: []
+      tags:
+        - location
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: ''
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLocationRequest'
+      responses:
+        '201':
+          description: The newly created location with additional parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationResponse'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /locations/{locationId}:
+    patch:
+      summary: Update location
+      description: Updates a location with new informations.
+      operationId: UpdateLocation
+      parameters:
+        - name: locationId
+          in: path
+          description: ID of the location which will receive the update.
+          required: true
+          schema:
+            $ref: '#/components/schemas/LocationId'
+      tags:
+        - location
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: ''
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLocationRequest'
+      responses:
+        '200':
+          description: The updated location with changed parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationResponse'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              examples:
+                NotFoundExample:
+                  $ref: '#/components/examples/NotFoundExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Delete location
+      description: Deletes a location of a user.
+      operationId: DeleteLocation
+      parameters:
+        - name: locationId
+          in: path
+          description: ID of the location which will be deleted.
+          required: true
+          schema:
+            $ref: '#/components/schemas/LocationId'
+      tags:
+        - location
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: No Content.
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              examples:
+                NotFoundExample:
+                  $ref: '#/components/examples/NotFoundExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /attachments:
+    post:
+      summary: Generates an attachment upload url
+      description: Generates an upload url for an item or location attachment
+      operationId: GenerateUploadUrl
+      parameters: []
+      tags:
+        - attachment
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Item or Location to attach a file to.
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAttachmentRequest'
+      responses:
+        '201':
+          description: The created url to upload a file.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentURLResponse'
+        '400':
+          description: Bad Request - message with additional information.
+          content:
+            application/json:
+              examples:
+                BadRequestExample:
+                  $ref: '#/components/examples/BadRequestExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - user is not logged in or authorization failed.
+          content:
+            application/json:
+              examples:
+                UnauthorizedExample:
+                  $ref: '#/components/examples/UnauthorizedExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found - message with additional information what wasn't found.
+          content:
+            application/json:
+              examples:
+                NotFoundExample:
+                  $ref: '#/components/examples/NotFoundExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error - message with additional information.
+          content:
+            application/json:
+              examples:
+                InternalServerErrorExample:
+                  $ref: '#/components/examples/InternalServerErrorExample'
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+##################
+###   MODELS   ###
+##################
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    # IDs
+    UserId:
+      description: The id of the user.
+      type: string
+      format: uuid
+    CollectionId:
+      description: The id of the collection.
+      type: string
+      format: uuid
+    ItemId:
+      description: The id of the item.
+      type: string
+      format: uuid
+    LocationId:
+      description: The id of the location.
+      type: string
+      format: uuid
+
+    # Pagination
+    Limit:
+      description: The number of entries to return.
+      type: number
+      format: int64
+    NextKey:
+      description: The next key to be used for pagination.
+      type: string
+      nullable: true
+
+    # Enums
+    CollectionVisibility:
+      description: >-
+        Settings to control who can view the collection (public, private,
+        shared with specific users).
+      type: string
+      enum:
+        - PRIVATE
+        - PUBLIC
+    ItemOwnershipStatus:
+      description: >-
+        Information about whether the user owns the item, wishes to buy it,
+        has borrowed it, etc.
+      type: string
+      enum:
+        - OWNER
+        - BORROWER
+        - WISHLIST
+    ItemStatus:
+      description: >-
+        Information about whether the item has been read/watched, is
+        currently being read/watched, or is on a to-read/to-watch list.
+      type: string
+      enum:
+        - TODO
+        - PROCESSING
+        - DONE
+
+    # Attachment
+    AttachmentUrl:
+      description: >-
+        A upload url to attach a file to an item or location depending on
+        the request parameter.
+      type: string
+      format: url
+      minLength: 1
+    CreateAttachmentRequest:
+      title: CreateAttachmentRequest
+      description: Creates an attachment upload URL.
+      type: object
+      properties:
+        itemId:
+          description: >-
+            Creates an upload URL to attach a file to an item. If itemId is
+            provided, locationId is unnecessary.
+          type: string
+          format: uuid
+        locationId:
+          description: >-
+            Creates an upload URL to attach a file to a location. If locationId
+            is provided, itemId is unnecessary.
+          type: string
+          format: uuid
+      anyOf:
+        - properties:
+            itemId:
+              $ref: '#/components/schemas/ItemId'
+          required:
+            - itemId
+        - properties:
+            locationId:
+              $ref: '#/components/schemas/LocationId'
+          required:
+            - locationId
+      additionalProperties: false
+    AttachmentURLResponse:
+      title: AttachmentURLResponse
+      description: Creates a attachment upload url.
+      required:
+        - uploadUrl
+      type: object
+      properties:
+        uploadUrl:
+          $ref: '#/components/schemas/AttachmentUrl'
+      additionalProperties: false
+
+    # Collections
+    Collection:
+      title: Collection
+      description: A collection of a user.
+      type: object
+      required:
+        - collectionId
+        - userId
+        - lastModified
+        - createdAt
+        - name
+        - visibility
+      properties:
+        collectionId:
+          $ref: '#/components/schemas/CollectionId'
+        userId:
+          $ref: '#/components/schemas/UserId'
+        lastModified:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        name:
+          description: >-
+            The name of the collection (e.g., "Science Fiction Books", "Marvel
+            Movies").
+          type: string
+          minLength: 1
+        description:
+          description: A brief description of the collection.
+          type: string
+          minLength: 1
+        visibility:
+          $ref: '#/components/schemas/CollectionVisibility'
+      additionalProperties: false
+    CreateCollectionRequest:
+      title: CreateCollectionRequest
+      description: Stores information about the items in each user's collection.
+      required:
+        - name
+        - visibility
+      type: object
+      properties:
+        name:
+          description: >-
+            The name of the collection (e.g., "Science Fiction Books", "Marvel
+            Movies").
+          type: string
+          minLength: 1
+        description:
+          description: A brief description of the collection.
+          type: string
+          minLength: 1
+        visibility:
+          $ref: '#/components/schemas/CollectionVisibility'
+      additionalProperties: false
+    UpdateCollectionRequest:
+      title: UpdateCollectionRequest
+      description: Stores information about the items in each user's collection.
+      required:
+        - name
+        - visibility
+      type: object
+      properties:
+        name:
+          description: >-
+            The name of the collection (e.g., "Science Fiction Books", "Marvel
+            Movies").
+          type: string
+          minLength: 1
+        description:
+          description: A brief description of the collection.
+          type: string
+          minLength: 1
+        visibility:
+          $ref: '#/components/schemas/CollectionVisibility'
+      additionalProperties: false
+    CollectionsResponse:
+      type: object
+      properties:
+        collections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Collection'
+        nextKey:
+          $ref: '#/components/schemas/NextKey'
+      required:
+        - collections
+    CollectionResponse:
+      type: object
+      properties:
+        collection:
+          $ref: '#/components/schemas/Collection'
+      required:
+        - collection
+    CollectionItemsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+        nextKey:
+          $ref: '#/components/schemas/NextKey'
+      required:
+        - items
+
+    # Items
+    Item:
+      title: Item
+      description: >-
+        Stores information about each item that can be part of a user's
+        collection.
+      required:
+        - itemId
+        - title
+        - userId
+        - addedAt
+        - lastModified
+        - isLendable
+        - ownershipStatus
+        - status
+      type: object
+      properties:
+        itemId:
+          $ref: '#/components/schemas/ItemId'
+        title:
+          description: The title of the item (e.g., the name of the book, movie, or comic).
+          type: string
+          minLength: 1
+        description:
+          description: A brief description or summary of the item.
+          type: string
+          minLength: 1
+        itemType:
+          description: The type of the item (e.g., book, movie, game, comic).
+          type: string
+          minLength: 1
+        userId:
+          $ref: '#/components/schemas/UserId'
+        addedAt:
+          type: string
+          format: date-time
+        lastModified:
+          type: string
+          format: date-time
+        attachmentUrl:
+          $ref: '#/components/schemas/AttachmentUrl'
+        locationId:
+          $ref: '#/components/schemas/LocationId'
+        isLendable:
+          description: Information about whether the user (owner) would lend the item.
+          type: boolean
+        ownershipStatus:
+          $ref: '#/components/schemas/ItemOwnershipStatus'
+        status:
+          $ref: '#/components/schemas/ItemStatus'
+      additionalProperties: false
+    CreateItemRequest:
+      title: CreateItemRequest
+      description: >-
+        Stores information about each item that can be part of a user's
+        collection.
+      required:
+        - title
+        - isLendable
+        - ownershipStatus
+        - status
+      type: object
+      properties:
+        title:
+          description: The title of the item (e.g., the name of the book, movie, or comic).
+          type: string
+          minLength: 1
+        itemType:
+          description: The type of the item (e.g., book, movie, game, comic).
+          type: string
+          minLength: 1
+        description:
+          description: A brief description or summary of the item.
+          type: string
+          minLength: 1
+        locationId:
+          $ref: '#/components/schemas/LocationId'
+        isLendable:
+          description: Information about whether the user (owner) would lend the item.
+          type: boolean
+        ownershipStatus:
+          $ref: '#/components/schemas/ItemOwnershipStatus'
+        status:
+          $ref: '#/components/schemas/ItemStatus'
+      additionalProperties: false
+    UpdateItemRequest:
+      title: UpdateItemRequest
+      description: >-
+        Stores information about each item that can be part of a user's
+        collection.
+      required:
+        - title
+        - isLendable
+        - ownershipStatus
+        - status
+      type: object
+      properties:
+        title:
+          description: The title of the item (e.g., the name of the book, movie, or comic).
+          type: string
+          minLength: 1
+        itemType:
+          description: The type of the item (e.g., book, movie, game, comic).
+          type: string
+          minLength: 1
+        description:
+          description: A brief description or summary of the item.
+          type: string
+          minLength: 1
+        locationId:
+          $ref: '#/components/schemas/LocationId'
+        isLendable:
+          description: Information about whether the user (owner) would lend the item.
+          type: boolean
+        ownershipStatus:
+          $ref: '#/components/schemas/ItemOwnershipStatus'
+        status:
+          $ref: '#/components/schemas/ItemStatus'
+      additionalProperties: false
+    ItemsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+        nextKey:
+          $ref: '#/components/schemas/NextKey'
+      required:
+        - items
+    ItemResponse:
+      type: object
+      properties:
+        item:
+          $ref: '#/components/schemas/Item'
+      required:
+        - item
+    ItemCollectionsResponse:
+      type: object
+      properties:
+        collections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Collection'
+      required:
+        - collections
+
+    # Locations
+    Location:
+      title: Location
+      description: Represents a physical location where collection items can be stored.
+      required:
+        - locationId
+        - name
+        - userId
+        - addedAt
+        - lastModified
+      type: object
+      properties:
+        name:
+          description: The name of the location (e.g., Living Room Bookshelf, Storage Box).
+          type: string
+          minLength: 1
+        description:
+          description: >-
+            A description of the location. Provides users with more information
+            about each location.
+          type: string
+          minLength: 1
+        userId:
+          $ref: '#/components/schemas/UserId'
+        addedAt:
+          type: string
+          format: date-time
+        lastModified:
+          type: string
+          format: date-time
+        attachmentUrl:
+          $ref: '#/components/schemas/AttachmentUrl'
+        locationId:
+          $ref: '#/components/schemas/LocationId'
+      additionalProperties: false
+    CreateLocationRequest:
+      title: CreateLocationRequest
+      description: Represents the physical locations where collection items.
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          description: The name of the location (e.g., Living Room Bookshelf, Storage Box).
+          type: string
+          minLength: 1
+        description:
+          description: >-
+            A description of the location. Provides users with more information
+            about each location.
+          type: string
+          minLength: 1
+      additionalProperties: false
+    UpdateLocationRequest:
+      title: UpdateLocationRequest
+      description: Represents the physical locations where collection items.
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          description: The name of the location (e.g., Living Room Bookshelf, Storage Box).
+          type: string
+          minLength: 1
+        description:
+          description: >-
+            A description of the location. Provides users with more information
+            about each location.
+          type: string
+          minLength: 1
+      additionalProperties: false
+    LocationsResponse:
+      type: object
+      properties:
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+        nextKey:
+          $ref: '#/components/schemas/NextKey'
+      required:
+        - locations
+    LocationResponse:
+      type: object
+      properties:
+        location:
+          $ref: '#/components/schemas/Location'
+      required:
+        - location
+    UpdateCollectionItemsRequest:
+      title: UpdateCollectionItemsRequest
+      type: object
+      properties:
+        itemIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemId'
+          uniqueItems: true
+        collectionIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionId'
+          uniqueItems: true
+      anyOf:
+        - properties:
+            itemIds:
+              type: array
+              minLength: 1
+              items:
+                $ref: '#/components/schemas/ItemId'
+          required:
+            - itemIds
+        - properties:
+            collectionIds:
+              type: array
+              minLength: 1
+              items:
+                $ref: '#/components/schemas/CollectionId'
+          required:
+            - collectionIds
+      additionalProperties: false
+    ErrorResponse:
+      description: Represents an error.
+      required:
+        - statusCode
+        - errorCode
+        - message
+      type: object
+      properties:
+        statusCode:
+          description: The http status code.
+          type: number
+          minimum: 100
+          maximum: 599
+        errorCode:
+          description: An unique error code.
+          type: string
+          minLength: 1
+        message:
+          description: Short error message.
+          type: string
+          minLength: 1
+        details:
+          description: Additional details about the error (optional).
+          type: string
+          minLength: 1
+      additionalProperties: false
+
+  examples:
+    BadRequestExample:
+      summary: 400 Bad Request error
+      description: An example of an 400 Bad Request error
+      value: >-
+        {"statusCode": 400, "errorCode": "T123", "message": "Bad Request - some
+        value is missing."}
+    UnauthorizedExample:
+      summary: 401 Unauthorized
+      description: An example of an 401 Unauthorized error
+      value: >-
+        {"statusCode": 401, "errorCode": "T123", "message": "Unauthorized - user
+        is not logged in or authorization failed."}
+    InternalServerErrorExample:
+      summary: 500 Internal Server error
+      description: An example of an 500 Internal Server error
+      value: >-
+        {"statusCode": 500, "errorCode": "T123", "message": "Internal Server -
+        something went horrably wrong."}
+    NotFoundExample:
+      summary: 404 Not Found error
+      description: An example of an 404 Not Found error
+      value: >-
+        {"statusCode": 404, "errorCode": "T123", "message": "Not Found - the
+        requested resource does not exist."}
