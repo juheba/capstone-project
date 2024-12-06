@@ -296,6 +296,42 @@ endpoints:
         responseModels:
           application/json: InternalServerErrorResponse
 
+  GetCollection:
+    summary: Returns a requested collection
+    description: A specific collection of a user
+    tags:
+      - collection
+    security:
+      - bearerAuth: []  # No scopes required
+    responseBody:
+      description: The requested collection.
+    methodResponses:
+      - statusCode: "200"
+        responseBody:
+          description: The newly created collection with additional parameters.
+        responseModels:
+          application/json: CollectionResponse
+      - statusCode: "400"
+        responseBody:
+          description: *Description400
+        responseModels:
+          application/json: BadRequestErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *Description401
+        responseModels:
+          application/json: UnauthorizedErrorResponse
+      - statusCode: "404"
+        responseBody:
+          description: *Description404
+        responseModels:
+          application/json: NotFoundErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *Description500
+        responseModels:
+          application/json: InternalServerErrorResponse
+
   CreateCollection:
     summary: Create a new collection
     description: Creates a new collection for a user

@@ -38,6 +38,25 @@ export class CollectionAccess {
     }
   }
 
+  async getCollectionById(userId: string, collectionId: string): Promise<Collection> {
+    logger.info({message: 'Getting collection by id', userId: userId, collectionId: collectionId})
+
+    const getParams = {
+      TableName: this.collectionsTable,
+      Key: {
+        userId,
+        collectionId
+      },
+    }
+
+    const result = await this.docClient.get(getParams).promise()
+    if (!result.Item) {
+      throw new Error(`Collection not found, collectionId: ${collectionId}`);
+    }
+
+    return result.Item as Collection
+  }
+
   async getCollectionsByIds(userId: string, collectionIds: string[]): Promise<Collection[]> {
     logger.info({message: 'Getting collections by ids', userId: userId})
 

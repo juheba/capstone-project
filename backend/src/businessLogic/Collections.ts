@@ -10,6 +10,10 @@ export async function getCollectionsForUser(userId: string, getLimitNextKeyReque
   return await collectionAccess.getCollectionsForUser(userId, getLimitNextKeyRequest.limit, getLimitNextKeyRequest.nextKey)
 }
 
+export async function getCollectionById(userId: string, collectionId: string): Promise<Collection> {
+  return await collectionAccess.getCollectionById(userId, collectionId)
+}
+
 export async function getCollectionsByIds(userId: string, collectionId: string[]): Promise<Collection[]> {
   return await collectionAccess.getCollectionsByIds(userId, collectionId)
 }

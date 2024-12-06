@@ -18,6 +18,24 @@ GetCollections:
         - xray:PutTraceSegments
       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}
 
+GetCollection:
+  tracing: true
+  handler: src/lambda/http/collection/getCollection.main
+  events:
+    - http:
+        method: get
+        path: collections/{collectionId}
+        cors: true
+        authorizer: Auth
+        documentation: ${file(./serverless/serverless.doc.yml):endpoints.GetCollection}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COLLECTION_TABLE}
+
 # Configure this function - 
 # Provide iamRoleStatements property. Decide the Actions and AWS Resource. 
 # To refer to an AWS resource defined in the "Resources" section, you can use "Resource: !GetAtt <resource-name>.Arn"

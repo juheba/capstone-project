@@ -11,6 +11,7 @@ Requirements:
 npm i                 # classic install
 sls dynamodb install  # installs dynamodb local
 sls openapi generate -o collector-openapi.yml -f yaml  # (optional) generates openapi spec
+sls print             # prints the compiled and resolved config file
 ```
 
 🟢 ONLINE
