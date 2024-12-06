@@ -10,6 +10,10 @@ export async function getItemsForUser(userId: string, getLimitNextKeyRequest: Ge
   return await itemAccess.getItemsForUser(userId, getLimitNextKeyRequest.limit, getLimitNextKeyRequest.nextKey)
 }
 
+export async function getItemById(userId: string, itemId: string): Promise<Item> {
+  return await itemAccess.getItemById(userId, itemId)
+}
+
 export async function getItemsByIds(userId: string, itemsId: string[]): Promise<Item[]> {
   return await itemAccess.getItemsByIds(userId, itemsId)
 }

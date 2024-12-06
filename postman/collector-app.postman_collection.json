@@ -442,6 +442,37 @@
 							]
 						},
 						{
+							"name": "Get item",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/{{STAGE}}/items/{{temp_itemId}}",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"{{STAGE}}",
+										"items",
+										"{{temp_itemId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Update item",
 							"request": {
 								"method": "PATCH",

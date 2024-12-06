@@ -568,6 +568,41 @@ endpoints:
           description: *Description500
         responseModels:
           application/json: InternalServerErrorResponse
+  GetItem:
+    summary: Get an item
+    description: Get an specific item of a user
+    tags:
+      - item
+    security:
+      - bearerAuth: []  # No scopes required
+    pathParams:
+      - name: itemId
+        description: ID of the item which will receive the update.
+        schema: &ItemId
+          type: string
+          format: uuid
+        required: true
+    methodResponses:
+      - statusCode: "200"
+        responseBody:
+          description: The requested item of a user
+        responseModels:
+          application/json: ItemResponse
+      - statusCode: "400"
+        responseBody:
+          description: *Description400
+        responseModels:
+          application/json: BadRequestErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *Description401
+        responseModels:
+          application/json: UnauthorizedErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *Description500
+        responseModels:
+          application/json: InternalServerErrorResponse
 
   CreateItem:
     summary: Create a new item

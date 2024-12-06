@@ -38,6 +38,25 @@ export class ItemAccess {
     }
   }
 
+  async getItemById(userId: string, itemId: string): Promise<Item> {
+    logger.info({message: 'Getting item by id', userId: userId, collectionId: itemId})
+
+    const getParams = {
+      TableName: this.itemsTable,
+      Key: {
+        userId,
+        itemId
+      },
+    }
+
+    const result = await this.docClient.get(getParams).promise()
+    if (!result.Item) {
+      throw new Error(`Item not found, itemId: ${itemId}`);
+    }
+
+    return result.Item as Item
+  }
+
   async getItemsByIds(userId: string, itemIds: string[]): Promise<Item[]> {
     logger.info({message: 'Getting items by ids', userId: userId})
 
