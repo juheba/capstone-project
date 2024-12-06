@@ -1027,10 +1027,9 @@ components:
     NextKey:
       description: The next key to be used for pagination.
       type: string
-      nullable: true
 
     # Enums
-    CollectionVisibility:
+    CollectionVisibilityEnum:
       description: >-
         Settings to control who can view the collection (public, private,
         shared with specific users).
@@ -1038,7 +1037,7 @@ components:
       enum:
         - PRIVATE
         - PUBLIC
-    ItemOwnershipStatus:
+    ItemOwnershipStatusEnum:
       description: >-
         Information about whether the user owns the item, wishes to buy it,
         has borrowed it, etc.
@@ -1047,7 +1046,7 @@ components:
         - OWNER
         - BORROWER
         - WISHLIST
-    ItemStatus:
+    ItemStatusEnum:
       description: >-
         Information about whether the item has been read/watched, is
         currently being read/watched, or is on a to-read/to-watch list.
@@ -1139,7 +1138,7 @@ components:
           type: string
           minLength: 1
         visibility:
-          $ref: '#/components/schemas/CollectionVisibility'
+          $ref: '#/components/schemas/CollectionVisibilityEnum'
       additionalProperties: false
     CreateCollectionRequest:
       title: CreateCollectionRequest
@@ -1160,7 +1159,7 @@ components:
           type: string
           minLength: 1
         visibility:
-          $ref: '#/components/schemas/CollectionVisibility'
+          $ref: '#/components/schemas/CollectionVisibilityEnum'
       additionalProperties: false
     UpdateCollectionRequest:
       title: UpdateCollectionRequest
@@ -1181,7 +1180,7 @@ components:
           type: string
           minLength: 1
         visibility:
-          $ref: '#/components/schemas/CollectionVisibility'
+          $ref: '#/components/schemas/CollectionVisibilityEnum'
       additionalProperties: false
     CollectionsResponse:
       type: object
@@ -1260,9 +1259,9 @@ components:
           description: Information about whether the user (owner) would lend the item.
           type: boolean
         ownershipStatus:
-          $ref: '#/components/schemas/ItemOwnershipStatus'
+          $ref: '#/components/schemas/ItemOwnershipStatusEnum'
         status:
-          $ref: '#/components/schemas/ItemStatus'
+          $ref: '#/components/schemas/ItemStatusEnum'
       additionalProperties: false
     CreateItemRequest:
       title: CreateItemRequest
@@ -1294,9 +1293,9 @@ components:
           description: Information about whether the user (owner) would lend the item.
           type: boolean
         ownershipStatus:
-          $ref: '#/components/schemas/ItemOwnershipStatus'
+          $ref: '#/components/schemas/ItemOwnershipStatusEnum'
         status:
-          $ref: '#/components/schemas/ItemStatus'
+          $ref: '#/components/schemas/ItemStatusEnum'
       additionalProperties: false
     UpdateItemRequest:
       title: UpdateItemRequest
@@ -1328,9 +1327,9 @@ components:
           description: Information about whether the user (owner) would lend the item.
           type: boolean
         ownershipStatus:
-          $ref: '#/components/schemas/ItemOwnershipStatus'
+          $ref: '#/components/schemas/ItemOwnershipStatusEnum'
         status:
-          $ref: '#/components/schemas/ItemStatus'
+          $ref: '#/components/schemas/ItemStatusEnum'
       additionalProperties: false
     ItemsResponse:
       type: object
