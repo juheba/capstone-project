@@ -1,13 +1,15 @@
 #!/bin/bash
 
-# Define paths
+GENERATOR="dart-dio"
+
 OPENAPI_CONTRACT_PATH="specs/collector-openapi.yml"
 OPENAPI_CONFIG_PATH="specs/collector-openapi-config.json"
 TEMP_OUTPUT_DIRECTORY=".generator_temp/collector-api"
 TEMP_SRC_FOLDER="$TEMP_OUTPUT_DIRECTORY/lib/src"
-OUTPUT_DIRECTORY="lib/generated/openapi/collector-api"
+
+OUTPUT_DIRECTORY="generated/$GENERATOR/collector-api"
 NEW_SRC_FOLDER="generated/openapi/collector-api"
-GENERATOR="dart-dio"
+
 
 # Check if openapi-generator-cli is installed
 if ! command -v openapi-generator-cli &> /dev/null
