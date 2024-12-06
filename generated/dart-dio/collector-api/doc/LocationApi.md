@@ -11,6 +11,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createLocation**](LocationApi.md#createlocation) | **POST** /locations | Create a new location
 [**deleteLocation**](LocationApi.md#deletelocation) | **DELETE** /locations/{locationId} | Delete location
+[**getLocation**](LocationApi.md#getlocation) | **GET** /locations/{locationId} | Get a location
 [**getLocations**](LocationApi.md#getlocations) | **GET** /locations | Get all locations
 [**updateLocation**](LocationApi.md#updatelocation) | **PATCH** /locations/{locationId} | Update location
 
@@ -88,6 +89,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getLocation**
+> LocationResponse getLocation(locationId)
+
+Get a location
+
+Get a specific location of a user
+
+### Example
+```dart
+import 'package:collector/generated/openapi/collector-api/api.dart';
+
+final api = CollectorApiClient().getLocationApi();
+final String locationId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // String | ID of the location which will receive the update.
+
+try {
+    final response = api.getLocation(locationId);
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling LocationApi->getLocation: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **locationId** | **String**| ID of the location which will receive the update. | 
+
+### Return type
+
+[**LocationResponse**](LocationResponse.md)
 
 ### Authorization
 

@@ -11,6 +11,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createItem**](ItemApi.md#createitem) | **POST** /items | Create a new item
 [**deleteItem**](ItemApi.md#deleteitem) | **DELETE** /items/{itemId} | Delete item
+[**getItem**](ItemApi.md#getitem) | **GET** /items/{itemId} | Get an items
 [**getItemCollections**](ItemApi.md#getitemcollections) | **GET** /items/{itemId}/collections | Get all collections of a item
 [**getItems**](ItemApi.md#getitems) | **GET** /items | Get all items
 [**updateItem**](ItemApi.md#updateitem) | **PATCH** /items/{itemId} | Update item
@@ -102,6 +103,49 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **getItem**
+> ItemResponse getItem(itemId)
+
+Get an items
+
+Get an item of a user
+
+### Example
+```dart
+import 'package:collector/generated/openapi/collector-api/api.dart';
+
+final api = CollectorApiClient().getItemApi();
+final String itemId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // String | ID of the item.
+
+try {
+    final response = api.getItem(itemId);
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling ItemApi->getItem: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **itemId** | **String**| ID of the item. | 
+
+### Return type
+
+[**ItemResponse**](ItemResponse.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **getItemCollections**
 > ItemCollectionsResponse getItemCollections(itemId)
 
@@ -150,7 +194,7 @@ Name | Type | Description  | Notes
 
 Get all items
 
-Get all itemss of a user
+Get all items of a user
 
 ### Example
 ```dart

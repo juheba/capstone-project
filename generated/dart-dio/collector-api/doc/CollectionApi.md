@@ -11,6 +11,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createCollection**](CollectionApi.md#createcollection) | **POST** /collections | Create a new collection
 [**deleteCollection**](CollectionApi.md#deletecollection) | **DELETE** /collections/{collectionId} | Delete collection
+[**getCollection**](CollectionApi.md#getcollection) | **GET** /collections/{collectionId} | Get a collection
 [**getCollectionItems**](CollectionApi.md#getcollectionitems) | **GET** /collections/{collectionId}/items | Get all items of a collection
 [**getCollections**](CollectionApi.md#getcollections) | **GET** /collections | Get all collections
 [**updateCollection**](CollectionApi.md#updatecollection) | **PATCH** /collections/{collectionId} | Update collection
@@ -90,6 +91,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getCollection**
+> CollectionResponse getCollection(collectionId)
+
+Get a collection
+
+Get a specific collection of a user
+
+### Example
+```dart
+import 'package:collector/generated/openapi/collector-api/api.dart';
+
+final api = CollectorApiClient().getCollectionApi();
+final String collectionId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // String | ID of the collection.
+
+try {
+    final response = api.getCollection(collectionId);
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling CollectionApi->getCollection: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **collectionId** | **String**| ID of the collection. | 
+
+### Return type
+
+[**CollectionResponse**](CollectionResponse.md)
 
 ### Authorization
 
