@@ -1,0 +1,57 @@
+# collector_api_client.api.AttachmentApi
+
+## Load the API package
+```dart
+import 'package:collector/generated/openapi/collector-api/src/api.dart';
+```
+
+All URIs are relative to *http://localhost*
+
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**generateUploadUrl**](AttachmentApi.md#generateuploadurl) | **POST** /attachments | Generates an attachment upload url
+
+
+# **generateUploadUrl**
+> AttachmentURLResponse generateUploadUrl(createAttachmentRequest)
+
+Generates an attachment upload url
+
+Generates an upload url for an item or location attachment
+
+### Example
+```dart
+import 'package:collector/generated/openapi/collector-api/src/api.dart';
+
+final api = CollectorApiClient().getAttachmentApi();
+final CreateAttachmentRequest createAttachmentRequest = ; // CreateAttachmentRequest | Item or Location to attach a file to.
+
+try {
+    final response = api.generateUploadUrl(createAttachmentRequest);
+    print(response);
+} catch on DioException (e) {
+    print('Exception when calling AttachmentApi->generateUploadUrl: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **createAttachmentRequest** | [**CreateAttachmentRequest**](CreateAttachmentRequest.md)| Item or Location to attach a file to. | [optional] 
+
+### Return type
+
+[**AttachmentURLResponse**](AttachmentURLResponse.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
