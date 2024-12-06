@@ -29,7 +29,7 @@ fi
 # Step 2: Remove Existing Generated Files
 echo "Removing existing generated API files in $OUTPUT_DIRECTORY..."
 rm -rf "$OUTPUT_DIRECTORY"
-rm -rf "$TEMP_TEMP_OUTPUT_DIRECTORY"
+rm -rf "$TEMP_OUTPUT_DIRECTORY"
 
 # Step 3: Regenerate API Client
 echo "Generating API client from OpenAPI contract..."
@@ -71,6 +71,17 @@ find "$TEMP_OUTPUT_DIRECTORY" \( -name "*.dart" -o -name "*.md" \) -type f | whi
 done
 
 echo "Replacement complete."
+
+# Additional functionality: Replace 'abstract class' with 'mixin' for EnumMixin classes
+echo "Converting 'abstract class' to 'mixin' for EnumMixin classes..."
+find "$TEMP_OUTPUT_DIRECTORY" -name "*.dart" -type f | while read -r file; do
+    echo "Processing $file for EnumMixin transformation..."
+    sed -i.bak -E "s/^abstract class (.*EnumMixin) \{$/mixin \1 \{/g" "$file"
+
+    # Remove backup file created by sed (.bak extension)
+    rm -f "${file}.bak"
+done
+echo "EnumMixin transformation complete."
 
 # Step 4: Format Dart Code
 echo "Formatting generated Dart code..."

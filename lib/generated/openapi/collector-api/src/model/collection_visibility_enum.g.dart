@@ -36,7 +36,7 @@ class _$CollectionVisibilityEnumMeta {
   BuiltSet<CollectionVisibilityEnum> get values => _$values;
 }
 
-abstract class _$CollectionVisibilityEnumMixin {
+mixin _$CollectionVisibilityEnumMixin {
   // ignore: non_constant_identifier_names
   _$CollectionVisibilityEnumMeta get CollectionVisibilityEnum =>
       const _$CollectionVisibilityEnumMeta();

@@ -39,7 +39,7 @@ class _$ItemStatusEnumMeta {
   BuiltSet<ItemStatusEnum> get values => _$values;
 }
 
-abstract class _$ItemStatusEnumMixin {
+mixin _$ItemStatusEnumMixin {
   // ignore: non_constant_identifier_names
   _$ItemStatusEnumMeta get ItemStatusEnum => const _$ItemStatusEnumMeta();
 }

@@ -42,7 +42,7 @@ class _$ItemOwnershipStatusEnumMeta {
   BuiltSet<ItemOwnershipStatusEnum> get values => _$values;
 }
 
-abstract class _$ItemOwnershipStatusEnumMixin {
+mixin _$ItemOwnershipStatusEnumMixin {
   // ignore: non_constant_identifier_names
   _$ItemOwnershipStatusEnumMeta get ItemOwnershipStatusEnum =>
       const _$ItemOwnershipStatusEnumMeta();
