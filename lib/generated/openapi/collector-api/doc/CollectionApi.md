@@ -2,7 +2,7 @@
 
 ## Load the API package
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 ```
 
 All URIs are relative to *http://localhost*
@@ -26,7 +26,7 @@ Creates a new collection for a user
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getCollectionApi();
 final CreateCollectionRequest createCollectionRequest = ; // CreateCollectionRequest | 
@@ -69,7 +69,7 @@ Deletes a collection of a user.
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getCollectionApi();
 final String collectionId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // String | ID of the collection which will be deleted.
@@ -111,7 +111,7 @@ List all items from a collection.
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getCollectionApi();
 final String collectionId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // String | ID of the collection.
@@ -154,7 +154,7 @@ Get all collections of a user
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getCollectionApi();
 final num limit = 8.14; // num | (optional) Iterates over the collections with the given limit.
@@ -199,7 +199,7 @@ Updates a collection with new informations.
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getCollectionApi();
 final String collectionId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // String | ID of the collection which will receive the update.
@@ -244,7 +244,7 @@ Adds one or multiple items to a collection.
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getCollectionApi();
 final String collectionId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // String | ID of the collection which will receive the items.

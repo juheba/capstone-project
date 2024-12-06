@@ -2,7 +2,7 @@
 
 ## Load the model package
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 ```
 
 ## Properties

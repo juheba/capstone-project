@@ -6,7 +6,7 @@ OPENAPI_CONFIG_PATH="specs/collector-openapi-config.json"
 TEMP_OUTPUT_DIRECTORY=".generator_temp/collector-api"
 TEMP_SRC_FOLDER="$TEMP_OUTPUT_DIRECTORY/lib/src"
 OUTPUT_DIRECTORY="lib/generated/openapi/collector-api"
-NEW_SRC_FOLDER="generated/openapi/collector-api/src"
+NEW_SRC_FOLDER="generated/openapi/collector-api"
 GENERATOR="dart-dio"
 
 # Check if openapi-generator-cli is installed
@@ -106,7 +106,7 @@ fi
 
 
 if [ -d "$TEMP_OUTPUT_DIRECTORY/lib/src" ]; then
-    mv "$TEMP_OUTPUT_DIRECTORY/lib/src" "$OUTPUT_DIRECTORY"
+    mv "$TEMP_OUTPUT_DIRECTORY/lib/src"/* "$OUTPUT_DIRECTORY"
 else
     echo "Warning: No lib directory found in the generated files."
 fi

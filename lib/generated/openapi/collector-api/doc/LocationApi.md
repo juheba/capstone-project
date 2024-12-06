@@ -2,7 +2,7 @@
 
 ## Load the API package
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 ```
 
 All URIs are relative to *http://localhost*
@@ -24,7 +24,7 @@ Creates a new location for a user
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getLocationApi();
 final CreateLocationRequest createLocationRequest = ; // CreateLocationRequest | 
@@ -67,7 +67,7 @@ Deletes a location of a user.
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getLocationApi();
 final String locationId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // String | ID of the location which will be deleted.
@@ -109,7 +109,7 @@ Get all locations of a user
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getLocationApi();
 final num limit = 8.14; // num | (optional) Iterates over the collections with the given limit.
@@ -154,7 +154,7 @@ Updates a location with new informations.
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getLocationApi();
 final String locationId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // String | ID of the location which will receive the update.

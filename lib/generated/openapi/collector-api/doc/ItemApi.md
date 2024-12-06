@@ -2,7 +2,7 @@
 
 ## Load the API package
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 ```
 
 All URIs are relative to *http://localhost*
@@ -26,7 +26,7 @@ Creates a new item for a user
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getItemApi();
 final CreateItemRequest createItemRequest = ; // CreateItemRequest | 
@@ -69,7 +69,7 @@ Deletes a item of a user.
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getItemApi();
 final String itemId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // String | ID of the item which will be deleted.
@@ -111,7 +111,7 @@ List all collections an item is assigned to.
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getItemApi();
 final String itemId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // String | ID of the item.
@@ -154,7 +154,7 @@ Get all itemss of a user
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getItemApi();
 final num limit = 8.14; // num | (optional) Iterates over the collections with the given limit.
@@ -199,7 +199,7 @@ Updates a item with new informations.
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getItemApi();
 final String itemId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // String | ID of the item which will receive the update.
@@ -244,7 +244,7 @@ Adds one or multiple collections to an item.
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getItemApi();
 final String itemId = 38400000-8cf0-11bd-b23e-10b96e4ef00d; // String | ID of the item which will receive the collections.

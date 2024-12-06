@@ -2,7 +2,7 @@
 
 ## Load the API package
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 ```
 
 All URIs are relative to *http://localhost*
@@ -21,7 +21,7 @@ Generates an upload url for an item or location attachment
 
 ### Example
 ```dart
-import 'package:collector/generated/openapi/collector-api/src/api.dart';
+import 'package:collector/generated/openapi/collector-api/api.dart';
 
 final api = CollectorApiClient().getAttachmentApi();
 final CreateAttachmentRequest createAttachmentRequest = ; // CreateAttachmentRequest | Item or Location to attach a file to.
