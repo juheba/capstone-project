@@ -839,6 +839,42 @@ endpoints:
         responseModels:
           application/json: InternalServerErrorResponse
 
+  GetLocation:
+    summary: Get a location
+    description: Get a specific location of a user
+    tags:
+      - location
+    security:
+      - bearerAuth: []  # No scopes required
+    pathParams:
+      - name: locationId
+        description: ID of the location.
+        schema: &LocationId
+          type: string
+          format: uuid
+        required: true
+    methodResponses:
+      - statusCode: "200"
+        responseBody:
+          description: The requested location of a user
+        responseModels:
+          application/json: LocationResponse
+      - statusCode: "400"
+        responseBody:
+          description: *Description400
+        responseModels:
+          application/json: BadRequestErrorResponse
+      - statusCode: "401"
+        responseBody:
+          description: *Description401
+        responseModels:
+          application/json: UnauthorizedErrorResponse
+      - statusCode: "500"
+        responseBody:
+          description: *Description500
+        responseModels:
+          application/json: InternalServerErrorResponse
+
   CreateLocation:
     summary: Create a new location
     description: Creates a new location for a user

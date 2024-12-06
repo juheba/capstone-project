@@ -10,6 +10,10 @@ export async function getLocationsForUser(userId: string, getLimitNextKeyRequest
   return await locationAccess.getLocationsForUser(userId, getLimitNextKeyRequest.limit, getLimitNextKeyRequest.nextKey)
 }
 
+export async function getLocationById(userId: string, locationId: string): Promise<Location> {
+  return await locationAccess.getLocationById(userId, locationId)
+}
+
 export async function createLocation(userId: string, createLocationRequest: CreateLocationRequest,): Promise <Location> {
   const locationId = uuidv4()
   const currentDate = new Date().toISOString()
@@ -38,8 +42,8 @@ export async function updateLocation(userId: string, locationId: string, updateL
   return await locationAccess.updateLocation(userId, location)
 }
 
-export async function updateAttachmentUrl(userId: string, itemId: string, url: string): Promise<Item> {
-  return await locationAccess.updateAttachmentUrl(userId, itemId, url)
+export async function updateAttachmentUrl(userId: string, locationId: string, url: string): Promise<Location> {
+  return await locationAccess.updateAttachmentUrl(userId, locationId, url)
 }
 
 export async function deleteLocation(userId: string, locationId: string): Promise<Boolean> {

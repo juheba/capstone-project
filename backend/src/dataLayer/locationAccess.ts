@@ -38,6 +38,25 @@ export class LocationAccess {
     }
   }
 
+  async getLocationById(userId: string, locationId: string): Promise<Location> {
+    logger.info({message: 'Getting location by id', userId: userId, locationId: locationId})
+
+    const getParams = {
+      TableName: this.locationsTable,
+      Key: {
+        userId,
+        locationId
+      },
+    }
+
+    const result = await this.docClient.get(getParams).promise()
+    if (!result.Item) {
+      throw new Error(`Location not found, itemId: ${locationId}`);
+    }
+
+    return result.Item as Location
+  }
+
   async createLocation(userId: string, location: Location) {
     logger.info({message: 'Creating a location', locationId: location.locationId, userId: userId})
 

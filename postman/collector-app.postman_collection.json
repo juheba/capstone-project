@@ -682,6 +682,123 @@
 			"name": "locations",
 			"item": [
 				{
+					"name": "{id}",
+					"item": [
+						{
+							"name": "Get location",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/{{STAGE}}/locations/{{temp_locationId}}",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"{{STAGE}}",
+										"locations",
+										"{{temp_locationId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update location",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"name": "Content-Type",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"edited - {{$randomProductMaterial}} {{$randomDepartment}}\",\n  \"description\": \"{{$randomPhrase}}\"\n}"
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/{{STAGE}}/locations/{{temp_locationId}}",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"{{STAGE}}",
+										"locations",
+										"{{temp_locationId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete location",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"name": "Content-Type",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/{{STAGE}}/locations/{{temp_locationId}}",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"{{STAGE}}",
+										"locations",
+										"{{temp_locationId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Get all locations",
 					"event": [
 						{
@@ -807,77 +924,6 @@
 							"path": [
 								"{{STAGE}}",
 								"locations"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update location",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"name": "Content-Type",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"edited - {{$randomProductMaterial}} {{$randomDepartment}}\",\n  \"description\": \"{{$randomPhrase}}\"\n}"
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/{{STAGE}}/locations/{{temp_locationId}}",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"{{STAGE}}",
-								"locations",
-								"{{temp_locationId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete location",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"name": "Content-Type",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/{{STAGE}}/locations/{{temp_locationId}}",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"{{STAGE}}",
-								"locations",
-								"{{temp_locationId}}"
 							]
 						}
 					},
