@@ -90,36 +90,50 @@ export class ItemAccess {
 
   async updateItem(userId: string, updatedItem): Promise<Item> {
     logger.info({message: 'Updating a item', itemId: updatedItem.itemId, userId: userId})
-
-    var params = {
-      TableName : this.itemsTable,
+  
+    // Base UpdateExpression for required fields
+    let updateExpression = `
+      SET itemType = :itemType, 
+          title = :title, 
+          description = :description, 
+          isLendable = :isLendable, 
+          ownershipStatus = :ownershipStatus, 
+          #s = :status, 
+          lastModified = :lastModified`;
+  
+    const expressionAttributeValues: { [key: string]: any } = {
+      ":itemType": updatedItem.itemType,
+      ":title": updatedItem.title,
+      ":description": updatedItem.description,
+      ":isLendable": updatedItem.isLendable,
+      ":ownershipStatus": updatedItem.ownershipStatus,
+      ":status": updatedItem.status,
+      ":lastModified": updatedItem.lastModified,
+    };
+  
+    const expressionAttributeNames = { "#s": "status" };  // Because status is a reserved keyword
+  
+    // Add optional locationId only if it is provided
+    if (updatedItem.locationId !== undefined) {
+      updateExpression += ", locationId = :locationId";
+      expressionAttributeValues[":locationId"] = updatedItem.locationId;
+    }
+  
+    const params = {
+      TableName: this.itemsTable,
       Key: {
         userId,
-        itemId: updatedItem.itemId
+        itemId: updatedItem.itemId,
       },
-      UpdateExpression: "SET itemType = :itemType, title = :title, description = :description, locationId = :locationId, "
-                        + " isLendable = :isLendable, ownershipStatus = :ownershipStatus, #s = :status, lastModified = :lastModified",
-      ExpressionAttributeValues: {
-        ":itemType": updatedItem.itemType,
-        ":title": updatedItem.title,
-        ":description": updatedItem.description,
-        ":locationId": updatedItem.locationId,
-        ":isLendable": updatedItem.isLendable,
-        ":ownershipStatus": updatedItem.ownershipStatus,
-        ":status": updatedItem.status,
-        ":lastModified": updatedItem.lastModified
-        //":notes": updatedItem.notes,
-        //":rating": updatedItem.rating,
-        //":image": updatedItem.image,
-      },
-      ExpressionAttributeNames: {  // Because status is a reserved keyword
-        "#s": "status"
-      },
+      UpdateExpression: updateExpression.trim(),
+      ExpressionAttributeValues: expressionAttributeValues,
+      ExpressionAttributeNames: expressionAttributeNames,
       ConditionExpression: "attribute_exists(userId) AND attribute_exists(itemId)",
-      ReturnValues: "ALL_NEW"
+      ReturnValues: "ALL_NEW",
     };
-    const result = await this.docClient.update(params).promise()
-    return result.Attributes as Item
+  
+    const result = await this.docClient.update(params).promise();
+    return result.Attributes as Item;
   }
 
   async updateAttachmentUrl(userId: string, itemId: string, url: string): Promise<Item> {
