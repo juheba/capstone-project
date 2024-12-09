@@ -9,8 +9,8 @@ import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
 
 import 'package:collector/generated/openapi/collector-api/model/attachment_url_response.dart';
-import 'package:collector/generated/openapi/collector-api/model/create_attachment_request.dart';
 import 'package:collector/generated/openapi/collector-api/model/error_response.dart';
+import 'package:collector/generated/openapi/collector-api/model/generate_upload_url_request.dart';
 
 class AttachmentApi {
   final Dio _dio;
@@ -23,7 +23,7 @@ class AttachmentApi {
   /// Generates an upload url for an item or location attachment
   ///
   /// Parameters:
-  /// * [createAttachmentRequest] - Item or Location to attach a file to.
+  /// * [generateUploadUrlRequest] - Item or Location to attach a file to.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -34,7 +34,7 @@ class AttachmentApi {
   /// Returns a [Future] containing a [Response] with a [AttachmentURLResponse] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<AttachmentURLResponse>> generateUploadUrl({
-    CreateAttachmentRequest? createAttachmentRequest,
+    required GenerateUploadUrlRequest generateUploadUrlRequest,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -65,11 +65,9 @@ class AttachmentApi {
     dynamic _bodyData;
 
     try {
-      const _type = FullType(CreateAttachmentRequest);
-      _bodyData = createAttachmentRequest == null
-          ? null
-          : _serializers.serialize(createAttachmentRequest,
-              specifiedType: _type);
+      const _type = FullType(GenerateUploadUrlRequest);
+      _bodyData = _serializers.serialize(generateUploadUrlRequest,
+          specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(

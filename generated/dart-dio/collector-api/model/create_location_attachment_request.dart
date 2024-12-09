@@ -6,54 +6,54 @@
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-part 'create_attachment_request_any_of.g.dart';
+part 'create_location_attachment_request.g.dart';
 
-/// CreateAttachmentRequestAnyOf
+/// Creates an location attachment upload URL.
 ///
 /// Properties:
-/// * [itemId] - The id of the item.
+/// * [locationId] - The id of the location.
 @BuiltValue()
-abstract class CreateAttachmentRequestAnyOf
+abstract class CreateLocationAttachmentRequest
     implements
-        Built<CreateAttachmentRequestAnyOf,
-            CreateAttachmentRequestAnyOfBuilder> {
-  /// The id of the item.
-  @BuiltValueField(wireName: r'itemId')
-  String get itemId;
+        Built<CreateLocationAttachmentRequest,
+            CreateLocationAttachmentRequestBuilder> {
+  /// The id of the location.
+  @BuiltValueField(wireName: r'locationId')
+  String get locationId;
 
-  CreateAttachmentRequestAnyOf._();
+  CreateLocationAttachmentRequest._();
 
-  factory CreateAttachmentRequestAnyOf(
-          [void updates(CreateAttachmentRequestAnyOfBuilder b)]) =
-      _$CreateAttachmentRequestAnyOf;
+  factory CreateLocationAttachmentRequest(
+          [void updates(CreateLocationAttachmentRequestBuilder b)]) =
+      _$CreateLocationAttachmentRequest;
 
   @BuiltValueHook(initializeBuilder: true)
-  static void _defaults(CreateAttachmentRequestAnyOfBuilder b) => b;
+  static void _defaults(CreateLocationAttachmentRequestBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<CreateAttachmentRequestAnyOf> get serializer =>
-      _$CreateAttachmentRequestAnyOfSerializer();
+  static Serializer<CreateLocationAttachmentRequest> get serializer =>
+      _$CreateLocationAttachmentRequestSerializer();
 }
 
-class _$CreateAttachmentRequestAnyOfSerializer
-    implements PrimitiveSerializer<CreateAttachmentRequestAnyOf> {
+class _$CreateLocationAttachmentRequestSerializer
+    implements PrimitiveSerializer<CreateLocationAttachmentRequest> {
   @override
   final Iterable<Type> types = const [
-    CreateAttachmentRequestAnyOf,
-    _$CreateAttachmentRequestAnyOf
+    CreateLocationAttachmentRequest,
+    _$CreateLocationAttachmentRequest
   ];
 
   @override
-  final String wireName = r'CreateAttachmentRequestAnyOf';
+  final String wireName = r'CreateLocationAttachmentRequest';
 
   Iterable<Object?> _serializeProperties(
     Serializers serializers,
-    CreateAttachmentRequestAnyOf object, {
+    CreateLocationAttachmentRequest object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
-    yield r'itemId';
+    yield r'locationId';
     yield serializers.serialize(
-      object.itemId,
+      object.locationId,
       specifiedType: const FullType(String),
     );
   }
@@ -61,7 +61,7 @@ class _$CreateAttachmentRequestAnyOfSerializer
   @override
   Object serialize(
     Serializers serializers,
-    CreateAttachmentRequestAnyOf object, {
+    CreateLocationAttachmentRequest object, {
     FullType specifiedType = FullType.unspecified,
   }) {
     return _serializeProperties(serializers, object,
@@ -74,19 +74,19 @@ class _$CreateAttachmentRequestAnyOfSerializer
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
     required List<Object?> serializedList,
-    required CreateAttachmentRequestAnyOfBuilder result,
+    required CreateLocationAttachmentRequestBuilder result,
     required List<Object?> unhandled,
   }) {
     for (var i = 0; i < serializedList.length; i += 2) {
       final key = serializedList[i] as String;
       final value = serializedList[i + 1];
       switch (key) {
-        case r'itemId':
+        case r'locationId':
           final valueDes = serializers.deserialize(
             value,
             specifiedType: const FullType(String),
           ) as String;
-          result.itemId = valueDes;
+          result.locationId = valueDes;
           break;
         default:
           unhandled.add(key);
@@ -97,12 +97,12 @@ class _$CreateAttachmentRequestAnyOfSerializer
   }
 
   @override
-  CreateAttachmentRequestAnyOf deserialize(
+  CreateLocationAttachmentRequest deserialize(
     Serializers serializers,
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    final result = CreateAttachmentRequestAnyOfBuilder();
+    final result = CreateLocationAttachmentRequestBuilder();
     final serializedList = (serialized as Iterable<Object?>).toList();
     final unhandled = <Object?>[];
     _deserializeProperties(

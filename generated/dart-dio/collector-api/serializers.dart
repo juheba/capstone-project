@@ -20,13 +20,13 @@ import 'package:collector/generated/openapi/collector-api/model/collection_items
 import 'package:collector/generated/openapi/collector-api/model/collection_response.dart';
 import 'package:collector/generated/openapi/collector-api/model/collection_visibility_enum.dart';
 import 'package:collector/generated/openapi/collector-api/model/collections_response.dart';
-import 'package:collector/generated/openapi/collector-api/model/create_attachment_request.dart';
-import 'package:collector/generated/openapi/collector-api/model/create_attachment_request_any_of.dart';
-import 'package:collector/generated/openapi/collector-api/model/create_attachment_request_any_of1.dart';
 import 'package:collector/generated/openapi/collector-api/model/create_collection_request.dart';
+import 'package:collector/generated/openapi/collector-api/model/create_item_attachment_request.dart';
 import 'package:collector/generated/openapi/collector-api/model/create_item_request.dart';
+import 'package:collector/generated/openapi/collector-api/model/create_location_attachment_request.dart';
 import 'package:collector/generated/openapi/collector-api/model/create_location_request.dart';
 import 'package:collector/generated/openapi/collector-api/model/error_response.dart';
+import 'package:collector/generated/openapi/collector-api/model/generate_upload_url_request.dart';
 import 'package:collector/generated/openapi/collector-api/model/item.dart';
 import 'package:collector/generated/openapi/collector-api/model/item_collections_response.dart';
 import 'package:collector/generated/openapi/collector-api/model/item_ownership_status_enum.dart';
@@ -52,13 +52,13 @@ part 'serializers.g.dart';
   CollectionResponse,
   CollectionVisibilityEnum,
   CollectionsResponse,
-  CreateAttachmentRequest,
-  CreateAttachmentRequestAnyOf,
-  CreateAttachmentRequestAnyOf1,
   CreateCollectionRequest,
+  CreateItemAttachmentRequest,
   CreateItemRequest,
+  CreateLocationAttachmentRequest,
   CreateLocationRequest,
   ErrorResponse,
+  GenerateUploadUrlRequest,
   Item,
   ItemCollectionsResponse,
   ItemOwnershipStatusEnum,

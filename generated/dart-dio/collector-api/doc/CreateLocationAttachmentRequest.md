@@ -1,4 +1,4 @@
-# collector_api_client.model.CreateAttachmentRequestAnyOf1
+# collector_api_client.model.CreateLocationAttachmentRequest
 
 ## Load the model package
 ```dart

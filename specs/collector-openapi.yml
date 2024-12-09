@@ -1117,11 +1117,18 @@ paths:
         - bearerAuth: []
       requestBody:
         description: Item or Location to attach a file to.
-        required: false
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateAttachmentRequest'
+              oneOf:
+                - $ref: '#/components/schemas/CreateItemAttachmentRequest'
+                - $ref: '#/components/schemas/CreateLocationAttachmentRequest'
+            examples:
+              CreateItemAttachmentRequestExample:
+                $ref: '#/components/examples/CreateItemAttachmentRequestExample'
+              CreateLocationAttachmentRequestExample:
+                $ref: '#/components/examples/CreateLocationAttachmentRequestExample'
       responses:
         '201':
           description: The created url to upload a file.
@@ -1238,34 +1245,23 @@ components:
       type: string
       format: url
       minLength: 1
-    CreateAttachmentRequest:
-      title: CreateAttachmentRequest
-      description: Creates an attachment upload URL.
+    CreateItemAttachmentRequest:
+      description: Creates an item attachment upload URL.
       type: object
+      required:
+        - itemId
       properties:
         itemId:
-          description: >-
-            Creates an upload URL to attach a file to an item. If itemId is
-            provided, locationId is unnecessary.
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/ItemId'
+      additionalProperties: false
+    CreateLocationAttachmentRequest:
+      description: Creates an location attachment upload URL.
+      type: object
+      required:
+        - locationId
+      properties:
         locationId:
-          description: >-
-            Creates an upload URL to attach a file to a location. If locationId
-            is provided, itemId is unnecessary.
-          type: string
-          format: uuid
-      anyOf:
-        - properties:
-            itemId:
-              $ref: '#/components/schemas/ItemId'
-          required:
-            - itemId
-        - properties:
-            locationId:
-              $ref: '#/components/schemas/LocationId'
-          required:
-            - locationId
+          $ref: '#/components/schemas/LocationId'
       additionalProperties: false
     AttachmentURLResponse:
       title: AttachmentURLResponse
@@ -1682,6 +1678,16 @@ components:
       additionalProperties: false
 
   examples:
+    CreateItemAttachmentRequestExample:
+      summary: Item attachment example
+      description: An example request to create an item attachment
+      value: >-
+        {"itemId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"}
+    CreateLocationAttachmentRequestExample:
+      summary: Location attachment example
+      description: An example request to create an location attachment
+      value: >-
+        {"locationId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"}
     BadRequestExample:
       summary: 400 Bad Request error
       description: An example of an 400 Bad Request error
