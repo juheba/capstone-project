@@ -132,33 +132,6 @@ Resources:
           Projection:
             ProjectionType: ALL # What attributes will be copied to an index
 
-#  TodosTable:
-#    Type: AWS::DynamoDB::Table
-#    Properties:
-#      AttributeDefinitions:
-#        - AttributeName: userId
-#          AttributeType: S
-#        - AttributeName: todoId
-#          AttributeType: S
-#        - AttributeName: createdAt
-#          AttributeType: S
-#      KeySchema:  # Key schema with partition and sort key creates a composite key
-#        - AttributeName: userId
-#          KeyType: HASH                 # userId is the partitionKey
-#        - AttributeName: todoId
-#          KeyType: RANGE                # todoId is the sortKey
-#      BillingMode: PAY_PER_REQUEST
-#      TableName: ${self:provider.environment.TODOS_TABLE}
-#      LocalSecondaryIndexes:
-#        - IndexName: ${self:provider.environment.TODOS_CREATED_AT_INDEX}
-#          KeySchema:
-#            - AttributeName: userId
-#              KeyType: HASH
-#            - AttributeName: createdAt
-#              KeyType: RANGE            # createdAt is the indexKey
-#          Projection:
-#            ProjectionType: ALL # What attributes will be copied to an index
-
   AttachmentsBucket:
     Type: AWS::S3::Bucket
     Properties:

@@ -9,7 +9,7 @@ import { DynamoDB } from "aws-sdk";
 
 const logger = createLogger('getItems')
 
-// Get all TODO items for a current user
+// Get all items for a current user
 const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info(`Processing event: ${event}`)
 
