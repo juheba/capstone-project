@@ -1036,308 +1036,79 @@
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "/collections",
-			"item": [
-				{
-					"name": "/{id}/items",
-					"item": [
-						{
-							"name": "Get items of collection",
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{BASE_URL}}/{{STAGE}}/collections/{{temp_collectionId}}/items",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"{{STAGE}}",
-										"collections",
-										"{{temp_collectionId}}",
-										"items"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Add items to collection",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"name": "Content-Type",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"itemIds\": [\"46376d2b-709c-4b0a-b79a-f9451aef6689\", \"9b7cbc78-88e8-484f-8012-74d2884280a1\", \"{{temp_itemId}}\"]\n}"
-								},
-								"url": {
-									"raw": "{{BASE_URL}}/{{STAGE}}/collections/{{temp_collectionId}}/items",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"{{STAGE}}",
-										"collections",
-										"{{temp_collectionId}}",
-										"items"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Get all collections",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/{{STAGE}}/collections",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"{{STAGE}}",
-								"collections"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get collections with limit",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseJson = pm.response.json();\r",
-									"pm.environment.set(\"temp_nextKey\", responseJson.nextKey);"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"const currentNextKey = pm.environment.get(\"temp_nextKey\")\r",
-									"if (null === currentNextKey || undefined === currentNextKey || \"\" === currentNextKey) {\r",
-									"    pm.request.removeQueryParams(\"nextKey\")\r",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/{{STAGE}}/collections?limit=2&nextKey={{temp_nextKey}}",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"{{STAGE}}",
-								"collections"
-							],
-							"query": [
-								{
-									"key": "limit",
-									"value": "2"
-								},
-								{
-									"key": "nextKey",
-									"value": "{{temp_nextKey}}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create collection",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseJson = pm.response.json();\r",
-									"pm.environment.set(\"temp_collectionId\", responseJson.item.collectionId);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"name": "Content-Type",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"{{$randomProductAdjective}} {{$randomDepartment}}\",\n  \"description\": \"{{$randomPhrase}}\",\n  \"visibility\": \"PRIVATE\"\n}"
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/{{STAGE}}/collections",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"{{STAGE}}",
-								"collections"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update collection",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"name": "Content-Type",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"edited - {{$randomProductAdjective}} {{$randomDepartment}}\",\n  \"description\": \"{{$randomPhrase}}\",\n  \"visibility\": \"PUBLIC\"\n}"
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/{{STAGE}}/collections/{{temp_collectionId}}",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"{{STAGE}}",
-								"collections",
-								"{{temp_collectionId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete collection",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"name": "Content-Type",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/{{STAGE}}/collections/{{temp_collectionId}}",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"{{STAGE}}",
-								"collections",
-								"{{temp_collectionId}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
 		}
 	],
 	"auth": {
-		"type": "bearer",
-		"bearer": [
+		"type": "oauth2",
+		"oauth2": [
 			{
-				"key": "token",
-				"value": "{{TOKEN}}",
+				"key": "refreshRequestParams",
+				"value": [],
+				"type": "any"
+			},
+			{
+				"key": "tokenRequestParams",
+				"value": [],
+				"type": "any"
+			},
+			{
+				"key": "authRequestParams",
+				"value": [],
+				"type": "any"
+			},
+			{
+				"key": "tokenName",
+				"value": "Auth0 Authorization",
+				"type": "string"
+			},
+			{
+				"key": "challengeAlgorithm",
+				"value": "S256",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "openid",
+				"type": "string"
+			},
+			{
+				"key": "redirect_uri",
+				"value": "{{vault:OAuth_Callback_URL}}",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "authorization_code",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "{{vault:OAuth_Client_Secret}}",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "{{vault:OAuth_Client_ID}}",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "{{vault:OAuth_Authorize_URL}}",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "{{vault:OAuth_Token_URL}}",
 				"type": "string"
 			}
 		]
