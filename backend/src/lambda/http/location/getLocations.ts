@@ -6,6 +6,7 @@ import { getLocationsForUser } from '@businessLogic/Locations';
 import { createLogger, middyfy, getUserId } from '@utils'
 
 import { DynamoDB } from "aws-sdk";
+import { BadRequestParameterError } from '@models/errors/DefaultErrors';
 
 const logger = createLogger('getLocations')
 
@@ -21,7 +22,7 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
     limit = parseLimitParameter(event)      // Maximum number of elements to return
     nextKey = parseNextKeyParameter(event)  // Next key to continue scan operation if necessary
   } catch (e) {
-    return createBadRequestResponse(e.message)
+    return BadRequestParameterError.setDetails(e.message).asJSONResponse();
   }
 
   const result = await getLocationsForUser(userId, {limit, nextKey})
@@ -97,21 +98,6 @@ function getQueryParameter(event, name: string) {
   }
 
   return queryParams[name]
-}
-
-/**
- * Creates a 400 BAD REQUEST response
- *
- * @param {string} details optional details to describe the error
- *
- * @returns {string} a json stringifed bad request response
- */
-function createBadRequestResponse(details) {
-  const err = {statusCode:400, errorCode:'T000', message:'Bad request parameter', details}
-  return {
-    statusCode: 400,
-    body: JSON.stringify(err)
-  }
 }
 
 /**

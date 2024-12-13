@@ -4,6 +4,7 @@ import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } f
 
 import { updateCollectionItems } from '@businessLogic/CollectionItems'
 import { createLogger, middyfy, getUserId } from '@utils'
+import { BadRequestParameterError, InternalServerError, ResourceNotFoundError } from '@models/errors/DefaultErrors';
 
 const logger = createLogger('updateCollectionItems')
 
@@ -18,13 +19,13 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
   try {
     collectionId = parseCollectionParameter(event)
   } catch (e) {
-    return createBadRequestResponse(e.message)
+    return BadRequestParameterError.setDetails(e.message).asJSONResponse();
   }
 
   try {
     itemIds = parseBody(event)
   } catch (e) {
-    return createBadRequestResponse(e.message)
+    return BadRequestParameterError.setDetails(e.message).asJSONResponse();
   }
 
   let result;
@@ -32,15 +33,17 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
     result = await updateCollectionItems(userId, collectionId, itemIds)
   } catch (error) {
     if (error.code === 'ConditionalCheckFailedException') {
-      const msg = 'No collection found with the provided collectionId'
-      logger.info({message: msg, collectionId: collectionId, userId: userId})
-      return createNotFoundResponse(`${msg}: ${collectionId}`)
+      const errMsg = 'No collection found with the provided collectionId'
+      logger.info({message: errMsg, collectionId: collectionId, userId: userId})
+      return ResourceNotFoundError.setDetails(`${errMsg}: ${collectionId}`).asJSONResponse();
     }
-    throw error;
+    const errMsg = `Unexpected error while deleting collection: ${collectionId}. Error: ${JSON.stringify(error)}`
+    return InternalServerError.setDetails(errMsg).asJSONResponse();
   }
 
   if (!result) {
-    return createInternalServerErrorResponse(`Couldn't update all item relations of collection with the provided collectionId: ${collectionId}`)
+    const errMsg = `Couldn't update all item relations of collection with the provided collectionId: ${collectionId}`
+    return InternalServerError.setDetails(errMsg).asJSONResponse();
   }
 
   return createNoContentResponse()
@@ -97,50 +100,5 @@ function createNoContentResponse() {
   return {
     statusCode: 204,
     body: ""
-  }
-}
-
-/**
- * Creates a 400 BAD REQUEST response
- *
- * @param {string} details optional details to describe the error
- *
- * @returns {string} a json stringifed bad request response
- */
-function createBadRequestResponse(details) {
-  const err = {statusCode:400, errorCode:'T400', message:'Bad request parameter', details}
-  return {
-    statusCode: 400,
-    body: JSON.stringify(err)
-  }
-}
-
-/**
- * Creates a 404 NOT FOUND response
- *
- * @param {string} details optional details to describe the error
- *
- * @returns {string} a json stringifed not found response
- */
-function createNotFoundResponse(details) {
-  const err = {statusCode:404, errorCode:'T001', message:'Resource not found', details}
-  return {
-    statusCode: 404,
-    body: JSON.stringify(err)
-  }
-}
-
-/**
- * Creates a 500 INTERNAL SERVER ERROR response
- *
- * @param {string} details optional details to describe the error
- *
- * @returns {string} a json stringifed internal server error response
- */
-function createInternalServerErrorResponse(details) {
-  const err = {statusCode:400, errorCode:'T500', message:'Unexpected Error', details}
-  return {
-    statusCode: 500,
-    body: JSON.stringify(err)
   }
 }

@@ -6,6 +6,7 @@ import { createAttachmentPresignedUrl } from '@businessLogic/Attachments';
 import { CreateAttachmentRequest } from '@requests/attachment'
 
 import { createLogger, middyfy, getUserId } from '@utils'
+import { BadRequestParameterError, InternalServerError, ResourceNotFoundError } from '@models/errors/DefaultErrors';
 
 const logger = createLogger('generateUploadUrl')
 
@@ -18,13 +19,15 @@ const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResu
   try {
     attachment = parseBody(event)
   } catch (e) {
-    return createBadRequestResponse(e.message)
+    return BadRequestParameterError.setDetails(e.message).asJSONResponse();
   }
 
   if ((attachment.itemId == null || attachment.itemId === undefined) && (attachment.locationId == null || attachment.locationId === undefined)) {
-    return createBadRequestResponse('\'itemId\' or \'locationId\' is required.')
+    const errMsg = '\'itemId\' or \'locationId\' is required.'
+    return BadRequestParameterError.setDetails(errMsg).asJSONResponse();
   } else if (attachment.itemId?.length > 0 && attachment.locationId?.length > 0) {
-    return createBadRequestResponse('\'itemId\' and \'locationId\' are mutually exclusive.')
+    const errMsg = '\'itemId\' and \'locationId\' are mutually exclusive.'
+    return BadRequestParameterError.setDetails(errMsg).asJSONResponse();
   }
 
   let result;
@@ -32,10 +35,12 @@ const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResu
     result = await createAttachmentPresignedUrl(userId, attachment)
   } catch (error) {
     if (error.code === 'ConditionalCheckFailedException') {
-      logger.info({message: 'No entry found with the provided id', userId: userId})
-      return createNotFoundResponse(`No entry found with the provided id`)
+      const errMsg = 'No entry found with the provided id'
+      logger.info({message: errMsg, userId: userId})
+      return ResourceNotFoundError.setDetails(`${errMsg}`).asJSONResponse();
     }
-    throw error;
+    const errMsg = `Unexpected error creating presigned url. Error: ${JSON.stringify(error)}`
+    return InternalServerError.setDetails(errMsg).asJSONResponse();
   }
 
   return {
@@ -66,34 +71,4 @@ function parseBody(event) {
   }
 
   return parsedBody
-}
-
-/**
- * Creates a 400 BAD REQUEST response
- *
- * @param {string} details optional details to describe the error
- *
- * @returns {string} a json stringifed bad request response
- */
- function createBadRequestResponse(details) {
-  const err = {statusCode:400, errorCode:'T000', message:'Bad request parameter', details}
-  return {
-    statusCode: 400,
-    body: JSON.stringify(err)
-  }
-}
-
-/**
- * Creates a 404 NOT FOUND response
- *
- * @param {string} details optional details to describe the error
- *
- * @returns {string} a json stringifed not found response
- */
-function createNotFoundResponse(details) {
-  const err = {statusCode:404, errorCode:'T001', message:'Resource not found', details}
-  return {
-    statusCode: 404,
-    body: JSON.stringify(err)
-  }
 }

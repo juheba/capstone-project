@@ -5,6 +5,7 @@ import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } f
 import { updateLocation } from '@businessLogic/Locations'
 import { UpdateLocationRequest } from '@requests/location/UpdateLocationRequest'
 import { createLogger, middyfy, getUserId } from '@utils'
+import { BadRequestParameterError, InternalServerError, ResourceNotFoundError } from '@models/errors/DefaultErrors';
 
 const logger = createLogger('updateLocation')
 
@@ -19,13 +20,13 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
   try {
     locationId = parseLocationParameter(event)
   } catch (e) {
-    return createBadRequestResponse(e.message)
+    return BadRequestParameterError.setDetails(e.message).asJSONResponse();
   }
 
   try {
     updatedLocation = parseBody(event)
   } catch (e) {
-    return createBadRequestResponse(e.message)
+    return BadRequestParameterError.setDetails(e.message).asJSONResponse();
   }
 
   let result;
@@ -33,11 +34,12 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
     result = await updateLocation(userId, locationId, updatedLocation)
   } catch (error) {
     if (error.code === 'ConditionalCheckFailedException') {
-      const msg = 'No location found with the provided locationId'
-      logger.info({message: msg, locationId: locationId, userId: userId})
-      return createNotFoundResponse(`${msg}: ${locationId}`)
+      const errMsg = 'No location found with the provided locationId'
+      logger.info({message: errMsg, locationId: locationId, userId: userId})
+      return ResourceNotFoundError.setDetails(`${errMsg}: ${locationId}`).asJSONResponse();
     }
-    throw error;
+    const errMsg = `Unexpected error while deleting location: ${locationId}. Error: ${JSON.stringify(error)}`
+    return InternalServerError.setDetails(errMsg).asJSONResponse();
   }
 
   return {
@@ -66,36 +68,6 @@ function parseLocationParameter(event) {
     throw new Error('parameter \'locationId\' is not valid.')
   }
   return locationId
-}
-
-/**
- * Creates a 400 BAD REQUEST response
- *
- * @param {string} details optional details to describe the error
- *
- * @returns {string} a json stringifed bad request response
- */
-function createBadRequestResponse(details) {
-  const err = {statusCode:400, errorCode:'T400', message:'Bad request parameter', details}
-  return {
-    statusCode: 400,
-    body: JSON.stringify(err)
-  }
-}
-
-/**
- * Creates a 404 NOT FOUND response
- *
- * @param {string} details optional details to describe the error
- *
- * @returns {string} a json stringifed not found response
- */
-function createNotFoundResponse(details) {
-  const err = {statusCode:404, errorCode:'T001', message:'Resource not found', details}
-  return {
-    statusCode: 404,
-    body: JSON.stringify(err)
-  }
 }
 
 /**

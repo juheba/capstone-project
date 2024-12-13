@@ -4,8 +4,7 @@ import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } f
 
 import { getItemById } from '@businessLogic/Items';
 import { createLogger, middyfy, getUserId } from '@utils'
-
-import { DynamoDB } from "aws-sdk";
+import { BadRequestParameterError, InternalServerError, ResourceNotFoundError } from '@models/errors/DefaultErrors';
 
 const logger = createLogger('getItems')
 
@@ -19,7 +18,7 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
   try {
     itemId = parseItemParameter(event)
   } catch (e) {
-    return createBadRequestResponse(e.message)
+    return BadRequestParameterError.setDetails(e.message).asJSONResponse();
   }
 
   let result;
@@ -27,10 +26,12 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
     result = await getItemById(userId, itemId)
   } catch (error) {
     if (error.message.includes('Item not found')) {
-      logger.info({message: 'No entry found with the provided itemId', itemId: itemId, userId: userId})
-      return createNotFoundResponse(`No item found with the provided itemId: ${itemId}`)
+      const errMsg = 'No item found with the provided itemId'
+      logger.info({message: errMsg, itemId: itemId, userId: userId})
+      return ResourceNotFoundError.setDetails(`${errMsg}: ${itemId}`).asJSONResponse();
     }
-    throw error;
+    const errMsg = `Unexpected error while deleting item: ${itemId}. Error: ${JSON.stringify(error)}`
+    return InternalServerError.setDetails(errMsg).asJSONResponse();
   }
 
   return {
@@ -58,51 +59,4 @@ function parseItemParameter(event) {
     throw new Error('parameter \'itemId\' is not valid.')
   }
   return itemId
-}
-
-/**
- * Get a query parameter or return "undefined"
- *
- * @param {Object} event HTTP event passed to a Lambda function
- * @param name a name of a query parameter to return
- *
- * @returns a value of a query parameter value or "undefined" if a parameter is not defined
- */
-function getQueryParameter(event, name: string) {
-  const queryParams = event.queryStringParameters
-  if (!queryParams) {
-    return undefined
-  }
-
-  return queryParams[name]
-}
-
-/**
- * Creates a 400 BAD REQUEST response
- *
- * @param {string} details optional details to describe the error
- *
- * @returns {string} a json stringifed bad request response
- */
-function createBadRequestResponse(details) {
-  const err = {statusCode:400, errorCode:'T000', message:'Bad request parameter', details}
-  return {
-    statusCode: 400,
-    body: JSON.stringify(err)
-  }
-}
-
-/**
- * Creates a 404 NOT FOUND response
- *
- * @param {string} details optional details to describe the error
- *
- * @returns {string} a json stringifed bad request response
- */
-function createNotFoundResponse(details) {
-  const err = {statusCode:404, errorCode:'T000', message:'Collection not found', details}
-  return {
-    statusCode: 404,
-    body: JSON.stringify(err)
-  }
 }

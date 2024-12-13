@@ -4,6 +4,7 @@ import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } f
 
 import { deleteItem } from '@businessLogic/Items';
 import { createLogger, middyfy, getUserId } from '@utils'
+import { BadRequestParameterError, InternalServerError, ResourceNotFoundError } from '@models/errors/DefaultErrors';
 
 const logger = createLogger('deleteItems')
 
@@ -17,7 +18,7 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
   try {
     itemId = parseItemParameter(event)
   } catch (e) {
-    return createBadRequestResponse(e.message)
+    return BadRequestParameterError.setDetails(e.message).asJSONResponse();
   }
 
   let result;
@@ -25,15 +26,16 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
     result = await deleteItem(userId, itemId)
   } catch (error) {
     if (error.code === 'ConditionalCheckFailedException') {
-      logger.info({message: 'No item found with the provided itemId', itemId: itemId, userId: userId})
-      return createNotFoundResponse(`No item found with the provided itemId: ${itemId}`)
+      const errMsg = 'No item found with the provided itemId'
+      logger.info({message: errMsg, itemId: itemId, userId: userId})
+      return ResourceNotFoundError.setDetails(`${errMsg}: ${itemId}`).asJSONResponse();
     }
-    // Re-throw the error if it wasn't a conditional check failure
-    throw error;
+    const errMsg = `Unexpected error while deleting item: ${itemId}. Error: ${JSON.stringify(error)}`
+    return InternalServerError.setDetails(errMsg).asJSONResponse();
   }
 
   if (!result) {
-    return createInternalServerErrorResponse(`Couldn't delete item with the provided itemId: ${itemId}`)
+    return InternalServerError.setDetails(`Couldn't delete item with the provided itemId: ${itemId}`).asJSONResponse();
   }
 
   return createNoContentResponse()
@@ -67,50 +69,5 @@ function createNoContentResponse() {
   return {
     statusCode: 204,
     body: ""
-  }
-}
-
-/**
- * Creates a 400 BAD REQUEST response
- *
- * @param {string} details optional details to describe the error
- *
- * @returns {string} a json stringifed bad request response
- */
-function createBadRequestResponse(details) {
-  const err = {statusCode:400, errorCode:'T000', message:'Bad request parameter', details}
-  return {
-    statusCode: 400,
-    body: JSON.stringify(err)
-  }
-}
-
-/**
- * Creates a 404 NOT FOUND response
- *
- * @param {string} details optional details to describe the error
- *
- * @returns {string} a json stringifed not found response
- */
-function createNotFoundResponse(details) {
-  const err = {statusCode:404, errorCode:'T001', message:'Resource not found', details}
-  return {
-    statusCode: 404,
-    body: JSON.stringify(err)
-  }
-}
-
-/**
- * Creates a 500 INTERNAL SERVER ERROR response
- *
- * @param {string} details optional details to describe the error
- *
- * @returns {string} a json stringifed internal server error response
- */
-function createInternalServerErrorResponse(details) {
-  const err = {statusCode:400, errorCode:'T500', message:'Unexpected Error', details}
-  return {
-    statusCode: 500,
-    body: JSON.stringify(err)
   }
 }

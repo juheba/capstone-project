@@ -5,6 +5,7 @@ import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } f
 import { CreateItemRequest } from '@requests/item'
 import { createItem } from '@businessLogic/Items';
 import { createLogger, middyfy, getUserId } from '@utils'
+import { BadRequestParameterError } from '@models/errors/DefaultErrors';
 
 const logger = createLogger('createItems')
 
@@ -17,7 +18,7 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
   try {
     item = parseBody(event)
   } catch (e) {
-    return createBadRequestResponse(e.message)
+    return BadRequestParameterError.setDetails(e.message).asJSONResponse();
   }
 
   const newItem = await createItem(userId, item)
@@ -53,19 +54,4 @@ function parseBody(event) {
     throw new Error('title is empty.')
   }
   return parsedBody
-}
-
-/**
- * Creates a 400 BAD REQUEST response
- *
- * @param {string} details optional details to describe the error
- *
- * @returns {string} a json stringifed bad request response
- */
- function createBadRequestResponse(details) {
-  const err = {statusCode:400, errorCode:'T000', message:'Bad request parameter', details}
-  return {
-    statusCode: 400,
-    body: JSON.stringify(err)
-  }
 }
