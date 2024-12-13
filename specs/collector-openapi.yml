@@ -1,8 +1,10 @@
 openapi: 3.0.0
+
 info:
   title: Collector API
   description: Serverless application for collection management
   version: v.0.0.0
+
 tags:
   - name: attachment
     description: Operations on attachments
@@ -12,6 +14,7 @@ tags:
     description: Operations on items
   - name: location
     description: Operations on locations
+
 paths:
   /collections:
     get:
@@ -1236,6 +1239,13 @@ components:
         - TODO
         - PROCESSING
         - DONE
+    ErrorTypeEnum:
+      description: >-
+        Information about the type of error.
+      type: string
+      enum:
+        - TECHNICAL
+        - BUSINESS
 
     # Attachment
     AttachmentUrl:
@@ -1655,6 +1665,7 @@ components:
       required:
         - statusCode
         - errorCode
+        - type
         - message
       type: object
       properties:
@@ -1664,9 +1675,12 @@ components:
           minimum: 100
           maximum: 599
         errorCode:
-          description: An unique error code.
+          description: An unique error code with an prefix that indicates the error type.
           type: string
           minLength: 1
+          example: "TC123"
+        type:
+          $ref: '#/components/schemas/ErrorTypeEnum'
         message:
           description: Short error message.
           type: string
@@ -1692,23 +1706,23 @@ components:
       summary: 400 Bad Request error
       description: An example of an 400 Bad Request error
       value: >-
-        {"statusCode": 400, "errorCode": "T123", "message": "Bad Request - some
+        {"statusCode": 400, "errorCode": "T123", "type": "TECHNICAL", "message": "Bad Request - some
         value is missing."}
     UnauthorizedExample:
       summary: 401 Unauthorized
       description: An example of an 401 Unauthorized error
       value: >-
-        {"statusCode": 401, "errorCode": "T123", "message": "Unauthorized - user
+        {"statusCode": 401, "errorCode": "T123", "type": "TECHNICAL", "message": "Unauthorized - user
         is not logged in or authorization failed."}
-    InternalServerErrorExample:
-      summary: 500 Internal Server error
-      description: An example of an 500 Internal Server error
-      value: >-
-        {"statusCode": 500, "errorCode": "T123", "message": "Internal Server -
-        something went horrably wrong."}
     NotFoundExample:
       summary: 404 Not Found error
       description: An example of an 404 Not Found error
       value: >-
-        {"statusCode": 404, "errorCode": "T123", "message": "Not Found - the
+        {"statusCode": 404, "errorCode": "B123", "type": "BUSINESS", "message": "Not Found - the
         requested resource does not exist."}
+    InternalServerErrorExample:
+      summary: 500 Internal Server error
+      description: An example of an 500 Internal Server error
+      value: >-
+        {"statusCode": 500, "errorCode": "T123", "type": "TECHNICAL", "message": "Internal Server -
+        something went horrably wrong."}

@@ -10,6 +10,9 @@ TEMP_SRC_FOLDER="$TEMP_OUTPUT_DIRECTORY/lib/src"
 OUTPUT_DIRECTORY="generated/$GENERATOR/collector-api"
 NEW_SRC_FOLDER="generated/openapi/collector-api"
 
+##############################################
+## Prepare environment and output directory ##
+##############################################
 
 # Check if openapi-generator-cli is installed
 if ! command -v openapi-generator-cli &> /dev/null
@@ -19,7 +22,7 @@ then
     exit 1
 fi
 
-# Step 1: Validate OpenAPI Contract
+# Validate OpenAPI Contract
 echo "Validating OpenAPI contract at $OPENAPI_CONTRACT_PATH..."
 openapi-generator-cli validate -i "$OPENAPI_CONTRACT_PATH"
 
@@ -28,12 +31,16 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Step 2: Remove Existing Generated Files
+# Remove Existing Generated Files
 echo "Removing existing generated API files in $OUTPUT_DIRECTORY..."
 rm -rf "$OUTPUT_DIRECTORY"
 rm -rf "$TEMP_OUTPUT_DIRECTORY"
 
-# Step 3: Regenerate API Client
+
+##################
+## Generate API ##
+##################
+
 echo "Generating API client from OpenAPI contract..."
 openapi-generator-cli generate -i $OPENAPI_CONTRACT_PATH -g $GENERATOR -c $OPENAPI_CONFIG_PATH -o $TEMP_OUTPUT_DIRECTORY
 
@@ -42,22 +49,26 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Step 3.1: Build
 echo "Building API client..."
 cd "$TEMP_OUTPUT_DIRECTORY"
 dart run build_runner build --delete-conflicting-outputs
 cd ../..
 
-# Step 3.2: Replace 'package:collector_api_client' and 'src' folder
+
+###########################################################
+## Replacements and fixes for appropiate package imports ##
+###########################################################
+
+# Replace 'package:collector_api_client' and 'src' folder
 echo "Replacing 'collector_api_client' and 'src' folder..."
 
-# Ensure the SRC_FOLDER exists
+## Ensure the SRC_FOLDER exists
 if [ ! -d "$TEMP_SRC_FOLDER" ]; then
     echo "Error: Directory $TEMP_SRC_FOLDER does not exist."
     exit 1
 fi
 
-# Find and replace export and import statements in all files
+## Find and replace export and import statements in all files
 find "$TEMP_OUTPUT_DIRECTORY" \( -name "*.dart" -o -name "*.md" \) -type f | while read -r file; do
     echo "Processing $file"
 
@@ -74,7 +85,7 @@ done
 
 echo "Replacement complete."
 
-# Additional functionality: Replace 'abstract class' with 'mixin' for EnumMixin classes
+## Replace 'abstract class' with 'mixin' for EnumMixin classes (generator bugfix/workaround)
 echo "Converting 'abstract class' to 'mixin' for EnumMixin classes..."
 find "$TEMP_OUTPUT_DIRECTORY" -name "*.dart" -type f | while read -r file; do
     echo "Processing $file for EnumMixin transformation..."
@@ -85,7 +96,12 @@ find "$TEMP_OUTPUT_DIRECTORY" -name "*.dart" -type f | while read -r file; do
 done
 echo "EnumMixin transformation complete."
 
-# Step 4: Format Dart Code
+
+
+######################
+## Format dart code ##
+######################
+
 echo "Formatting generated Dart code..."
 dart format "$TEMP_OUTPUT_DIRECTORY"
 
@@ -95,18 +111,22 @@ else
     echo "Code formatted successfully."
 fi
 
-# Step 5: Move Generated Files to Output Directory
+
+##########################
+## Move generated files ##
+##########################
+
 echo "Moving generated API files to $OUTPUT_DIRECTORY..."
 mkdir -p "$OUTPUT_DIRECTORY"
 
-# Check if generated directories exist
+# Check if docs directory exist
 if [ -d "$TEMP_OUTPUT_DIRECTORY/doc" ]; then
     mv "$TEMP_OUTPUT_DIRECTORY/doc" "$OUTPUT_DIRECTORY"
 else
     echo "Warning: No doc directory found in the generated files."
 fi
 
-
+# Check if lib/src directory exist
 if [ -d "$TEMP_OUTPUT_DIRECTORY/lib/src" ]; then
     mv "$TEMP_OUTPUT_DIRECTORY/lib/src"/* "$OUTPUT_DIRECTORY"
 else
@@ -114,7 +134,10 @@ else
 fi
 
 
-# Step 6: Remove Temporary Files
+#####################################
+## Cleanup: remove temporary files ##
+#####################################
+
 echo "Removing temporary files..."
 rm -rf "$TEMP_OUTPUT_DIRECTORY"
 rm -rf ".generator_temp"
