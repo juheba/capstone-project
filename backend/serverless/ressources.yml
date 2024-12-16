@@ -11,7 +11,43 @@ Resources:
       ResponseType: BAD_REQUEST_BODY
       RestApiId: !Ref ApiGatewayRestApi
       ResponseTemplates:
-        application/json: "{'statusCode': 400, errorCode:'API400', 'message': 'Bad request parameter', 'details': '$context.error.validationErrorString'}"
+        application/json: "{\"statusCode\": 400, \"errorCode\":\"API400\", \"message\": \"Bad request parameter\", \"errorMessage\": $context.error.messageString, \"details\": \"$context.error.validationErrorString\"}"
+
+  GatewayResponseUnauthorized:
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization'"
+        gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,DELETE,PATCH'"
+      ResponseType: UNAUTHORIZED
+      RestApiId: !Ref ApiGatewayRestApi
+      ResponseTemplates:
+        application/json: "{\"statusCode\": 401, \"errorCode\":\"API401\", \"message\": \"Unauthorized\", \"errorMessage\": $context.error.messageString, \"details\": \"$context.error.validationErrorString\"}"
+
+  GatewayResponseExpiredToken:
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization'"
+        gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,DELETE,PATCH'"
+      ResponseType: EXPIRED_TOKEN
+      RestApiId: !Ref ApiGatewayRestApi
+      ResponseTemplates:
+        application/json: "{\"statusCode\": 403, \"errorCode\":\"API403\", \"message\": \"Forbidden because of expired token\", \"errorMessage\": $context.error.messageString, \"details\": \"$context.error.validationErrorString\"}"
+
+  GatewayResponseResourceNotFound:
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization'"
+        gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,DELETE,PATCH'"
+      ResponseType: RESOURCE_NOT_FOUND
+      RestApiId: !Ref ApiGatewayRestApi
+      ResponseTemplates:
+        application/json: "{\"statusCode\": 404, \"errorCode\":\"API404\", \"message\": \"Requested resource not found\", \"errorMessage\": $context.error.messageString, \"resourcePath\":  \"$context.resourcePath\", \"details\": \"$context.error.validationErrorString\"}"
 
   GatewayResponseDefault4XX:
     Type: AWS::ApiGateway::GatewayResponse

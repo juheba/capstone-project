@@ -6,7 +6,7 @@ import { getCollectionsForUser } from '@businessLogic/Collections';
 import { createLogger, middyfy, getUserId } from '@utils'
 
 import { DynamoDB } from "aws-sdk";
-import { BadRequestParameterError } from '@models/errors/DefaultErrors';
+import { BadRequestParameterError, InternalServerError } from '@models/errors/DefaultErrors';
 
 const logger = createLogger('getCollections')
 
@@ -25,7 +25,22 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Pro
     return BadRequestParameterError.setDetails(e.message).asJSONResponse();
   }
 
-  const result = await getCollectionsForUser(userId, {limit, nextKey})
+  let result;
+  try {
+    result = await getCollectionsForUser(userId, {limit, nextKey})
+  } catch (error) {
+    if (error.code === 'ValidationException') {
+      const errMsg = `ValidationException while get collections. Error: ${JSON.stringify(error)}`
+      logger.info({message: errMsg, userId: userId})
+      return BadRequestParameterError.setDetails(error.message).asJSONResponse();
+    }
+    const errMsg = `Unexpected error while get collections. Error: ${JSON.stringify(error)}`
+    return InternalServerError.setDetails(errMsg).asJSONResponse();
+  }
+
+  if (!result) {
+    return InternalServerError.setDetails(`Couldn't get collections`).asJSONResponse();
+  }
 
   return {
     statusCode: 200,
