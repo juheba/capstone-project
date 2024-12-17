@@ -60,6 +60,10 @@ export class CollectionAccess {
   async getCollectionsByIds(userId: string, collectionIds: string[]): Promise<Collection[]> {
     logger.info({message: 'Getting collections by ids', userId: userId})
 
+    if (collectionIds.length === 0) {
+      return [] as Collection[];
+    }
+
     const keys = collectionIds.map(collectionId => ({ 
       userId: userId,
       collectionId

@@ -60,6 +60,10 @@ export class ItemAccess {
   async getItemsByIds(userId: string, itemIds: string[]): Promise<Item[]> {
     logger.info({message: 'Getting items by ids', userId: userId})
 
+    if (itemIds.length === 0) {
+      return [] as Item[];
+    }
+
     const keys = itemIds.map(itemId => ({ 
       userId: userId,
       itemId
