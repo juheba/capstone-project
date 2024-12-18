@@ -1,18 +1,20 @@
 const path = require('path');
 const slsw = require('serverless-webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-// var nodeExternals = require('webpack-node-externals')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+//const nodeExternals = require('webpack-node-externals');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
   entry: slsw.lib.entries,
   // externals: [nodeExternals()],
-  devtool: 'source-map',
+  devtool: slsw.lib.webpack.isLocal ? 'source-map' : 'nosources-source-map',
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
     plugins: [
-      new TsconfigPathsPlugin({ configFile: "./tsconfig.json" })
-    ]
+      new TsconfigPathsPlugin({ configFile: "./tsconfig.json" }),
+    ],
   },
   output: {
     libraryTarget: 'commonjs',
@@ -20,6 +22,10 @@ module.exports = {
     filename: '[name].js',
   },
   target: 'node',
+  optimization: {
+    usedExports: true,
+    minimize: !slsw.lib.webpack.isLocal,
+  },
   module: {
     rules: [
       // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
@@ -27,9 +33,16 @@ module.exports = {
         test: /\.tsx?$/,
         loader: 'ts-loader',
         options: {
-          transpileOnly: true
-        }
+          transpileOnly: true,
+          happyPackMode: true,
+        },
       },
     ],
   },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new ForkTsCheckerWebpackPlugin({
+      async: false, // Ensures type-checking happens before emitting files
+    }),
+  ],
 };

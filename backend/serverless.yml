@@ -23,10 +23,18 @@ package:
     - .git/**
     - .serverless/**
     - serverless/**
+    - .vscode/**
+    - .idea/**
+    - README.md
+    - tslint.json
 
 custom:
   webpack:
-    concurrency: 10 # desired concurrency, defaults to the number of available cores
+    webpackConfig: './webpack.config.js'
+    concurrency: 5 # Parallelize the build process for multiple functions, defaults to the number of available cores
+    includeModules: true # Ensures that required modules are included in the bundle
+    packager: 'npm'
+    excludeFiles: '**/*.test.ts' # Exclude test files from the bundle
   documentation: ${file(serverless/serverless.doc.yml):documentation}
   serverless-offline:
     httpPort: 3003
