@@ -3,6 +3,7 @@
 //
 
 // ignore_for_file: unused_element
+import 'package:collector/generated/openapi/collector-api/model/error_type_enum.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
@@ -12,7 +13,8 @@ part 'error_response.g.dart';
 ///
 /// Properties:
 /// * [statusCode] - The http status code.
-/// * [errorCode] - An unique error code.
+/// * [errorCode] - An unique error code with an prefix that indicates the error type.
+/// * [type]
 /// * [message] - Short error message.
 /// * [details] - Additional details about the error (optional).
 @BuiltValue()
@@ -22,9 +24,13 @@ abstract class ErrorResponse
   @BuiltValueField(wireName: r'statusCode')
   num get statusCode;
 
-  /// An unique error code.
+  /// An unique error code with an prefix that indicates the error type.
   @BuiltValueField(wireName: r'errorCode')
   String get errorCode;
+
+  @BuiltValueField(wireName: r'type')
+  ErrorTypeEnum get type;
+  // enum typeEnum {  TECHNICAL,  BUSINESS,  };
 
   /// Short error message.
   @BuiltValueField(wireName: r'message')
@@ -68,6 +74,11 @@ class _$ErrorResponseSerializer implements PrimitiveSerializer<ErrorResponse> {
     yield serializers.serialize(
       object.errorCode,
       specifiedType: const FullType(String),
+    );
+    yield r'type';
+    yield serializers.serialize(
+      object.type,
+      specifiedType: const FullType(ErrorTypeEnum),
     );
     yield r'message';
     yield serializers.serialize(
@@ -119,6 +130,13 @@ class _$ErrorResponseSerializer implements PrimitiveSerializer<ErrorResponse> {
             specifiedType: const FullType(String),
           ) as String;
           result.errorCode = valueDes;
+          break;
+        case r'type':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(ErrorTypeEnum),
+          ) as ErrorTypeEnum;
+          result.type = valueDes;
           break;
         case r'message':
           final valueDes = serializers.deserialize(

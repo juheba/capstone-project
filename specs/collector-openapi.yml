@@ -1642,11 +1642,10 @@ components:
           items:
             $ref: '#/components/schemas/CollectionId'
           uniqueItems: true
-      anyOf:
+      oneOf:
         - properties:
             itemIds:
               type: array
-              minLength: 1
               items:
                 $ref: '#/components/schemas/ItemId'
           required:
@@ -1654,7 +1653,6 @@ components:
         - properties:
             collectionIds:
               type: array
-              minLength: 1
               items:
                 $ref: '#/components/schemas/CollectionId'
           required:

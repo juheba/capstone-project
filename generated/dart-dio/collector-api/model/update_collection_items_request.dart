@@ -3,12 +3,12 @@
 //
 
 // ignore_for_file: unused_element
-import 'package:collector/generated/openapi/collector-api/model/update_collection_items_request_any_of1.dart';
-import 'package:collector/generated/openapi/collector-api/model/update_collection_items_request_any_of.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:collector/generated/openapi/collector-api/model/update_collection_items_request_one_of1.dart';
+import 'package:collector/generated/openapi/collector-api/model/update_collection_items_request_one_of.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:one_of/any_of.dart';
+import 'package:one_of/one_of.dart';
 
 part 'update_collection_items_request.g.dart';
 
@@ -22,8 +22,8 @@ abstract class UpdateCollectionItemsRequest
     implements
         Built<UpdateCollectionItemsRequest,
             UpdateCollectionItemsRequestBuilder> {
-  /// Any Of [UpdateCollectionItemsRequestAnyOf], [UpdateCollectionItemsRequestAnyOf1]
-  AnyOf get anyOf;
+  /// One Of [UpdateCollectionItemsRequestOneOf], [UpdateCollectionItemsRequestOneOf1]
+  OneOf get oneOf;
 
   UpdateCollectionItemsRequest._();
 
@@ -62,10 +62,9 @@ class _$UpdateCollectionItemsRequestSerializer
     UpdateCollectionItemsRequest object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    final anyOf = object.anyOf;
-    return serializers.serialize(anyOf,
-        specifiedType: FullType(
-            AnyOf, anyOf.valueTypes.map((type) => FullType(type)).toList()))!;
+    final oneOf = object.oneOf;
+    return serializers.serialize(oneOf.value,
+        specifiedType: FullType(oneOf.valueType))!;
   }
 
   @override
@@ -75,14 +74,14 @@ class _$UpdateCollectionItemsRequestSerializer
     FullType specifiedType = FullType.unspecified,
   }) {
     final result = UpdateCollectionItemsRequestBuilder();
-    Object? anyOfDataSrc;
-    final targetType = const FullType(AnyOf, [
-      FullType(UpdateCollectionItemsRequestAnyOf),
-      FullType(UpdateCollectionItemsRequestAnyOf1),
+    Object? oneOfDataSrc;
+    final targetType = const FullType(OneOf, [
+      FullType(UpdateCollectionItemsRequestOneOf),
+      FullType(UpdateCollectionItemsRequestOneOf1),
     ]);
-    anyOfDataSrc = serialized;
-    result.anyOf = serializers.deserialize(anyOfDataSrc,
-        specifiedType: targetType) as AnyOf;
+    oneOfDataSrc = serialized;
+    result.oneOf = serializers.deserialize(oneOfDataSrc,
+        specifiedType: targetType) as OneOf;
     return result.build();
   }
 }

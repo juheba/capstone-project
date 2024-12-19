@@ -8,15 +8,15 @@ part of 'update_collection_items_request.dart';
 
 class _$UpdateCollectionItemsRequest extends UpdateCollectionItemsRequest {
   @override
-  final AnyOf anyOf;
+  final OneOf oneOf;
 
   factory _$UpdateCollectionItemsRequest(
           [void Function(UpdateCollectionItemsRequestBuilder)? updates]) =>
       (new UpdateCollectionItemsRequestBuilder()..update(updates))._build();
 
-  _$UpdateCollectionItemsRequest._({required this.anyOf}) : super._() {
+  _$UpdateCollectionItemsRequest._({required this.oneOf}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        anyOf, r'UpdateCollectionItemsRequest', 'anyOf');
+        oneOf, r'UpdateCollectionItemsRequest', 'oneOf');
   }
 
   @override
@@ -31,13 +31,13 @@ class _$UpdateCollectionItemsRequest extends UpdateCollectionItemsRequest {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is UpdateCollectionItemsRequest && anyOf == other.anyOf;
+    return other is UpdateCollectionItemsRequest && oneOf == other.oneOf;
   }
 
   @override
   int get hashCode {
     var _$hash = 0;
-    _$hash = $jc(_$hash, anyOf.hashCode);
+    _$hash = $jc(_$hash, oneOf.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -45,7 +45,7 @@ class _$UpdateCollectionItemsRequest extends UpdateCollectionItemsRequest {
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'UpdateCollectionItemsRequest')
-          ..add('anyOf', anyOf))
+          ..add('oneOf', oneOf))
         .toString();
   }
 }
@@ -56,9 +56,9 @@ class UpdateCollectionItemsRequestBuilder
             UpdateCollectionItemsRequestBuilder> {
   _$UpdateCollectionItemsRequest? _$v;
 
-  AnyOf? _anyOf;
-  AnyOf? get anyOf => _$this._anyOf;
-  set anyOf(AnyOf? anyOf) => _$this._anyOf = anyOf;
+  OneOf? _oneOf;
+  OneOf? get oneOf => _$this._oneOf;
+  set oneOf(OneOf? oneOf) => _$this._oneOf = oneOf;
 
   UpdateCollectionItemsRequestBuilder() {
     UpdateCollectionItemsRequest._defaults(this);
@@ -67,7 +67,7 @@ class UpdateCollectionItemsRequestBuilder
   UpdateCollectionItemsRequestBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _anyOf = $v.anyOf;
+      _oneOf = $v.oneOf;
       _$v = null;
     }
     return this;
@@ -90,8 +90,8 @@ class UpdateCollectionItemsRequestBuilder
   _$UpdateCollectionItemsRequest _build() {
     final _$result = _$v ??
         new _$UpdateCollectionItemsRequest._(
-            anyOf: BuiltValueNullFieldError.checkNotNull(
-                anyOf, r'UpdateCollectionItemsRequest', 'anyOf'));
+            oneOf: BuiltValueNullFieldError.checkNotNull(
+                oneOf, r'UpdateCollectionItemsRequest', 'oneOf'));
     replace(_$result);
     return _$result;
   }

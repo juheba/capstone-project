@@ -9,7 +9,8 @@ import 'package:collector/generated/openapi/collector-api/api.dart';
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **statusCode** | **num** | The http status code. | 
-**errorCode** | **String** | An unique error code. | 
+**errorCode** | **String** | An unique error code with an prefix that indicates the error type. | 
+**type** | [**ErrorTypeEnum**](ErrorTypeEnum.md) |  | 
 **message** | **String** | Short error message. | 
 **details** | **String** | Additional details about the error (optional). | [optional] 
 

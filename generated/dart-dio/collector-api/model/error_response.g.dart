@@ -12,6 +12,8 @@ class _$ErrorResponse extends ErrorResponse {
   @override
   final String errorCode;
   @override
+  final ErrorTypeEnum type;
+  @override
   final String message;
   @override
   final String? details;
@@ -22,6 +24,7 @@ class _$ErrorResponse extends ErrorResponse {
   _$ErrorResponse._(
       {required this.statusCode,
       required this.errorCode,
+      required this.type,
       required this.message,
       this.details})
       : super._() {
@@ -29,6 +32,7 @@ class _$ErrorResponse extends ErrorResponse {
         statusCode, r'ErrorResponse', 'statusCode');
     BuiltValueNullFieldError.checkNotNull(
         errorCode, r'ErrorResponse', 'errorCode');
+    BuiltValueNullFieldError.checkNotNull(type, r'ErrorResponse', 'type');
     BuiltValueNullFieldError.checkNotNull(message, r'ErrorResponse', 'message');
   }
 
@@ -45,6 +49,7 @@ class _$ErrorResponse extends ErrorResponse {
     return other is ErrorResponse &&
         statusCode == other.statusCode &&
         errorCode == other.errorCode &&
+        type == other.type &&
         message == other.message &&
         details == other.details;
   }
@@ -54,6 +59,7 @@ class _$ErrorResponse extends ErrorResponse {
     var _$hash = 0;
     _$hash = $jc(_$hash, statusCode.hashCode);
     _$hash = $jc(_$hash, errorCode.hashCode);
+    _$hash = $jc(_$hash, type.hashCode);
     _$hash = $jc(_$hash, message.hashCode);
     _$hash = $jc(_$hash, details.hashCode);
     _$hash = $jf(_$hash);
@@ -65,6 +71,7 @@ class _$ErrorResponse extends ErrorResponse {
     return (newBuiltValueToStringHelper(r'ErrorResponse')
           ..add('statusCode', statusCode)
           ..add('errorCode', errorCode)
+          ..add('type', type)
           ..add('message', message)
           ..add('details', details))
         .toString();
@@ -83,6 +90,10 @@ class ErrorResponseBuilder
   String? get errorCode => _$this._errorCode;
   set errorCode(String? errorCode) => _$this._errorCode = errorCode;
 
+  ErrorTypeEnum? _type;
+  ErrorTypeEnum? get type => _$this._type;
+  set type(ErrorTypeEnum? type) => _$this._type = type;
+
   String? _message;
   String? get message => _$this._message;
   set message(String? message) => _$this._message = message;
@@ -100,6 +111,7 @@ class ErrorResponseBuilder
     if ($v != null) {
       _statusCode = $v.statusCode;
       _errorCode = $v.errorCode;
+      _type = $v.type;
       _message = $v.message;
       _details = $v.details;
       _$v = null;
@@ -128,6 +140,8 @@ class ErrorResponseBuilder
                 statusCode, r'ErrorResponse', 'statusCode'),
             errorCode: BuiltValueNullFieldError.checkNotNull(
                 errorCode, r'ErrorResponse', 'errorCode'),
+            type: BuiltValueNullFieldError.checkNotNull(
+                type, r'ErrorResponse', 'type'),
             message: BuiltValueNullFieldError.checkNotNull(
                 message, r'ErrorResponse', 'message'),
             details: details);

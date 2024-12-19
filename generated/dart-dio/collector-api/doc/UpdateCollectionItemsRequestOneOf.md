@@ -1,4 +1,4 @@
-# collector_api_client.model.UpdateCollectionItemsRequestAnyOf
+# collector_api_client.model.UpdateCollectionItemsRequestOneOf
 
 ## Load the model package
 ```dart

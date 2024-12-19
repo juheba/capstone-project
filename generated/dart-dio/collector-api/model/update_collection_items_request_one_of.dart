@@ -7,53 +7,53 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-part 'update_collection_items_request_any_of1.g.dart';
+part 'update_collection_items_request_one_of.g.dart';
 
-/// UpdateCollectionItemsRequestAnyOf1
+/// UpdateCollectionItemsRequestOneOf
 ///
 /// Properties:
-/// * [collectionIds]
+/// * [itemIds]
 @BuiltValue()
-abstract class UpdateCollectionItemsRequestAnyOf1
+abstract class UpdateCollectionItemsRequestOneOf
     implements
-        Built<UpdateCollectionItemsRequestAnyOf1,
-            UpdateCollectionItemsRequestAnyOf1Builder> {
-  @BuiltValueField(wireName: r'collectionIds')
-  BuiltList<String> get collectionIds;
+        Built<UpdateCollectionItemsRequestOneOf,
+            UpdateCollectionItemsRequestOneOfBuilder> {
+  @BuiltValueField(wireName: r'itemIds')
+  BuiltList<String> get itemIds;
 
-  UpdateCollectionItemsRequestAnyOf1._();
+  UpdateCollectionItemsRequestOneOf._();
 
-  factory UpdateCollectionItemsRequestAnyOf1(
-          [void updates(UpdateCollectionItemsRequestAnyOf1Builder b)]) =
-      _$UpdateCollectionItemsRequestAnyOf1;
+  factory UpdateCollectionItemsRequestOneOf(
+          [void updates(UpdateCollectionItemsRequestOneOfBuilder b)]) =
+      _$UpdateCollectionItemsRequestOneOf;
 
   @BuiltValueHook(initializeBuilder: true)
-  static void _defaults(UpdateCollectionItemsRequestAnyOf1Builder b) => b;
+  static void _defaults(UpdateCollectionItemsRequestOneOfBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<UpdateCollectionItemsRequestAnyOf1> get serializer =>
-      _$UpdateCollectionItemsRequestAnyOf1Serializer();
+  static Serializer<UpdateCollectionItemsRequestOneOf> get serializer =>
+      _$UpdateCollectionItemsRequestOneOfSerializer();
 }
 
-class _$UpdateCollectionItemsRequestAnyOf1Serializer
-    implements PrimitiveSerializer<UpdateCollectionItemsRequestAnyOf1> {
+class _$UpdateCollectionItemsRequestOneOfSerializer
+    implements PrimitiveSerializer<UpdateCollectionItemsRequestOneOf> {
   @override
   final Iterable<Type> types = const [
-    UpdateCollectionItemsRequestAnyOf1,
-    _$UpdateCollectionItemsRequestAnyOf1
+    UpdateCollectionItemsRequestOneOf,
+    _$UpdateCollectionItemsRequestOneOf
   ];
 
   @override
-  final String wireName = r'UpdateCollectionItemsRequestAnyOf1';
+  final String wireName = r'UpdateCollectionItemsRequestOneOf';
 
   Iterable<Object?> _serializeProperties(
     Serializers serializers,
-    UpdateCollectionItemsRequestAnyOf1 object, {
+    UpdateCollectionItemsRequestOneOf object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
-    yield r'collectionIds';
+    yield r'itemIds';
     yield serializers.serialize(
-      object.collectionIds,
+      object.itemIds,
       specifiedType: const FullType(BuiltList, [FullType(String)]),
     );
   }
@@ -61,7 +61,7 @@ class _$UpdateCollectionItemsRequestAnyOf1Serializer
   @override
   Object serialize(
     Serializers serializers,
-    UpdateCollectionItemsRequestAnyOf1 object, {
+    UpdateCollectionItemsRequestOneOf object, {
     FullType specifiedType = FullType.unspecified,
   }) {
     return _serializeProperties(serializers, object,
@@ -74,19 +74,19 @@ class _$UpdateCollectionItemsRequestAnyOf1Serializer
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
     required List<Object?> serializedList,
-    required UpdateCollectionItemsRequestAnyOf1Builder result,
+    required UpdateCollectionItemsRequestOneOfBuilder result,
     required List<Object?> unhandled,
   }) {
     for (var i = 0; i < serializedList.length; i += 2) {
       final key = serializedList[i] as String;
       final value = serializedList[i + 1];
       switch (key) {
-        case r'collectionIds':
+        case r'itemIds':
           final valueDes = serializers.deserialize(
             value,
             specifiedType: const FullType(BuiltList, [FullType(String)]),
           ) as BuiltList<String>;
-          result.collectionIds.replace(valueDes);
+          result.itemIds.replace(valueDes);
           break;
         default:
           unhandled.add(key);
@@ -97,12 +97,12 @@ class _$UpdateCollectionItemsRequestAnyOf1Serializer
   }
 
   @override
-  UpdateCollectionItemsRequestAnyOf1 deserialize(
+  UpdateCollectionItemsRequestOneOf deserialize(
     Serializers serializers,
     Object serialized, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    final result = UpdateCollectionItemsRequestAnyOf1Builder();
+    final result = UpdateCollectionItemsRequestOneOfBuilder();
     final serializedList = (serialized as Iterable<Object?>).toList();
     final unhandled = <Object?>[];
     _deserializeProperties(
