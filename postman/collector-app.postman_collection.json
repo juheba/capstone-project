@@ -24,16 +24,31 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										},
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													""
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"const responseJson = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Verify items in the response\", function () {\r",
+													"    pm.expect(responseJson.items).to.exist;\r",
+													"    pm.expect(responseJson.items).to.be.an('array');\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Verify presence of nextKey field with null value\", function () {\r",
+													"    pm.expect(responseJson.nextKey).to.be.null;\r",
+													"});"
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -62,6 +77,9 @@
 											"listen": "test",
 											"script": {
 												"exec": [
+													"pm.test(\"Status code is 204\", function () {\r",
+													"    pm.response.to.have.status(204);\r",
+													"});\r",
 													""
 												],
 												"type": "text/javascript",
@@ -116,7 +134,38 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											""
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const responseJson = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Verify collectionId and userId in the response\", function () {\r",
+											"    pm.expect(responseJson.collection.userId).to.be.a('string');\r",
+											"    pm.expect(responseJson.collection.userId).to.not.be.empty;\r",
+											"    pm.expect(responseJson.collection.collectionId).to.be.a('string');\r",
+											"    pm.expect(responseJson.collection.collectionId).to.not.be.empty;\r",
+											"    pm.expect(responseJson.collection.collectionId).to.match(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify name, description and visibility in the response\", function () {\r",
+											"    pm.expect(responseJson.collection.name).to.be.a('string');\r",
+											"    pm.expect(responseJson.collection.name).to.not.be.empty;\r",
+											"    pm.expect(responseJson.collection.description).to.be.a('string');\r",
+											"    pm.expect(responseJson.collection.description).to.not.be.empty;\r",
+											"    pm.expect(responseJson.collection.visibility).to.be.a('string');\r",
+											"    pm.expect(responseJson.collection.visibility).to.not.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify 'createdAt' and 'lastModified' are dates with time and not empty\", function () {\r",
+											"    pm.expect(responseJson.collection.createdAt).to.be.a('string');\r",
+											"    pm.expect(responseJson.collection.createdAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+											"    pm.expect(responseJson.collection.createdAt).to.not.be.empty;\r",
+											"\r",
+											"    pm.expect(responseJson.collection.lastModified).to.be.a('string');\r",
+											"    pm.expect(responseJson.collection.lastModified).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+											"    pm.expect(responseJson.collection.lastModified).to.not.be.empty;\r",
+											"});"
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -142,13 +191,53 @@
 						},
 						{
 							"name": "Update collection",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const responseJson = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Verify collectionId and userId in the response\", function () {\r",
+											"    pm.expect(responseJson.collection.userId).to.be.a('string');\r",
+											"    pm.expect(responseJson.collection.userId).to.not.be.empty;\r",
+											"    pm.expect(responseJson.collection.collectionId).to.be.a('string');\r",
+											"    pm.expect(responseJson.collection.collectionId).to.not.be.empty;\r",
+											"    pm.expect(responseJson.collection.collectionId).to.match(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify name, description and visibility in the response\", function () {\r",
+											"    const requestJson = JSON.parse(pm.request.body.raw);\r",
+											"    pm.expect(responseJson.collection.name).to.equal(requestJson.name);\r",
+											"    pm.expect(responseJson.collection.description).to.equal(requestJson.description);\r",
+											"    pm.expect(responseJson.collection.visibility).to.equal(requestJson.visibility);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify 'createdAt' and 'lastModified' are dates with time and not empty\", function () {\r",
+											"    pm.expect(responseJson.collection.createdAt).to.be.a('string');\r",
+											"    pm.expect(responseJson.collection.createdAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+											"    pm.expect(responseJson.collection.createdAt).to.not.be.empty;\r",
+											"\r",
+											"    pm.expect(responseJson.collection.lastModified).to.be.a('string');\r",
+											"    pm.expect(responseJson.collection.lastModified).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+											"    pm.expect(responseJson.collection.lastModified).to.not.be.empty;\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"request": {
 								"method": "PATCH",
 								"header": [
 									{
 										"key": "Content-Type",
 										"value": "application/json",
-										"name": "Content-Type",
 										"type": "text"
 									}
 								],
@@ -179,7 +268,21 @@
 										"exec": [
 											""
 										],
-										"type": "text/javascript"
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
 									}
 								}
 							],
@@ -189,7 +292,6 @@
 									{
 										"key": "Content-Type",
 										"value": "application/json",
-										"name": "Content-Type",
 										"type": "text"
 									}
 								],
@@ -222,16 +324,31 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						},
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									""
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Verify collections in the response\", function () {\r",
+									"    pm.expect(responseJson.collections).to.exist;\r",
+									"    pm.expect(responseJson.collections).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify presence of nextKey field with null value\", function () {\r",
+									"    pm.expect(responseJson.nextKey).to.be.null;\r",
+									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -258,8 +375,34 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
 									"const responseJson = pm.response.json();\r",
-									"pm.environment.set(\"temp_nextKey\", responseJson.nextKey);"
+									"pm.environment.set(\"temp_nextKey\", responseJson.nextKey);\r",
+									"\r",
+									"pm.test(\"Verify collections in the response\", function () {\r",
+									"    pm.expect(responseJson.collections).to.exist;\r",
+									"    pm.expect(responseJson.collections).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify query parameter limit works correctly\", function () {\r",
+									"    const requestLimitValue = Number.parseInt(pm.request.url.query.get('limit'));\r",
+									"    if (responseJson.nextKey !== null) {\r",
+									"        pm.expect(responseJson.collections.length).to.equal(requestLimitValue);\r",
+									"    } else {\r",
+									"        pm.expect(responseJson.collections.length).to.be.greaterThan(0);\r",
+									"        pm.expect(responseJson.collections.length).to.be.lessThan(requestLimitValue+1);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify nextKey in the response\", function () {\r",
+									"    if (responseJson.nextKey != null) {\r",
+									"        pm.expect(responseJson.nextKey).to.be.a(\"string\");\r",
+									"        pm.expect(responseJson.nextKey).to.not.be.empty;\r",
+									"    }\r",
+									"});"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -312,10 +455,41 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
 									"const responseJson = pm.response.json();\r",
-									"pm.environment.set(\"temp_collectionId\", responseJson.collection.collectionId);"
+									"pm.environment.set(\"temp_collectionId\", responseJson.collection.collectionId);\r",
+									"\r",
+									"pm.test(\"Verify collectionId and userId in the response\", function () {\r",
+									"    pm.expect(responseJson.collection.userId).to.be.a('string');\r",
+									"    pm.expect(responseJson.collection.userId).to.not.be.empty;\r",
+									"    pm.expect(responseJson.collection.collectionId).to.be.a('string');\r",
+									"    pm.expect(responseJson.collection.collectionId).to.not.be.empty;\r",
+									"    pm.expect(responseJson.collection.collectionId).to.match(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/);\r",
+									"    \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify name, description and visibility in the response\", function () {\r",
+									"    const requestJson = JSON.parse(pm.request.body.raw);\r",
+									"    pm.expect(responseJson.collection.name).to.equal(requestJson.name);\r",
+									"    pm.expect(responseJson.collection.description).to.equal(requestJson.description);\r",
+									"    pm.expect(responseJson.collection.visibility).to.equal(requestJson.visibility);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify 'createdAt' and 'lastModified' are dates with time and not empty\", function () {\r",
+									"    pm.expect(responseJson.collection.createdAt).to.be.a('string');\r",
+									"    pm.expect(responseJson.collection.createdAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+									"    pm.expect(responseJson.collection.createdAt).to.not.be.empty;\r",
+									"\r",
+									"    pm.expect(responseJson.collection.lastModified).to.be.a('string');\r",
+									"    pm.expect(responseJson.collection.lastModified).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+									"    pm.expect(responseJson.collection.lastModified).to.not.be.empty;\r",
+									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -366,16 +540,31 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										},
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													""
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"const responseJson = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Verify collections in the response\", function () {\r",
+													"    pm.expect(responseJson.collections).to.exist;\r",
+													"    pm.expect(responseJson.collections).to.be.an('array');\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Verify presence of nextKey field with null value\", function () {\r",
+													"    pm.expect(responseJson.nextKey).to.be.null;\r",
+													"});"
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -404,9 +593,13 @@
 											"listen": "test",
 											"script": {
 												"exec": [
+													"pm.test(\"Status code is 204\", function () {\r",
+													"    pm.response.to.have.status(204);\r",
+													"});\r",
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -448,7 +641,44 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											""
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const responseJson = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Verify itemId and userId in the response\", function () {\r",
+											"    pm.expect(responseJson.item.userId).to.be.a('string');\r",
+											"    pm.expect(responseJson.item.userId).to.not.be.empty;\r",
+											"    pm.expect(responseJson.item.itemId).to.be.a('string');\r",
+											"    pm.expect(responseJson.item.itemId).to.not.be.empty;\r",
+											"    pm.expect(responseJson.item.itemId).to.match(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify title and description in the response\", function () {\r",
+											"    pm.expect(responseJson.item.title).to.be.a('string');\r",
+											"    pm.expect(responseJson.item.title).to.not.be.empty;\r",
+											"    pm.expect(responseJson.item.description).to.be.a('string');\r",
+											"    pm.expect(responseJson.item.description).to.not.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify attachment in the response\", function () {\r",
+											"    if (responseJson.item.attachment !== undefined) {\r",
+											"        pm.expect(responseJson.item.attachment).to.be.a('string');\r",
+											"        pm.expect(responseJson.item.attachment).to.not.be.empty;\r",
+											"        pm.expect(responseJson.item.attachment).to.match(/^https?:\\/\\/.+/);\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify 'addedAt' and 'lastModified' are dates with time and not empty\", function () {\r",
+											"    pm.expect(responseJson.item.addedAt).to.be.a('string');\r",
+											"    pm.expect(responseJson.item.addedAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+											"    pm.expect(responseJson.item.addedAt).to.not.be.empty;\r",
+											"\r",
+											"    pm.expect(responseJson.item.lastModified).to.be.a('string');\r",
+											"    pm.expect(responseJson.item.lastModified).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+											"    pm.expect(responseJson.item.lastModified).to.not.be.empty;\r",
+											"});"
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -474,6 +704,54 @@
 						},
 						{
 							"name": "Update item",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const responseJson = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Verify itemId and userId in the response\", function () {\r",
+											"    pm.expect(responseJson.item.userId).to.be.a('string');\r",
+											"    pm.expect(responseJson.item.userId).to.not.be.empty;\r",
+											"    pm.expect(responseJson.item.itemId).to.be.a('string');\r",
+											"    pm.expect(responseJson.item.itemId).to.not.be.empty;\r",
+											"    pm.expect(responseJson.item.itemId).to.match(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify title and description in the response\", function () {\r",
+											" const requestJson = JSON.parse(pm.request.body.raw);\r",
+											"    pm.expect(responseJson.item.title).to.equal(requestJson.title);\r",
+											"    pm.expect(responseJson.item.description).to.equal(requestJson.description);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify attachment in the response\", function () {\r",
+											"    if (responseJson.item.attachment !== undefined) {\r",
+											"        pm.expect(responseJson.item.attachment).to.be.a('string');\r",
+											"        pm.expect(responseJson.item.attachment).to.not.be.empty;\r",
+											"        pm.expect(responseJson.item.attachment).to.match(/^https?:\\/\\/.+/);\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify 'addedAt' and 'lastModified' are dates with time and not empty\", function () {\r",
+											"    pm.expect(responseJson.item.addedAt).to.be.a('string');\r",
+											"    pm.expect(responseJson.item.addedAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+											"    pm.expect(responseJson.item.addedAt).to.not.be.empty;\r",
+											"\r",
+											"    pm.expect(responseJson.item.lastModified).to.be.a('string');\r",
+											"    pm.expect(responseJson.item.lastModified).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+											"    pm.expect(responseJson.item.lastModified).to.not.be.empty;\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"request": {
 								"method": "PATCH",
 								"header": [
@@ -511,7 +789,21 @@
 										"exec": [
 											""
 										],
-										"type": "text/javascript"
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
 									}
 								}
 							],
@@ -521,7 +813,6 @@
 									{
 										"key": "Content-Type",
 										"value": "application/json",
-										"name": "Content-Type",
 										"type": "text"
 									}
 								],
@@ -554,16 +845,31 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						},
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									""
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Verify items in the response\", function () {\r",
+									"    pm.expect(responseJson.items).to.exist;\r",
+									"    pm.expect(responseJson.items).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify presence of nextKey field with null value\", function () {\r",
+									"    pm.expect(responseJson.nextKey).to.be.null;\r",
+									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -590,10 +896,37 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
 									"const responseJson = pm.response.json();\r",
-									"pm.environment.set(\"temp_nextKey\", responseJson.nextKey);"
+									"pm.environment.set(\"temp_nextKey\", responseJson.nextKey);\r",
+									"\r",
+									"pm.test(\"Verify items in the response\", function () {\r",
+									"    pm.expect(responseJson.items).to.exist;\r",
+									"    pm.expect(responseJson.items).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify query parameter limit works correctly\", function () {\r",
+									"    const requestLimitValue = Number.parseInt(pm.request.url.query.get('limit'));\r",
+									"    if (responseJson.nextKey !== null) {\r",
+									"        pm.expect(responseJson.items.length).to.equal(requestLimitValue);\r",
+									"    } else {\r",
+									"        pm.expect(responseJson.items.length).to.be.greaterThan(0);\r",
+									"        pm.expect(responseJson.items.length).to.be.lessThan(requestLimitValue+1);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify nextKey in the response\", function () {\r",
+									"    if (responseJson.nextKey != null) {\r",
+									"        pm.expect(responseJson.nextKey).to.be.a(\"string\");\r",
+									"        pm.expect(responseJson.nextKey).to.not.be.empty;\r",
+									"    }\r",
+									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						},
 						{
@@ -605,7 +938,8 @@
 									"    pm.request.removeQueryParams(\"nextKey\")\r",
 									"}"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -642,10 +976,39 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
 									"const responseJson = pm.response.json();\r",
-									"pm.environment.set(\"temp_itemId\", responseJson.item.itemId);"
+									"pm.environment.set(\"temp_itemId\", responseJson.item.itemId);\r",
+									"\r",
+									"pm.test(\"Verify itemId and userId in the response\", function () {\r",
+									"    pm.expect(responseJson.item.userId).to.be.a('string');\r",
+									"    pm.expect(responseJson.item.userId).to.not.be.empty;\r",
+									"    pm.expect(responseJson.item.itemId).to.be.a('string');\r",
+									"    pm.expect(responseJson.item.itemId).to.not.be.empty;\r",
+									"    pm.expect(responseJson.item.itemId).to.match(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify title and description in the response\", function () {\r",
+									"    const requestJson = JSON.parse(pm.request.body.raw);\r",
+									"    pm.expect(responseJson.item.title).to.equal(requestJson.title);\r",
+									"    pm.expect(responseJson.item.description).to.equal(requestJson.description);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify 'addedAt' and 'lastModified' are dates with time and not empty\", function () {\r",
+									"    pm.expect(responseJson.item.addedAt).to.be.a('string');\r",
+									"    pm.expect(responseJson.item.addedAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+									"    pm.expect(responseJson.item.addedAt).to.not.be.empty;\r",
+									"\r",
+									"    pm.expect(responseJson.item.lastModified).to.be.a('string');\r",
+									"    pm.expect(responseJson.item.lastModified).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+									"    pm.expect(responseJson.item.lastModified).to.not.be.empty;\r",
+									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -655,13 +1018,12 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
-								"name": "Content-Type",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"title\": \"{{$randomProductName}}\",\n  \"description\": \"{{$randomPhrase}}\",\n  \"itemType\": \"{{$randomProductMaterial}}\",\n  \"isLendable\": false,\n  \"ownershipStatus\": \"WISHLIST\",\n  \"status\": \"TODO\"\n}"
+							"raw": "{\n    \"title\": \"{{$randomProductName}}\",\n    \"description\": \"{{$randomPhrase}}\",\n    \"itemType\": \"{{$randomProductMaterial}}\",\n    \"isLendable\": false,\n    \"ownershipStatus\": \"WISHLIST\",\n    \"status\": \"TODO\"\n}"
 						},
 						"url": {
 							"raw": "{{BASE_URL}}/{{STAGE}}/items",
@@ -701,7 +1063,44 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											""
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const responseJson = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Verify locationId and userId in the response\", function () {\r",
+											"    pm.expect(responseJson.location.userId).to.be.a('string');\r",
+											"    pm.expect(responseJson.location.userId).to.not.be.empty;\r",
+											"    pm.expect(responseJson.location.locationId).to.be.a('string');\r",
+											"    pm.expect(responseJson.location.locationId).to.not.be.empty;\r",
+											"    pm.expect(responseJson.location.locationId).to.match(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify name and description in the response\", function () {\r",
+											"    pm.expect(responseJson.location.name).to.be.a('string');\r",
+											"    pm.expect(responseJson.location.name).to.not.be.empty;\r",
+											"    pm.expect(responseJson.location.description).to.be.a('string');\r",
+											"    pm.expect(responseJson.location.description).to.not.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify attachment in the response\", function () {\r",
+											"    if (responseJson.location.attachment !== undefined) {\r",
+											"        pm.expect(responseJson.location.attachment).to.be.a('string');\r",
+											"        pm.expect(responseJson.location.attachment).to.not.be.empty;\r",
+											"        pm.expect(responseJson.location.attachment).to.match(/^https?:\\/\\/.+/);\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify 'addedAt' and 'lastModified' are dates with time and not empty\", function () {\r",
+											"    pm.expect(responseJson.location.addedAt).to.be.a('string');\r",
+											"    pm.expect(responseJson.location.addedAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+											"    pm.expect(responseJson.location.addedAt).to.not.be.empty;\r",
+											"\r",
+											"    pm.expect(responseJson.location.lastModified).to.be.a('string');\r",
+											"    pm.expect(responseJson.location.lastModified).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+											"    pm.expect(responseJson.location.lastModified).to.not.be.empty;\r",
+											"});"
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -727,6 +1126,54 @@
 						},
 						{
 							"name": "Update location",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const responseJson = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Verify locationId and userId in the response\", function () {\r",
+											"    pm.expect(responseJson.location.userId).to.be.a('string');\r",
+											"    pm.expect(responseJson.location.userId).to.not.be.empty;\r",
+											"    pm.expect(responseJson.location.locationId).to.be.a('string');\r",
+											"    pm.expect(responseJson.location.locationId).to.not.be.empty;\r",
+											"    pm.expect(responseJson.location.locationId).to.match(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify name and description in the response\", function () {\r",
+											"    const requestJson = JSON.parse(pm.request.body.raw);\r",
+											"    pm.expect(responseJson.location.name).to.equal(requestJson.name);\r",
+											"    pm.expect(responseJson.location.description).to.equal(requestJson.description);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify attachment in the response\", function () {\r",
+											"    if (responseJson.location.attachment !== undefined) {\r",
+											"        pm.expect(responseJson.location.attachment).to.be.a('string');\r",
+											"        pm.expect(responseJson.location.attachment).to.not.be.empty;\r",
+											"        pm.expect(responseJson.location.attachment).to.match(/^https?:\\/\\/.+/);\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify 'addedAt' and 'lastModified' are dates with time and not empty\", function () {\r",
+											"    pm.expect(responseJson.location.addedAt).to.be.a('string');\r",
+											"    pm.expect(responseJson.location.addedAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+											"    pm.expect(responseJson.location.addedAt).to.not.be.empty;\r",
+											"\r",
+											"    pm.expect(responseJson.location.lastModified).to.be.a('string');\r",
+											"    pm.expect(responseJson.location.lastModified).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+											"    pm.expect(responseJson.location.lastModified).to.not.be.empty;\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"request": {
 								"method": "PATCH",
 								"header": [
@@ -764,7 +1211,21 @@
 										"exec": [
 											""
 										],
-										"type": "text/javascript"
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
 									}
 								}
 							],
@@ -774,7 +1235,6 @@
 									{
 										"key": "Content-Type",
 										"value": "application/json",
-										"name": "Content-Type",
 										"type": "text"
 									}
 								],
@@ -807,16 +1267,31 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						},
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									""
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Verify locations in the response\", function () {\r",
+									"    pm.expect(responseJson.locations).to.exist;\r",
+									"    pm.expect(responseJson.locations).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify presence of nextKey field with null value\", function () {\r",
+									"    pm.expect(responseJson.nextKey).to.be.null;\r",
+									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -843,10 +1318,37 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
 									"const responseJson = pm.response.json();\r",
-									"pm.environment.set(\"temp_nextKey\", responseJson.nextKey);"
+									"pm.environment.set(\"temp_nextKey\", responseJson.nextKey);\r",
+									"\r",
+									"pm.test(\"Verify locations in the response\", function () {\r",
+									"    pm.expect(responseJson.locations).to.exist;\r",
+									"    pm.expect(responseJson.locations).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify query parameter limit works correctly\", function () {\r",
+									"    const requestLimitValue = Number.parseInt(pm.request.url.query.get('limit'));\r",
+									"    if (responseJson.nextKey !== null) {\r",
+									"        pm.expect(responseJson.locations.length).to.equal(requestLimitValue);\r",
+									"    } else {\r",
+									"        pm.expect(responseJson.locations.length).to.be.greaterThan(0);\r",
+									"        pm.expect(responseJson.locations.length).to.be.lessThan(requestLimitValue+1);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify nextKey in the response\", function () {\r",
+									"    if (responseJson.nextKey != null) {\r",
+									"        pm.expect(responseJson.nextKey).to.be.a(\"string\");\r",
+									"        pm.expect(responseJson.nextKey).to.not.be.empty;\r",
+									"    }\r",
+									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						},
 						{
@@ -858,7 +1360,8 @@
 									"    pm.request.removeQueryParams(\"nextKey\")\r",
 									"}"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -895,10 +1398,39 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
 									"const responseJson = pm.response.json();\r",
-									"pm.environment.set(\"temp_locationId\", responseJson.location.locationId);"
+									"pm.environment.set(\"temp_locationId\", responseJson.location.locationId);\r",
+									"\r",
+									"pm.test(\"Verify locationId and userId in the response\", function () {\r",
+									"    pm.expect(responseJson.location.userId).to.be.a('string');\r",
+									"    pm.expect(responseJson.location.userId).to.not.be.empty;\r",
+									"    pm.expect(responseJson.location.locationId).to.be.a('string');\r",
+									"    pm.expect(responseJson.location.locationId).to.not.be.empty;\r",
+									"    pm.expect(responseJson.location.locationId).to.match(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify name and description in the response\", function () {\r",
+									"    const requestJson = JSON.parse(pm.request.body.raw);\r",
+									"    pm.expect(responseJson.location.name).to.equal(requestJson.name);\r",
+									"    pm.expect(responseJson.location.description).to.equal(requestJson.description);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify 'addedAt' and 'lastModified' are dates with time and not empty\", function () {\r",
+									"    pm.expect(responseJson.location.addedAt).to.be.a('string');\r",
+									"    pm.expect(responseJson.location.addedAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+									"    pm.expect(responseJson.location.addedAt).to.not.be.empty;\r",
+									"\r",
+									"    pm.expect(responseJson.location.lastModified).to.be.a('string');\r",
+									"    pm.expect(responseJson.location.lastModified).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);\r",
+									"    pm.expect(responseJson.location.lastModified).to.not.be.empty;\r",
+									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -941,10 +1473,22 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
 									"const responseJson = pm.response.json();\r",
-									"pm.environment.set(\"temp_uploadUrl\", responseJson.uploadUrl);"
+									"pm.environment.set(\"temp_uploadUrl\", responseJson.uploadUrl);\r",
+									"\r",
+									"pm.test(\"Verify uploadUrl in the response\", function () {\r",
+									"    pm.expect(responseJson.uploadUrl).to.be.a('string');\r",
+									"    pm.expect(responseJson.uploadUrl).to.not.be.empty;\r",
+									"    pm.expect(responseJson.uploadUrl).to.match(/^https?:\\/\\/.+/);\r",
+									"});\r",
+									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -980,10 +1524,22 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
 									"const responseJson = pm.response.json();\r",
-									"pm.environment.set(\"temp_uploadUrl\", responseJson.uploadUrl);"
+									"pm.environment.set(\"temp_uploadUrl\", responseJson.uploadUrl);\r",
+									"\r",
+									"pm.test(\"Verify uploadUrl in the response\", function () {\r",
+									"    pm.expect(responseJson.uploadUrl).to.be.a('string');\r",
+									"    pm.expect(responseJson.uploadUrl).to.not.be.empty;\r",
+									"    pm.expect(responseJson.uploadUrl).to.match(/^https?:\\/\\/.+/);\r",
+									"});\r",
+									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1014,6 +1570,21 @@
 				},
 				{
 					"name": "UploadURL with actual image binary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "noauth"
