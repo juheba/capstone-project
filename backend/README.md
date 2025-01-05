@@ -88,7 +88,7 @@ The following environment variables are used in the project:
 
 # API documentation
 
-TODO: For detailed API documentation, refer to the OpenAPI contract.
+For detailed API documentation, refer to the [OpenApi contract](./contract/).
 
 # Ressources and relationships
 

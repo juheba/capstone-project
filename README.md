@@ -39,7 +39,7 @@ With features like item and collection management, location tracking, and detail
 
 ## Getting Started
 * Backend: For detailed information about the backend setup, including environment configuration, API endpoints, and more, please refer to the [Backend README.md](./backend/README.md).
-* TODO: For detailed API documentation, refer to the OpenAPI contract.
+* Contract: For detailed API documentation, refer to the [OpenApi contract](./contract/).
 * TODO: frontend ...
 
 
