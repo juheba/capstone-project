@@ -38,10 +38,9 @@ With features like item and collection management, location tracking, and detail
 * These tests are implmented and executed using the [Postman collection](./postman/).
 
 ## Getting Started
-* Backend: For detailed information about the backend setup, including environment configuration, API endpoints, and more, please refer to the [Backend README.md](./backend/README.md).
-* Contract: For detailed API documentation, refer to the [OpenApi contract](./contract/).
-* TODO: frontend ...
-
+* Backend: For detailed information about the backend setup, including environment configuration, architecture diagram, API endpoints, and more, please refer to the [Backend README.md](./backend/README.md).
+* Contract: For detailed API documentation, refer to the [OpenApi contract](./contract/specs/collector-openapi.yml).
+* Frontend: Visit the frontend repository at [Collector App Respository](https://github.com/juheba/collector-app).
 
 
 # Udacity Cloud Capstone Project Criterias

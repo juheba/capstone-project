@@ -88,7 +88,54 @@ The following environment variables are used in the project:
 
 # API documentation
 
-For detailed API documentation, refer to the [OpenApi contract](./contract/).
+For detailed API documentation, refer to the [OpenApi contract](../contract/specs/collector-openapi.yml).
+
+```
+   ┌───────────────────────────────────────────────────────────┐
+   │                                                           │
+   │   GET    | /dev/collections                               │
+   │   POST   | /functions/GetCollections/invocations          │
+   │   GET    | /dev/collections/{collectionId}                │
+   │   POST   | /functions/GetCollection/invocations           │
+   │   POST   | /dev/collections                               │
+   │   POST   | /functions/CreateCollection/invocations        │
+   │   PATCH  | /dev/collections/{collectionId}                │
+   │   POST   | /functions/UpdateCollection/invocations        │
+   │   DELETE | /dev/collections/{collectionId}                │
+   │   POST   | /functions/DeleteCollection/invocations        │
+   │   GET    | /dev/collections/{collectionId}/items          │
+   │   POST   | /functions/GetCollectionItems/invocations      │
+   │   POST   | /dev/collections/{collectionId}/items          │
+   │   POST   | /functions/UpdateCollectionItems/invocations   │
+   │   GET    | /dev/items                                     │
+   │   POST   | /functions/GetItems/invocations                │
+   │   GET    | /dev/items/{itemId}                            │
+   │   POST   | /functions/GetItem/invocations                 │
+   │   POST   | /dev/items                                     │
+   │   POST   | /functions/CreateItem/invocations              │
+   │   PATCH  | /dev/items/{itemId}                            │
+   │   POST   | /functions/UpdateItem/invocations              │
+   │   DELETE | /dev/items/{itemId}                            │
+   │   POST   | /functions/DeleteItem/invocations              │
+   │   GET    | /dev/items/{itemId}/collections                │
+   │   POST   | /functions/GetItemCollections/invocations      │
+   │   POST   | /dev/items/{itemId}/collections                │
+   │   POST   | /functions/UpdateItemCollections/invocations   │
+   │   GET    | /dev/locations                                 │
+   │   POST   | /functions/GetLocations/invocations            │
+   │   GET    | /dev/locations/{locationId}                    │
+   │   POST   | /functions/GetLocation/invocations             │
+   │   POST   | /dev/locations                                 │
+   │   POST   | /functions/CreateLocation/invocations          │
+   │   PATCH  | /dev/locations/{locationId}                    │
+   │   POST   | /functions/UpdateLocation/invocations          │
+   │   DELETE | /dev/locations/{locationId}                    │
+   │   POST   | /functions/DeleteLocation/invocations          │
+   │   POST   | /dev/attachments                               │
+   │   POST   | /functions/GenerateUploadUrl/invocations       │
+   │                                                           │
+   └───────────────────────────────────────────────────────────┘
+```
 
 # Ressources and relationships
 
