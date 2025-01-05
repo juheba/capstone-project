@@ -86,18 +86,19 @@ The following environment variables are used in the project:
 * `AWS_NODEJS_CONNECTION_REUSE_ENABLED`: Node.js connection reuse
 * `NODE_OPTIONS`: Node.js options
 
+# API documentation
+
+TODO: For detailed API documentation, refer to the OpenAPI contract.
 
 # Ressources and relationships
 
-![ER Diagram](docs/img/er-diagram.mmd)
+![ER Diagram](docs/img/er-diagram.png)
+see [original .mmd in docs/img](docs/img/er-diagram.mmd)
 
-**Collection:** Stores information about the items in each user's collection.
-
-**Item:** Stores information about each item that can be part of a user's collection.
-
-**CollectionItem:** A list of items (i.e., individual books, movies, comics, etc.) that belong to one or many the collections.
-
-**Location:** Represents the physical locations where collection items can be stored.
+* **Collection:** Stores information about the items in each user's collection.
+* **Item:** Stores information about each item that can be part of a user's collection.
+* **CollectionItem:** A list of items (i.e., individual books, movies, comics, etc.) that belong to one or many collections.
+* **Location:** Represents the physical locations where collection items can be stored.
 
 ### NOT IMPLEMENTED YET ###
 
@@ -108,12 +109,33 @@ The below notes are only ideas and a first draft:
 **Lending:** Stores information about each lending transaction.
 | implemented | name        | description |
 |:-----------:|-------------|-------------|
-|             | LendingID   | A unique identifier for each lending transaction. |
-|             | LenderUserID | The identifier of the user who is lending the item. |
-|             | LenderUsername | The name of the user who is lending the item. |
-|             | BorrowerUserID | The identifier of the user who is borrowing the item. |
-|             | BorrowerUsername | The name of the user who is borrowing the item. |
-|             | ItemID      | The identifier of the item being lent. |
-|             | DateLent    | The date when the item was lent. |
-|             | DateReturned| The date when the item was returned. |
-|             | Status      | e.g., lending, returned |
+|     ❌     | LendingID    | A unique identifier for each lending transaction. |
+|     ❌     | LenderUserID | The identifier of the user who is lending the item. |
+|     ❌     | LenderUsername | The name of the user who is lending the item. |
+|     ❌     | BorrowerUserID | The identifier of the user who is borrowing the item. |
+|     ❌     | BorrowerUsername | The name of the user who is borrowing the item. |
+|     ❌     | ItemID       | The identifier of the item being lent. |
+|     ❌     | DateLent     | The date when the item was lent. |
+|     ❌     | DateReturned | The date when the item was returned. |
+|     ❌     | Status       | e.g., lending, returned |
+
+# Test Setup
+
+The current test setup utilizes Postman for API testing. The Postman collection and environment files are located in the [postman](postman) folder.
+
+The collection file `collector-app.postman_collection.json` contains predefined requests for interacting with the backend services, including operations for collections, items, and locations. Two environment files, `DEV collector-app.postman_environment.json` and `LOCAL collector-app.postman_environment.json`, are provided to facilitate testing in different environments.
+* `DEV` environment is configured for testing against the deployed AWS infrastructure
+* `LOCAL` environment is set up for testing against a local instance running on `http://localhost:3003`
+
+To get started, import the collection and the desired environment into Postman, and execute the requests to validate the API endpoints.
+
+### Authentication
+
+Most of the requests to the backend services require an authentication header. This ensures that only authorized users can access protected resources. To include the authentication header in your requests, follow these steps:
+
+* **Obtain an ID Token**: Use Auth0 to authenticate and obtain an id token. This token will be used to authorize your requests.
+* **Include the Authorization Header**: Add the following header to your requests:
+    ```
+    Authorization: Bearer YOUR_ID_TOKEN
+    ```
+* **Postman Setup**: In Postman, you can set up the authorization header by navigating to the "Authorization" tab in your request. Select "Bearer Token" as the type and paste your token in the "Token" field.
