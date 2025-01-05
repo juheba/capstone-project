@@ -1,12 +1,15 @@
 # Serverless Backend
 
+This is the serverless backend for the Collector App.
+
 ## Quickstart
 
-Requirements: 
+### Requirements
 * Node version > 18 - check via `node -v`
 * Typescript version > 5 - check via `tsc -v`
 * Serverless version > 3 - check via `sls -v`
 
+### Commands
 ```sh
 npm i                 # classic install
 sls dynamodb install  # installs dynamodb local
@@ -31,64 +34,76 @@ sls dynamodb start  # start dynamodb hosted on http://localhost:8000
 ```sh
 aws dynamodb help  # Help
 aws dynamodb list-tables --endpoint-url http://localhost:8000  # List all tables
-aws dynamodb describe-table --endpoint-url http://localhost:8000 --table-name todos-dev  # Describe a table by name (with item count)
+aws dynamodb describe-table --endpoint-url http://localhost:8000 --table-name collector-app-collection-dev  # Describe a table by name (with item count)
 ```
 
+## Architecture overview
+
+The backend of the Collector App is designed using a serverless architecture on AWS. It provides a REST API via AWS API Gateway, with business logic implemented in Lambda functions. These functions interact with DynamoDB tables and an S3 bucket, using IAM roles for secure access. Some of them are protected and can only be accessed by authenticated users. The entire system is monitored using AWS X-Ray and CloudWatch to ensure performance and reliability.
+
+![Architecture overview diagram](docs/img/infrastructure-overview.svg)
+
+### Key components and their roles
+
+**AWS API Gateway** is used to expose the Lambda functions as RESTful APIs. It handles the routing of HTTP requests to the appropriate Lambda functions and provides features like request validation and rate limiting.
+
+**AWS Lambda** functions are used to handle the business logic of the application. Each function is triggered by specific events, such as HTTP requests via API Gateway or changes in DynamoDB streams.
+
+**AWS DynamoDB** is used as the primary database for storing collections, items, and locations. The data is organized using tables with composite keys to optimize query performance. The following tables are used:
+
+* `COLLECTION_TABLE`: Stores information about collections.
+* `ITEM_TABLE`: Stores information about items.
+* `COLLECTION_ITEM_TABLE`: Stores the relationship between collections and items.
+* `LOCATION_TABLE`: Stores information about locations.
+
+**AWS S3** is used for storing attachments related to collections and items. It provides scalable and durable storage for files such as images and documents.
+
+**IAM Roles** are used to securely control access to AWS resources. Each Lambda function is assigned a specific role with permissions tailored to its needs, ensuring that functions can only access the resources they require.
+
+**AWS X-Ray** is used for tracing and debugging the application. It helps in monitoring and analyzing the performance of the Lambda functions, providing insights into the execution flow and identifying bottlenecks.
+
+**AWS CloudWatch** is used for logging and monitoring the application. It collects and tracks metrics, collects and monitors log files, and sets alarms. This helps in maintaining the health and performance of the backend services.
+
+**Auth0** is used for authentication and authorization. It provides secure login and registration functionality for the frontend application. Some Lambda functions are protected and can only be accessed by authenticated users.
+
+## Environment Variables
+The following environment variables are used in the project:
+
+* `REGION`: AWS region
+* `STAGE`: Deployment stage
+* `AUTH_0_SECRET_ID`: Auth0 secret ID
+* `AUTH_0_SECRET_FIELD`: Auth0 secret field
+* `COLLECTION_TABLE`: DynamoDB table for collections
+* `COLLECTION_CREATED_AT_INDEX`: Index for collection creation date
+* `ITEM_TABLE`: DynamoDB table for items
+* `ITEM_CREATED_AT_INDEX`: Index for item creation date
+* `COLLECTION_ITEM_TABLE`: DynamoDB table for collection items
+* `COLLECTION_ITEM_INDEX`: Index for collection items
+* `LOCATION_TABLE`: DynamoDB table for locations
+* `LOCATION_ADDED_AT_INDEX`: Index for location addition date
+* `ATTACHMENTS_S3_BUCKET`: S3 bucket for attachments
+* `SIGNED_URL_EXPIRATION`: Expiration time for signed URLs
+* `AWS_NODEJS_CONNECTION_REUSE_ENABLED`: Node.js connection reuse
+* `NODE_OPTIONS`: Node.js options
 
 
-# Ressources
+# Ressources and relationships
 
-**User:** Stores information about each user.
-| implemented | name        | description |
-|:-----------:|-------------|-------------|
-|             | UserID      | A unique identifier of a user provided by oauth0. |
-|             | Username    | The name of the user.
-|             | Email       | The email adress of the user.
+![ER Diagram](docs/img/er-diagram.mmd)
 
 **Collection:** Stores information about the items in each user's collection.
-| implemented | name        | description |
-|:-----------:|-------------|-------------|
-|     ✅     | CollectionID | A unique identifier for each collection. |
-|     ✅     | UserID      | A unique identifier of a user provided by oauth0 |
-|     ✅     | Name        | The name of the collection (e.g., "Science Fiction Books", "Marvel Movies").|
-|     ✅     | Description | A brief description of the collection.|
-|     ✅     | Visibility  | Settings to control who can view the collection (public, private, shared with specific users).|
-|     ✅     | Creation Date/Last Modified | The date the collection was created and the date it was last updated.|
-|             | Tags/Labels | User-defined labels or tags that can be used to categorize and filter items.|
 
 **Item:** Stores information about each item that can be part of a user's collection.
-| implemented | name        | description |
-|:-----------:|-------------|-------------|
-|     ✅     | ItemID      | A unique identifier for each item. |
-|     ✅     | ItemType    | e.g., book, movie, game, comic |
-|     ✅     | Title  | The title of the item (e.g., the name of the book, movie, or comic). |
-|     ✅     | Description/Summary | A brief description or summary of the item. |
-|             | Genre       | The genre(s) of the item (e.g., fantasy, action, romance). |
-|             | Creator(s)  | The author(s), director(s), or other creator(s) of the item. |
-|             | Release/Publication Date | The date the item was originally released or published. |
-|     ✅     | Cover/Image | An image of the item's cover or poster. |
-|             | Review/Notes | A section where the user can write personal notes about the item. |
-|             | Rating      | The item's rating, either user-generated or from a popular rating system (e.g., IMDb for movies, Goodreads for books). |
-|     ✅     | isLendable (boolean)| Information about whether the user (owner) would lend the item. |
-|     ✅     | Ownership | Information about whether the user owns the item, wishes to buy it, has borrowed it, etc. |
-|     ✅     | Status      | Information about whether the item has been read/watched, is currently being read/watched, or is on a to-read/to-watch list. |
-|     ✅     | LocationID  | A unique identifier for each location. |
-|     ✅     | Creation Date/Last Modified | The date the collection was created and the date it was last updated.|
-|             | Tags/Labels | User-defined labels or tags that can be used to categorize and filter items. |
 
 **CollectionItem:** A list of items (i.e., individual books, movies, comics, etc.) that belong to one or many the collections.
-| implemented | name        | description |
-|:-----------:|-------------|-------------|
-|     ✅     | ItemID      | A unique identifier for each item. |
-|     ✅     | CollectionID | A unique identifier for each collection. |
 
 **Location:** Represents the physical locations where collection items can be stored.
-| implemented | name        | description |
-|:-----------:|-------------|-------------|
-|     ✅     | LocationID  | A unique identifier for each location. |
-|     ✅     | Title/Name  | The name of the location (e.g., "Living Room Bookshelf", "Storage Box 1"). Allows users to identify and search for locations. |
-|     ✅     | Description | A description of the location. Provides users with more information about each location, such as its physical characteristics or where it is located in the user's home. |
-|     ✅     | ImageURL    | An image of the location for easier recognation. |
+
+### NOT IMPLEMENTED YET ###
+
+The below notes are only ideas and a first draft:
+* Lending = Stores information about each lending transaction.
+* Tags/Labels = User-defined labels or tags that can be used to categorize and filter items.
 
 **Lending:** Stores information about each lending transaction.
 | implemented | name        | description |

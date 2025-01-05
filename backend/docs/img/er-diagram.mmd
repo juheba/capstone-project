@@ -1,0 +1,52 @@
+%%{init: {'theme': 'dark'}}%%
+
+erDiagram
+    USER one to zero or more COLLECTION : "has"
+    USER one to zero or more ITEM : "has/wishes"
+    USER one to zero or more LOCATION : "provides"
+
+    COLLECTION one to one or more COLLECTION_ITEM : "has assigned items"
+    ITEM one to one or more COLLECTION_ITEM : "is orgnized in collections"
+
+    ITEM one or zero to one LOCATION : "is located in"
+
+    COLLECTION {
+        VARCHAR collectionId PK "A unique identifier for each collection."
+        VARCHAR userId UK "A unique identifier of a user provided by oauth0"
+        VARCHAR name "The name of the collection (e.g., 'Science Fiction Books', 'Marvel Movies')."
+        VARCHAR description "A brief description of the collection."
+        VARCHAR visibility "Settings to control who can view the collection (public, private, shared with specific users)."
+        DATE createdAt "The date and time the collection was created."
+        DATE lastModified "The date and time the collection was last updated."
+    }
+
+    ITEM {
+        VARCHAR itemId PK "A unique identifier for each item."
+        VARCHAR userId UK "A unique identifier of a user provided by oauth0"
+        VARCHAR locationId FK "References a location."
+        VARCHAR title "The title of the item (e.g., the name of the book, movie, or comic)."
+        VARCHAR description "A brief description or summary of the item."
+        VARCHAR itemType "e.g., book, movie, game, comic"
+        VARCHAR ownershipStatus "Information about whether the user owns the item, wishes to buy it, has borrowed it, etc."
+        VARCHAR status "Information about whether the item has been read/watched, is currently being read/watched, or is on a to-read/to-watch list."
+        VARCHAR attachmentUrl "An image of the item's cover or poster."
+        BOOL isLendable "Information about whether the user (owner) would lend the item."
+        DATE addedAt "The date and time the item was added."
+        DATE lastModified "The date and time the item was last updated."
+    }
+
+    COLLECTION_ITEM {
+        VARCHAR collectionId PK, FK "References a collection."
+        VARCHAR itemId PK, FK "References a item."
+    }
+
+    LOCATION {
+        VARCHAR locationId PK "A unique identifier for each location."
+        VARCHAR userId UK "A unique identifier of a user provided by oauth0"
+        VARCHAR name "The name of the location (e.g., 'Living Room Bookshelf', 'Storage Box 1'). Allows users to identify and search for locations."
+        VARCHAR description "A description of the location. Provides users with more information about each location, such as its physical characteristics or where it is located in the user's home."
+        VARCHAR attachmentUrl "An image of the location for easier recognation."
+        DATE addedAt "The date and time the location was added."
+        DATE lastModified "The date and time the location was last updated."
+    }
+

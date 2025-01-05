@@ -1,5 +1,19 @@
+# Cloud Capstone Project
 
-# Features
+This project is part of the Udacity Cloud Developer Nanodegree program and serves as a capstone project.
+It is an educational project designed to demonstrate the skills and knowledge acquired during the nanodegree.
+For more information about the program, visit [Udacity Cloud Developer Nanodegree](https://www.udacity.com/course/cloud-developer-nanodegree--nd9990?promo=savemore&coupon=HOLIDAY40&utm_source=gsem_brand&utm_medium=ads_r&utm_campaign=19692269004_c_individuals&utm_term=151372115492&utm_keyword=nanodegree%20cloud_e&utm_source=gsem_brand&utm_medium=ads_r&utm_campaign=19692269004_c_individuals&utm_term=151372115492&utm_keyword=nanodegree%20cloud_e&gad_source=1&gclid=CjwKCAiA65m7BhAwEiwAAgu4JKW0pO8Z1BLC16i5LluaZntA1OY0h9oZLCtXPUjgII30Thp2WUUC-hoCkYIQAvD_BwE).
+
+
+# Collector App
+
+Collector App is an application designed to help users manage their collections of items.
+The backend is built using a serverless architecture on AWS, leveraging services like AWS Lambda, API Gateway, DynamoDB, and S3.
+The frontend is developed using Flutter, providing a seamless experience on both web and Android platforms.
+The application includes authentication using Auth0 and API documentation with OpenAPI.
+With features like item and collection management, location tracking, and detailed analytics, Collector App provides a tool for collectors to organize and track their collections efficiently.
+
+## Features
 
 **Full-Stack Application**
 * Backend:
@@ -15,19 +29,20 @@
 * Some lambda functions can only be executed via proper authorization
 
 **API Documentation**
-* Contract:
-  * An OpenApi 3 contract can be found in .... TODO.
-  * It documents the api and makes the rest client implementation easier.
-  * Uses OpenAPI Generator to generate a flutter dio rest client.
+* An OpenApi 3 contract can be found in .... TODO.
+* It documents the api and makes the rest client implementation easier.
+* Uses OpenAPI Generator to generate a flutter dio rest client.
 
 **Testing**
 * Integration tests ensure that the api work as expected.
-* These tests are executed using the [Postman collection](./postman/).
+* These tests are implmented and executed using the [Postman collection](./postman/).
 
-# Getting Started
-* see [Backend README.md](./backend/README.md) with the serverless project serving as backend api
-* TODO: contract ...
+## Getting Started
+* Backend: For detailed information about the backend setup, including environment configuration, API endpoints, and more, please refer to the [Backend README.md](./backend/README.md).
+* TODO: For detailed API documentation, refer to the OpenAPI contract.
 * TODO: frontend ...
+
+
 
 # Udacity Cloud Capstone Project Criterias
 
